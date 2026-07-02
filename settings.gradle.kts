@@ -24,3 +24,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "ProgettoSistemiMobile"
 include(":app")
+include(":domain")
+include(":data")
+include(":uicompose")
