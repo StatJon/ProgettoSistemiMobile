@@ -4,7 +4,7 @@ import com.unibo.mobile.domain.model.entity.Ally
 import com.unibo.mobile.domain.model.entity.CombatEntity
 import com.unibo.mobile.domain.model.entity.Enemy
 
-interface CombatStatus {
+interface CombatState {
     val turnOrder: List<CombatEntity>
     val turnIndex: Int
     val log: List<CombatLogEntry>
