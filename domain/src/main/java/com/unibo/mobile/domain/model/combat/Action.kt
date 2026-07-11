@@ -5,6 +5,8 @@ import com.unibo.mobile.domain.model.entity.CombatEntity
 
 interface Action {
     val actor: CombatEntity
-    val target: List<CombatEntity>
+    val target: CombatEntity
     val ability: Ability
+    val isHit: Boolean
+    val amount: Int
 }
