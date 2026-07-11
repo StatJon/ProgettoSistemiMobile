@@ -7,7 +7,7 @@ interface DungeonUseCase {
     fun initDungeon(
         victoryCount: Int,
         savedDungeon: Dungeon?
-    )
+    ) : Dungeon
 
     fun advanceToNextRoom(dungeon: Dungeon): Dungeon
 

@@ -8,8 +8,9 @@ interface CombatState {
     val turnOrder: List<CombatEntity>
     val turnIndex: Int
     val log: List<CombatLogEntry>
+    val status: CombatOutcome
 
-    fun getActiveEnemy(): CombatEntity
+    fun getActiveEntity(): CombatEntity
     fun getAllEnemies(): List<Enemy>
     fun getAllAllies(): List<Ally>
 

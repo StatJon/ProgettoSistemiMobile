@@ -7,6 +7,7 @@ import com.unibo.mobile.domain.model.combat.PostCombatReward
 import com.unibo.mobile.domain.model.entity.Ally
 import com.unibo.mobile.domain.model.entity.CombatEntity
 import com.unibo.mobile.domain.model.entity.Enemy
+import com.unibo.mobile.domain.model.save.PlayerCharacter
 
 interface RoomCombatUseCase {
     fun initCombat(
@@ -19,19 +20,14 @@ interface RoomCombatUseCase {
         actionToExecute: Action
     ): CombatState
 
-    fun writeNewLog(action: Action): CombatLogEntry
-
     fun advanceTurn(currentState: CombatState): CombatState
 
-    fun isDefeated(entity: CombatEntity): Boolean
+    fun calculatePostCombatReward(enemyList: List<Enemy>): PostCombatReward
 
-    fun isCombatOver(currentState: CombatState): Boolean
-
-    fun calculcatePostCombatReward(enemyList: List<Enemy>): PostCombatReward
-
-    fun assignPostCombatReward(
-        ally: Ally,
-        reward: PostCombatReward
-    ): Ally
+    fun updatePlayerCharacter(
+        playerCharacter: PlayerCharacter,
+        allies: List<Ally>,
+        reward: PostCombatReward?
+    ): PlayerCharacter
 
 }
