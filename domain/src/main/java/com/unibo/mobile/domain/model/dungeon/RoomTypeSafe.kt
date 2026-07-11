@@ -1,6 +1,6 @@
 package com.unibo.mobile.domain.model.dungeon
 
-abstract class RoomTypeSafe (
+abstract class RoomTypeSafe(
     override val roomTypeId: String,
     override val displayName: String,
     val availAction: List<RoomAction>
