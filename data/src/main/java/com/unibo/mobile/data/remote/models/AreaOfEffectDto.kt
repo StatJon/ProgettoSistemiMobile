@@ -4,6 +4,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class DamageDto(
-    @param:Json(name = "damage_dice") val damageDice: String
+data class AreaOfEffectDto(
+    @param:Json(name = "size") val size: Int
 )
