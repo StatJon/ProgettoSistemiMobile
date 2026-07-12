@@ -6,5 +6,11 @@ import retrofit2.http.GET
 
 interface DndApi {
     @GET(value="spells/fireball")
-    suspend fun getFireball(): SpellDto
+    suspend fun getFireballTestOnly(): SpellDto
+
+    @GET(value="spells/mass-healing-word")
+    suspend fun getMassHealingWordTestOnly(): SpellDto
+
+    @GET(value="spells/bless")
+    suspend fun getBlessTestOnly(): SpellDto
 }

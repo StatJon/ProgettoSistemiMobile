@@ -1,5 +1,6 @@
 package com.unibo.mobile.domain.model.ability
 
+//obsolete enum
 enum class TargetType {
     SINGLE_ENEMY,
     SINGLE_ALLY,
