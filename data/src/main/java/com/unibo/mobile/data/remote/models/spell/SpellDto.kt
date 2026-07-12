@@ -1,4 +1,4 @@
-package com.unibo.mobile.data.remote.models
+package com.unibo.mobile.data.remote.models.spell
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
