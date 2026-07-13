@@ -14,7 +14,7 @@ class ApiRepositoryImplTest {
 
     class FakeSaveGameDao : SaveGameDao {
         override suspend fun getSaveGame(): SaveGameEntity? = null
-        override suspend fun insertOrUpdate(entity: SaveGameEntity) {}
+        override suspend fun insertOrUpdateSaveGame(entity: SaveGameEntity) {}
     }
 
 

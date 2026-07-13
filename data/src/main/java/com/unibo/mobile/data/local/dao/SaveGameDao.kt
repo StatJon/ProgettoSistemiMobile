@@ -12,5 +12,5 @@ interface SaveGameDao {
     suspend fun getSaveGame(): SaveGameEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(entity: SaveGameEntity)
+    suspend fun insertOrUpdateSaveGame(entity: SaveGameEntity)
 }
