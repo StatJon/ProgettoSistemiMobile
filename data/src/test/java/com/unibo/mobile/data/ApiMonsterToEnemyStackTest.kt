@@ -1,5 +1,7 @@
 package com.unibo.mobile.data
 
+import com.unibo.mobile.data.local.dao.SaveGameDao
+import com.unibo.mobile.data.local.entities.SaveGameEntity
 import com.unibo.mobile.data.models.entity.EnemyTypeImpl
 import com.unibo.mobile.data.remote.api.RetrofitClient
 import com.unibo.mobile.data.remote.mapper.toEnemyOrNull
@@ -19,10 +21,17 @@ class ApiMonsterToEnemyStackTest {
         println(enemy)
     }
 
+    class FakeSaveGameDao : SaveGameDao {
+        override suspend fun getSaveGame(): SaveGameEntity? = null
+        override suspend fun insertOrUpdate(entity: SaveGameEntity) {}
+    }
+
     @Test
     fun testMonsterHumanoidToEnemyRepositoryList(): Unit = runBlocking {
         val client = RetrofitClient()
-        val enemyTypeList = LocalRepositoryImpl().getEnemyTypes()
+        val enemyTypeList = LocalRepositoryImpl(
+            saveGameDao = FakeSaveGameDao()
+        ).getEnemyTypes()
         val monsterDto: MonsterDto = client.dndService.getMonster("acolyte")
         val enemy = monsterDto.toEnemyOrNull(enemyTypeList)
         println(enemy)

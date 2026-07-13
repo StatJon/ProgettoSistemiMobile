@@ -38,5 +38,8 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     ksp(libs.moshi.codegen)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
 }

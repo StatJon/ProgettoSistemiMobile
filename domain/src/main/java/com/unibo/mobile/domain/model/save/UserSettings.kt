@@ -1,11 +1,10 @@
 package com.unibo.mobile.domain.model.save
 
 interface UserSettings {
+    val musicEnable: Boolean
     val musicVolume: Float
+    val soundEnable : Boolean
     val soundVolume: Float
-    val localization: String
+    val language: String
 
-    fun manageVolume(): Float {
-        TODO("Decidere in seguito come gestire livelli volume e muto")
-    }
 }

@@ -114,7 +114,7 @@ private fun defineInitiative(monsterDto: MonsterDto): Int {
 
 private fun defineEnemyType(monsterDto: MonsterDto, enemyTypeList: List<EnemyType>): EnemyType? {
     val enemyTypeRaw = monsterDto.type
-    val enemyType = enemyTypeList.firstOrNull() { it.enemyTypeId == enemyTypeRaw } ?: return null
+    val enemyType = enemyTypeList.firstOrNull { it.enemyTypeId == enemyTypeRaw } ?: return null
     return enemyType
 }
 

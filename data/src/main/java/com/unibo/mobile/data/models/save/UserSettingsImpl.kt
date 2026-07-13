@@ -5,6 +5,8 @@ import com.unibo.mobile.domain.model.save.UserSettings
 data class UserSettingsImpl(
     override val musicVolume: Float,
     override val soundVolume: Float,
-    override val localization: String
+    override val musicEnable: Boolean,
+    override val soundEnable: Boolean,
+    override val language: String,
 ) : UserSettings {
 }
