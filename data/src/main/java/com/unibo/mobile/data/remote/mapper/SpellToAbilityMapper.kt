@@ -1,6 +1,6 @@
 package com.unibo.mobile.data.remote.mapper
 
-import com.unibo.mobile.data.models.AbilityImpl
+import com.unibo.mobile.data.models.ability.AbilityImpl
 import com.unibo.mobile.data.remote.models.spell.SpellDto
 import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.ability.AbilityType

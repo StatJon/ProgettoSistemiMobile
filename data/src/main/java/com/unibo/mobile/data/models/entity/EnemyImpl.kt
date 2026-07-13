@@ -1,4 +1,4 @@
-package com.unibo.mobile.data.models
+package com.unibo.mobile.data.models.entity
 
 import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.entity.Enemy

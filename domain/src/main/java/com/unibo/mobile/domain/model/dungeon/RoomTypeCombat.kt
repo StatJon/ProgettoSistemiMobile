@@ -1,9 +1,8 @@
 package com.unibo.mobile.domain.model.dungeon
 
-abstract class RoomTypeCombat(
-    override val roomTypeId: String,
-    override val displayName: String,
-    val challengeRating: Float
-) : RoomType {
-    override val isSafe: Boolean = false
+interface RoomTypeCombat : RoomType {
+    override val isSafe: Boolean get() = false
+    val minEnemyCr: ChallengeRating
+    val maxTotalCr: ChallengeRating
+    val maxNumEnemies: Int
 }

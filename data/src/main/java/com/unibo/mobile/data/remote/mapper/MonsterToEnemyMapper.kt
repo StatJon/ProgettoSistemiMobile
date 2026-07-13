@@ -1,7 +1,7 @@
 package com.unibo.mobile.data.remote.mapper
 
-import com.unibo.mobile.data.models.AbilityImpl
-import com.unibo.mobile.data.models.EnemyImpl
+import com.unibo.mobile.data.models.ability.AbilityImpl
+import com.unibo.mobile.data.models.entity.EnemyImpl
 import com.unibo.mobile.data.remote.models.monster.ActionDto
 import com.unibo.mobile.data.remote.models.monster.MonsterDto
 import com.unibo.mobile.domain.model.ability.Ability
@@ -35,7 +35,11 @@ fun MonsterDto.toEnemyOrNull(enemyTypeList: List<EnemyType>): Enemy? {
 
 // Helper Functions
 private fun extractActions(monsterDto: MonsterDto): List<Ability>? {
-    val actionDtoList: List<ActionDto> = monsterDto.actions.filter { !it.damage.isNullOrEmpty() }
+    val actionDtoList: List<ActionDto> = monsterDto.actions.filter {
+        !it.damage.isNullOrEmpty() && isValidDiceFormat(
+            it.damage.first().damageDice
+        )
+    }
     if (actionDtoList.isEmpty()) return null
     val pairList: List<Pair<String, String>> = actionDtoList.map { actionDto ->
         val name = actionDto.name
@@ -70,6 +74,19 @@ private fun extractActions(monsterDto: MonsterDto): List<Ability>? {
     return abilityList
 }
 
+// Helper Functions for extractActinos ONLY
+
+private fun isValidDiceFormat(diceString: String): Boolean {
+    return diceString.matches(Regex("""\d+d\d+(\+\d+)?"""))
+}
+
+private fun formatDisplayName(rawId: String): String {
+    return rawId
+        .split("-")
+        .joinToString(" ") { word -> word.replaceFirstChar { it.uppercase() } }
+} // Helper per extractActions() per Monster.Ability.displayName, non Monster.displayName
+
+// Helper Functions
 private fun defineMonsterId(monsterDto: MonsterDto): String {
     return monsterDto.index
 }
@@ -78,11 +95,6 @@ private fun defineDisplayName(monsterDto: MonsterDto): String {
     return monsterDto.name
 }
 
-private fun formatDisplayName(rawId: String): String {
-    return rawId
-        .split("-")
-        .joinToString(" ") { word -> word.replaceFirstChar { it.uppercase() } }
-} // Helper per extractActions() per Monster.Ability.displayName, non Monster.displayName
 
 private fun defineHp(monsterDto: MonsterDto): Int {
     return monsterDto.hitPoints

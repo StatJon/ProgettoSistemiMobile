@@ -1,6 +1,6 @@
 package com.unibo.mobile.data.repositories
 
-import com.unibo.mobile.data.models.EnemyTypeImpl
+import com.unibo.mobile.data.models.entity.EnemyTypeImpl
 import com.unibo.mobile.domain.model.dungeon.Dungeon
 import com.unibo.mobile.domain.model.entity.EnemyType
 import com.unibo.mobile.domain.model.entity.PlayerClass

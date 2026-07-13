@@ -1,6 +1,6 @@
 package com.unibo.mobile.data
 
-import com.unibo.mobile.data.models.EnemyTypeImpl
+import com.unibo.mobile.data.models.entity.EnemyTypeImpl
 import com.unibo.mobile.data.remote.api.RetrofitClient
 import com.unibo.mobile.data.remote.mapper.toEnemyOrNull
 import com.unibo.mobile.data.remote.models.monster.MonsterDto
