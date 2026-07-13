@@ -14,7 +14,7 @@ fun SpellDto.toAbilityOrNull(): Ability? {
     if (!isCompatibleSpell(this)) return null
     // functions for final assembler
     val abilityId: String = defineAbilityId(this)
-    val displayName: String = defineDisplayName(this)
+    val displayName: String = formatDisplayName(this)
     val actionCost: Int = defineActionCost(this)
     val level: Int = defineLevel(this)
     val abilityType: AbilityType = defineAbilityType(this)
@@ -42,21 +42,21 @@ private fun defineAbilityId(spellDto: SpellDto): String {
     return spellDto.index
 }
 
-private fun defineDisplayName(spellDto: SpellDto): String {
+private fun formatDisplayName(spellDto: SpellDto): String {
     return spellDto.name
 }
 
 private fun defineActionCost(spellDto: SpellDto): Int {
     return when (spellDto.castingTime) {
-        "1 action" -> 2
-        "1 bonus action" -> 1
-        else -> 2
+        "1 action" -> DefaultValues.STANDARD_ACTION_COST
+        "1 bonus action" -> DefaultValues.BONUS_ACTION_COST
+        else -> DefaultValues.DEFAULT_ACTION_COST
     }
 }
 
 private fun defineLevel(spellDto: SpellDto): Int {
     return when {
-        spellDto.level == 0 -> 1
+        spellDto.level == 0 -> DefaultValues.DEFAULT_MIN_LEVEL
         else -> spellDto.level
     }
 }
@@ -115,7 +115,8 @@ private fun assembleAbility(
         level = level,
         abilityType = abilityType,
         diceCount = diceCount,
-        diceType = diceType
+        diceType = diceType,
+        flatExtraAmount = DefaultValues.DEFAULT_FLAT_EXTRA
     )
 
 }

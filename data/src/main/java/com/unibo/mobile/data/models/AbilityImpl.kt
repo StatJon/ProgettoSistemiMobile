@@ -11,5 +11,6 @@ data class AbilityImpl(
     override val level: Int,
     override val abilityType: AbilityType,
     override val diceCount: Int,
-    override val diceType: Dice
+    override val diceType: Dice,
+    override val flatExtraAmount: Int
 ) : Ability

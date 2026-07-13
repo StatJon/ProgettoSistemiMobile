@@ -8,5 +8,6 @@ interface Ability {
     val abilityType: AbilityType // val targetType: TargetType Obsolete, unified in AbilityType
     val diceCount: Int
     val diceType: Dice
+    val flatExtraAmount: Int
 
 }

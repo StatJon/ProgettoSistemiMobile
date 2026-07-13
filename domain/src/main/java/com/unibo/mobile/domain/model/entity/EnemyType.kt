@@ -1,6 +1,6 @@
 package com.unibo.mobile.domain.model.entity
 
 interface EnemyType {
-    val enemyId: String
+    val enemyTypeId: String
     val displayName: String
 }

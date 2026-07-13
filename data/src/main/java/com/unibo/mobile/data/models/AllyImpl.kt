@@ -5,18 +5,19 @@ import com.unibo.mobile.domain.model.entity.Ally
 import com.unibo.mobile.domain.model.entity.PlayerClass
 
 data class AllyImpl(
+    override val entityId: String,
+    override val displayName: String,
     override val currentMp: Int,
     override val maxMp: Int,
     override val playerClass: PlayerClass,
     override val playerExp: Int,
-    override val name: String,
     override val currentHp: Int,
     override val maxHp: Int,
     override val currentAp: Int,
     override val maxAp: Int,
     override val armorClass: Int,
     override val initiative: Int,
-    override val abilities: List<Ability>
+    override val abilities: List<Ability>,
 ) : Ally {
     override fun getCurrentLevel(): Int {
         TODO("Not yet implemented")

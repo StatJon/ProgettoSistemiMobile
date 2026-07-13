@@ -13,5 +13,5 @@ data class MonsterDto(
     @param:Json(name = "dexterity") val dexterity: Int,
     @param:Json(name = "challenge_rating") val challengeRating: Float,
     @param:Json(name = "xp") val xp: Int,
-    @param:Json(name = "actions") val actions: List<ActionsDto>
+    @param:Json(name = "actions") val actions: List<ActionDto>
 )

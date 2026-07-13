@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ActionsDto(
+data class ActionDto(
     @param:Json(name = "name") val name: String,
     @param:Json(name = "damage") val damage: List<DamageDto>?
 )

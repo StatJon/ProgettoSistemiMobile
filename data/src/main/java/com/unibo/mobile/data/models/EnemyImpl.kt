@@ -5,16 +5,17 @@ import com.unibo.mobile.domain.model.entity.Enemy
 import com.unibo.mobile.domain.model.entity.EnemyType
 
 data class EnemyImpl(
-    override val enemyType: EnemyType,
-    override val challengeRating: Float,
-    override val name: String,
+    override val entityId: String,
+    override val displayName: String,
     override val currentHp: Int,
     override val maxHp: Int,
     override val currentAp: Int,
     override val maxAp: Int,
     override val armorClass: Int,
     override val initiative: Int,
-    override val abilities: List<Ability>
+    override val abilities: List<Ability>,
+    override val enemyType: EnemyType,
+    override val challengeRating: Float
 ) : Enemy {
     override fun changeHp(amount: Int): EnemyImpl {
         return this.copy(currentHp = currentHp + amount)
