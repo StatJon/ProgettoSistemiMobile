@@ -11,6 +11,29 @@ data class PlayerCharacterImpl(
     override val characterMp: Int,
     override val characterMaxMp: Int,
     override val characterExp: Int,
-    override val abilityList: List<Ability>
+    override val abilityList: List<Ability>,
 ) : PlayerCharacter {
+    override fun changeHp(amount: Int): PlayerCharacter {
+        return this.copy(characterHp = characterHp + amount)
+    }
+
+    override fun changeMp(amount: Int): PlayerCharacter {
+        return this.copy(characterMp = characterMp + amount)
+    }
+
+    override fun addMaxHp(amount: Int): PlayerCharacter {
+        return this.copy(characterMaxHp = characterMaxHp + amount)
+    }
+
+    override fun addMaxMp(amount: Int): PlayerCharacter {
+        return this.copy(characterMaxMp = characterMaxMp + amount)
+    }
+
+    override fun addAbilities(abilityList: List<Ability>): PlayerCharacter {
+        return this.copy(abilityList = this.abilityList + abilityList)
+    }
+
+    override fun addExp(amount: Int): PlayerCharacter {
+        return this.copy(characterExp = characterExp + amount)
+    }
 }

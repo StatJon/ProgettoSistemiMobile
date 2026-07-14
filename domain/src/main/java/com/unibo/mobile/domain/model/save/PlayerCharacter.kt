@@ -11,4 +11,11 @@ interface PlayerCharacter {
     val characterMaxMp: Int
     val characterExp: Int
     val abilityList: List<Ability>
+
+    fun changeHp(amount: Int): PlayerCharacter
+    fun changeMp(amount: Int): PlayerCharacter
+    fun addMaxHp(amount: Int): PlayerCharacter
+    fun addMaxMp(amount: Int): PlayerCharacter
+    fun addAbilities(abilityList: List<Ability>): PlayerCharacter
+    fun addExp(amount: Int): PlayerCharacter
 }

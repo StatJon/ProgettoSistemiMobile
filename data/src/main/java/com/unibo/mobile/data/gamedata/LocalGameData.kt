@@ -8,8 +8,28 @@ import com.unibo.mobile.domain.model.entity.PlayerClass
 object LocalGameData {
 
     val playerClasses: List<PlayerClass> = listOf(
-        PlayerClassImpl(classId = "cleric", displayName = "Cleric", unlockCountRequired = 0),
-        PlayerClassImpl(classId = "druid", displayName = "Druid", unlockCountRequired = 1)
+        PlayerClassImpl(
+            classId = "cleric",
+            displayName = "Cleric",
+            unlockCountRequired = 0,
+            strength = 10,
+            dexterity = 14,
+            constitution = 16,
+            intelligence = 8,
+            wisdom = 16,
+            charisma = 8
+        ),
+        PlayerClassImpl(
+            classId = "druid",
+            displayName = "Druid",
+            unlockCountRequired = 1,
+            strength = 8,
+            dexterity = 14,
+            constitution = 14,
+            intelligence = 10,
+            wisdom = 16,
+            charisma = 10
+        )
     )
 
     val enemyTypes: List<EnemyType> = listOf(

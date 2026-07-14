@@ -7,8 +7,5 @@ interface LevelUpStrategy {
     fun applyLevelUp(
         playerCharacter: PlayerCharacter,
         newAbilities: List<Ability>,
-        addMaxHp: Int,
-        addMaxMp: Int,
-        addMaxAp: Int
     ): PlayerCharacter
 }

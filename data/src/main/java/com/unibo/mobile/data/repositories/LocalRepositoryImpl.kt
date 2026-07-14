@@ -64,7 +64,7 @@ class LocalRepositoryImpl(
             characterMp = saveGameRaw.playerCurrentMp,
             characterMaxMp = saveGameRaw.playerMaxMp,
             characterExp = saveGameRaw.playerExp,
-            abilityList = placeholderAbilities
+            abilityList = placeholderAbilities,
         )
 
         val saveSession = SaveSessionImpl(

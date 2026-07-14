@@ -45,9 +45,15 @@ class ApiRepositoryImplTest {
         val apiRepository = ApiRepositoryImpl(dndApi, localRepository)
 
         val fakePlayerClass = PlayerClassImpl(
-            classId = "wizard",
-            displayName = "Wizard",
-            unlockCountRequired = 0
+            classId = "druid",
+            displayName = "Druid",
+            unlockCountRequired = 1,
+            strength = 8,
+            dexterity = 14,
+            constitution = 14,
+            intelligence = 10,
+            wisdom = 16,
+            charisma = 10
         )
 
         val abilities = apiRepository.getAbilitiesPlayerCharacter(fakePlayerClass, level = 3)
