@@ -4,6 +4,6 @@ import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.entity.CombatEntity
 
 interface ResourceCost {
-    fun canAfford(actor: CombatEntity, ability: Ability): Boolean
-    fun consumeResource(actor: CombatEntity, ability: Ability): CombatEntity
+    fun canAfford(pool: Int, cost: Int): Boolean
+    fun consumeResource(entity: CombatEntity, ability: Ability): CombatEntity
 }

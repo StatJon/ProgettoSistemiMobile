@@ -12,7 +12,12 @@ data class EnemyImpl(
     override val currentAp: Int,
     override val maxAp: Int,
     override val armorClass: Int,
-    override val initiative: Int,
+    override val strength: Int,
+    override val dexterity: Int,
+    override val constitution: Int,
+    override val intelligence: Int,
+    override val wisdom: Int,
+    override val charisma: Int,
     override val abilities: List<Ability>,
     override val enemyType: EnemyType,
     override val challengeRating: Float

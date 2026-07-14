@@ -1,5 +1,6 @@
 package com.unibo.mobile.data.repositories
 
+import com.unibo.mobile.data.gamedata.LocalGameData
 import com.unibo.mobile.data.local.dao.SaveGameDao
 import com.unibo.mobile.data.local.entities.SaveGameEntity
 import com.unibo.mobile.data.models.ability.AbilityImpl
@@ -9,7 +10,6 @@ import com.unibo.mobile.data.models.save.SaveSessionImpl
 import com.unibo.mobile.data.models.save.UserSettingsImpl
 import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.ability.AbilityType
-import com.unibo.mobile.domain.model.ability.Dice
 import com.unibo.mobile.domain.model.entity.EnemyType
 import com.unibo.mobile.domain.model.entity.PlayerClass
 import com.unibo.mobile.domain.model.save.SaveGame
@@ -108,10 +108,10 @@ class LocalRepositoryImpl(
     }
 
     override fun getPlayerClasses(): List<PlayerClass> {
-        return LocalRepositoryStaticGameData.playerClasses
+        return LocalGameData.playerClasses
     }
 
     override fun getEnemyTypes(): List<EnemyType> {
-        return LocalRepositoryStaticGameData.enemyTypes
+        return LocalGameData.enemyTypes
     }
 }

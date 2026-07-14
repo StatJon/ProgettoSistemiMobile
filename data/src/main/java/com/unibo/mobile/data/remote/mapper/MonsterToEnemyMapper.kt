@@ -1,5 +1,7 @@
 package com.unibo.mobile.data.remote.mapper
 
+import android.R
+import android.telephony.SignalStrength
 import com.unibo.mobile.data.models.ability.AbilityImpl
 import com.unibo.mobile.data.models.entity.EnemyImpl
 import com.unibo.mobile.data.remote.models.monster.ActionDto
@@ -18,7 +20,12 @@ fun MonsterDto.toEnemyOrNull(enemyTypeList: List<EnemyType>): Enemy? {
     val hp: Int = defineHp(this)
     val ap: Int = defineAp()
     val armorClass: Int = defineArmorClass(this)
-    val initiative: Int = defineInitiative(this)
+    val strength: Int = defineStrength(this)
+    val dexterity: Int = defineDexterity(this)
+    val constitution: Int = defineConstitution(this)
+    val intelligence: Int = defineIntelligence(this)
+    val wisdom: Int = defineWisdom(this)
+    val charisma: Int = defineCharisma(this)
     val challengeRating: Float = defineChallengeRating(this)
     return assembleEnemy(
         id,
@@ -26,7 +33,12 @@ fun MonsterDto.toEnemyOrNull(enemyTypeList: List<EnemyType>): Enemy? {
         hp,
         ap,
         armorClass,
-        initiative,
+        strength,
+        dexterity,
+        constitution,
+        intelligence,
+        wisdom,
+        charisma,
         actionList,
         enemyType,
         challengeRating
@@ -108,10 +120,28 @@ private fun defineArmorClass(monsterDto: MonsterDto): Int {
     return monsterDto.armorClassDto.first().value
 }
 
-private fun defineInitiative(monsterDto: MonsterDto): Int {
+private fun defineStrength(monsterDto: MonsterDto): Int {
+    return monsterDto.strength
+}
+private fun defineDexterity(monsterDto: MonsterDto): Int {
     return monsterDto.dexterity
 }
 
+private fun defineConstitution(monsterDto: MonsterDto): Int {
+    return monsterDto.constitution
+}
+
+private fun defineIntelligence(monsterDto: MonsterDto): Int {
+    return monsterDto.intelligence
+}
+
+private fun defineWisdom(monsterDto: MonsterDto): Int {
+    return monsterDto.wisdom
+}
+
+private fun defineCharisma(monsterDto: MonsterDto): Int {
+    return monsterDto.charisma
+}
 private fun defineEnemyType(monsterDto: MonsterDto, enemyTypeList: List<EnemyType>): EnemyType? {
     val enemyTypeRaw = monsterDto.type
     val enemyType = enemyTypeList.firstOrNull { it.enemyTypeId == enemyTypeRaw } ?: return null
@@ -128,7 +158,12 @@ private fun assembleEnemy(
     maxHp: Int,
     maxAp: Int,
     armorClass: Int,
-    initiative: Int,
+    strength: Int,
+    dexterity: Int,
+    constitution: Int,
+    intelligence: Int,
+    wisdom: Int,
+    charisma: Int,
     abilities: List<Ability>,
     enemyType: EnemyType,
     challengeRating: Float
@@ -141,7 +176,12 @@ private fun assembleEnemy(
         currentAp = maxAp,
         maxAp = maxAp,
         armorClass = armorClass,
-        initiative = initiative,
+        strength = strength,
+        dexterity = dexterity,
+        constitution = constitution,
+        intelligence = intelligence,
+        wisdom = wisdom,
+        charisma = charisma,
         abilities = abilities,
         enemyType = enemyType,
         challengeRating = challengeRating

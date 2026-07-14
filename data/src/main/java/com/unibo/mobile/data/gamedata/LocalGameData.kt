@@ -1,11 +1,11 @@
-package com.unibo.mobile.data.repositories
+package com.unibo.mobile.data.gamedata
 
 import com.unibo.mobile.data.models.entity.EnemyTypeImpl
 import com.unibo.mobile.data.models.entity.PlayerClassImpl
 import com.unibo.mobile.domain.model.entity.EnemyType
 import com.unibo.mobile.domain.model.entity.PlayerClass
 
-object LocalRepositoryStaticGameData {
+object LocalGameData {
 
     val playerClasses: List<PlayerClass> = listOf(
         PlayerClassImpl(classId = "cleric", displayName = "Cleric", unlockCountRequired = 0),

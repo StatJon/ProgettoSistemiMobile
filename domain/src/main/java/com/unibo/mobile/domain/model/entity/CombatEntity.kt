@@ -10,7 +10,12 @@ interface CombatEntity {
     val currentAp: Int
     val maxAp: Int
     val armorClass: Int
-    val initiative: Int
+    val strength: Int
+    val dexterity: Int
+    val constitution: Int
+    val intelligence: Int
+    val wisdom: Int
+    val charisma: Int
     val abilities: List<Ability>
     fun isTurnOver(): Boolean = currentAp <= 0
     fun isAlive(): Boolean = currentAp > 0
