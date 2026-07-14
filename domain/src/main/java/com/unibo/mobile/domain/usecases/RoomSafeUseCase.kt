@@ -4,7 +4,7 @@ import com.unibo.mobile.domain.model.dungeon.RoomAction
 import com.unibo.mobile.domain.model.save.SaveSession
 
 interface RoomSafeUseCase {
-    fun applyRoomAction(
+    suspend fun applyRoomAction(
         saveSession: SaveSession,
         roomAction: RoomAction
     ): SaveSession
