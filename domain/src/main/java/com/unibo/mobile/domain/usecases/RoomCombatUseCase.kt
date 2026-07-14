@@ -1,7 +1,7 @@
 package com.unibo.mobile.domain.usecases
 
+import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.combat.Action
-import com.unibo.mobile.domain.model.combat.CombatLogEntry
 import com.unibo.mobile.domain.model.combat.CombatState
 import com.unibo.mobile.domain.model.combat.PostCombatReward
 import com.unibo.mobile.domain.model.entity.Ally
@@ -14,6 +14,18 @@ interface RoomCombatUseCase {
         allies: List<Ally>,
         enemies: List<Enemy>
     ): CombatState
+
+    fun resolveAttackPlayer(
+        actor: CombatEntity,
+        ability: Ability,
+        target: CombatEntity,
+        allEntities: List<CombatEntity>
+    ): Action
+
+    fun resolveAttackNpc(
+        actor: CombatEntity,
+        allEntities: List<CombatEntity>
+    ): List<Action>
 
     fun executeAction(
         currentState: CombatState,
