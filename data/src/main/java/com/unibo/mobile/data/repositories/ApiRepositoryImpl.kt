@@ -1,9 +1,13 @@
 package com.unibo.mobile.data.repositories
 
+import android.util.Log.e
 import com.unibo.mobile.data.remote.api.DndApi
+import com.unibo.mobile.data.remote.mapper.toAbilityOrNull
 import com.unibo.mobile.data.remote.mapper.toEnemyOrNull
 import com.unibo.mobile.data.remote.models.monster.MonsterDto
 import com.unibo.mobile.data.remote.models.monster.MonsterListDto
+import com.unibo.mobile.data.remote.models.spell.SpellDto
+import com.unibo.mobile.data.remote.models.spell.SpellListDto
 import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.dungeon.ChallengeRating
 import com.unibo.mobile.domain.model.dungeon.RoomTypeCombat
@@ -28,13 +32,11 @@ class ApiRepositoryImpl(
         val crQueryList: String = crValues.joinToString(
             separator = ",",
             transform = { it.challengeRatingValue.toString() })
-        println(crQueryList)
         val monsterListDto: MonsterListDto = dndApi.getMonstersChallengeRating(crQueryList)
-        val indices: List<String> = monsterListDto.results.map { it.index }
+        val indexes: List<String> = monsterListDto.results.map { it.index }
         val monsterDtoList: List<MonsterDto> = coroutineScope {
-            indices.map { index ->
+            indexes.map { index ->
                 async {
-                    println("Fetching: $index")
                     try {
                         dndApi.getMonster(index)
                     } catch (e: Exception) {
@@ -49,15 +51,32 @@ class ApiRepositoryImpl(
         return enemies
     }
 
-    override suspend fun getAbilitiesEnemy(enemy: EnemyType): List<Ability> {
-        TODO("Funzione di gioco extra, aggiunge altre spell ai nemici, non obbligatorio per prima versione")
-    }
-
     override suspend fun getAbilitiesPlayerCharacter(
         playerClass: PlayerClass,
         level: Int
     ): List<Ability> {
-        TODO("Not yet implemented")
+        val spellListDto: SpellListDto = dndApi.getClassSpells(playerClass.classId)
+        val indexes: List<String> = spellListDto.results.map { it.index }
+        val spellDtoList: List<SpellDto> = coroutineScope {
+            indexes.map { index ->
+                async {
+                    try {
+                        dndApi.getSpell(index)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+            }.awaitAll().filterNotNull()
+        }
+        val abilityList: List<Ability> =
+            spellDtoList
+                .mapNotNull { it.toAbilityOrNull() }
+                .filter { it.level == level }
+        return abilityList
+    }
+
+    override suspend fun getAbilitiesEnemy(enemy: EnemyType): List<Ability> {
+        TODO("Funzione di gioco extra, aggiunge altre spell ai nemici, non obbligatorio per prima versione")
     }
 
 }

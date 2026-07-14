@@ -3,6 +3,7 @@ package com.unibo.mobile.data
 import com.unibo.mobile.data.local.dao.SaveGameDao
 import com.unibo.mobile.data.local.entities.SaveGameEntity
 import com.unibo.mobile.data.models.dungeon.RoomTypeCombatImpl
+import com.unibo.mobile.data.models.entity.PlayerClassImpl
 import com.unibo.mobile.data.remote.api.RetrofitClient
 import com.unibo.mobile.data.repositories.ApiRepositoryImpl
 import com.unibo.mobile.data.repositories.LocalRepositoryImpl
@@ -36,5 +37,23 @@ class ApiRepositoryImplTest {
         println("Trovati ${enemies.size} nemici")
         enemies.forEach { println(it) }
     }
+
+    @Test
+    fun testGetAbilitiesPlayerCharacter(): Unit = runBlocking {
+        val dndApi = RetrofitClient().dndService
+        val localRepository = LocalRepositoryImpl(saveGameDao = FakeSaveGameDao())
+        val apiRepository = ApiRepositoryImpl(dndApi, localRepository)
+
+        val fakePlayerClass = PlayerClassImpl(
+            classId = "wizard",
+            displayName = "Wizard",
+            unlockCountRequired = 0
+        )
+
+        val abilities = apiRepository.getAbilitiesPlayerCharacter(fakePlayerClass, level = 3)
+        println("Trovate ${abilities.size} abilità")
+        abilities.forEach { println(it) }
+    }
+
 
 }
