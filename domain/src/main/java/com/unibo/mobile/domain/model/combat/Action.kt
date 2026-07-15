@@ -9,4 +9,5 @@ interface Action {
     val ability: Ability
     val isHit: Boolean
     val amount: Int
+    val attackRoll: Int
 }

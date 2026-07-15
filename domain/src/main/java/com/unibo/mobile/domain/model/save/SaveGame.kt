@@ -4,4 +4,5 @@ interface SaveGame {
     val saveSession: SaveSession?
     val userSettings: UserSettings
     val winCounter: Int
+    fun incrementWinCounter(): SaveGame
 }

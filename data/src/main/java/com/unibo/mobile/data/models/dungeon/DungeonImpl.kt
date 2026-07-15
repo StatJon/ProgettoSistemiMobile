@@ -7,4 +7,8 @@ data class DungeonImpl(
     override val rooms: List<Room>,
     override val currentRoomIndex: Int
 ) : Dungeon {
+    override fun advanceRoomIndex(): Dungeon {
+        return this.copy(currentRoomIndex = currentRoomIndex + 1)
+    }
+
 }

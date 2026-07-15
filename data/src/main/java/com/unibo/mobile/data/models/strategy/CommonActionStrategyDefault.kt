@@ -52,14 +52,16 @@ class CommonActionStrategyDefault : CommonActionStrategy {
         target: CombatEntity,
         ability: Ability,
         isHit: Boolean,
-        amount: Int
+        amount: Int,
+        attackRoll: Int
     ): Action {
         return ActionImpl(
             actor = actor,
             target = target,
             ability = ability,
             isHit = isHit,
-            amount = amount
+            amount = amount,
+            attackRoll = attackRoll
         )
     }
 }

@@ -21,6 +21,7 @@ interface CommonActionStrategy {
         target: CombatEntity,
         ability: Ability,
         isHit: Boolean,
-        amount: Int
+        amount: Int,
+        attackRoll: Int
     ): Action
 }

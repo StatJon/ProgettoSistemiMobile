@@ -9,6 +9,11 @@ import com.unibo.mobile.domain.model.entity.PlayerClass
 object LocalGameData {
 
     const val EXP_PER_LEVEL = 100
+    const val HP_RESTORE_BASE = 5
+    const val MP_RESTORE_BASE = 3
+
+    const val BASE_ROOMS = 3
+    const val MAX_ENEMIES_PER_ROOM = 3
 
     val playerClasses: List<PlayerClass> = listOf(
         PlayerClassImpl(

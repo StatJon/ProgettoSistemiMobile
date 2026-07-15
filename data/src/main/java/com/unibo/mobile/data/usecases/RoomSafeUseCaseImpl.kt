@@ -1,6 +1,5 @@
 package com.unibo.mobile.data.usecases
 
-import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.dungeon.RoomAction
 import com.unibo.mobile.domain.model.save.SaveSession
 import com.unibo.mobile.domain.model.strategy.LevelUpStrategy

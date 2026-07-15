@@ -9,6 +9,7 @@ data class ActionImpl(
     override val target: CombatEntity,
     override val ability: Ability,
     override val isHit: Boolean,
-    override val amount: Int
+    override val amount: Int,
+    override val attackRoll: Int
 ) : Action {
 }
