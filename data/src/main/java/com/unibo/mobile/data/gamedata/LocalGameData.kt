@@ -8,6 +8,8 @@ import com.unibo.mobile.domain.model.entity.PlayerClass
 
 object LocalGameData {
 
+    const val EXP_PER_LEVEL = 100
+
     val playerClasses: List<PlayerClass> = listOf(
         PlayerClassImpl(
             classId = "cleric",

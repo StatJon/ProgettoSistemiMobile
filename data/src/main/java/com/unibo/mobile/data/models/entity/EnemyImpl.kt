@@ -20,7 +20,8 @@ data class EnemyImpl(
     override val charisma: Int,
     override val abilities: List<Ability>,
     override val enemyType: EnemyType,
-    override val challengeRating: Float
+    override val challengeRating: Float,
+    override val rewardExp: Int
 ) : Enemy {
     override fun changeHp(amount: Int): EnemyImpl {
         return this.copy(currentHp = currentHp + amount)

@@ -1,7 +1,5 @@
 package com.unibo.mobile.data.remote.mapper
 
-import android.R
-import android.telephony.SignalStrength
 import com.unibo.mobile.data.models.ability.AbilityImpl
 import com.unibo.mobile.data.models.entity.EnemyImpl
 import com.unibo.mobile.data.remote.models.monster.ActionDto
@@ -27,6 +25,7 @@ fun MonsterDto.toEnemyOrNull(enemyTypeList: List<EnemyType>): Enemy? {
     val wisdom: Int = defineWisdom(this)
     val charisma: Int = defineCharisma(this)
     val challengeRating: Float = defineChallengeRating(this)
+    val rewardExp: Int = defineRewardExp(this)
     return assembleEnemy(
         id,
         displayName,
@@ -41,7 +40,8 @@ fun MonsterDto.toEnemyOrNull(enemyTypeList: List<EnemyType>): Enemy? {
         charisma,
         actionList,
         enemyType,
-        challengeRating
+        challengeRating,
+        rewardExp
     )
 }
 
@@ -152,6 +152,10 @@ private fun defineChallengeRating(monsterDto: MonsterDto): Float {
     return monsterDto.challengeRating
 }
 
+private fun defineRewardExp(monsterDto: MonsterDto): Int{
+    return monsterDto.xp
+}
+
 private fun assembleEnemy(
     id: String,
     name: String,
@@ -166,7 +170,8 @@ private fun assembleEnemy(
     charisma: Int,
     abilities: List<Ability>,
     enemyType: EnemyType,
-    challengeRating: Float
+    challengeRating: Float,
+    rewardExp: Int
 ): Enemy {
     return EnemyImpl(
         entityId = id,
@@ -184,7 +189,8 @@ private fun assembleEnemy(
         charisma = charisma,
         abilities = abilities,
         enemyType = enemyType,
-        challengeRating = challengeRating
+        challengeRating = challengeRating,
+        rewardExp = rewardExp
     )
 }
 

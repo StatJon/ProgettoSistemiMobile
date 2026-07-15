@@ -15,6 +15,7 @@ data class SaveGameEntity(
     val playerCurrentMp: Int,
     val playerMaxMp: Int,
     val playerExp: Int,
+    val playerLevel: Int,
     val playerAbilityIds: String,
     val musicEnabled: Boolean,
     val musicVolume: Float,

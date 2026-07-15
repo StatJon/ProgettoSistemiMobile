@@ -10,6 +10,7 @@ data class PlayerCharacterImpl(
     override val characterMaxHp: Int,
     override val characterMp: Int,
     override val characterMaxMp: Int,
+    override val characterLevel: Int,
     override val characterExp: Int,
     override val abilityList: List<Ability>,
 ) : PlayerCharacter {
@@ -31,6 +32,10 @@ data class PlayerCharacterImpl(
 
     override fun addAbilities(abilityList: List<Ability>): PlayerCharacter {
         return this.copy(abilityList = this.abilityList + abilityList)
+    }
+
+    override fun setLevel(newLevel: Int): PlayerCharacter {
+        return this.copy(characterLevel = newLevel)
     }
 
     override fun addExp(amount: Int): PlayerCharacter {

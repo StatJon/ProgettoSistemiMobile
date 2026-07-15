@@ -64,6 +64,7 @@ class LocalRepositoryImpl(
             characterMp = saveGameRaw.playerCurrentMp,
             characterMaxMp = saveGameRaw.playerMaxMp,
             characterExp = saveGameRaw.playerExp,
+            characterLevel = saveGameRaw.playerLevel,
             abilityList = placeholderAbilities,
         )
 
@@ -94,6 +95,7 @@ class LocalRepositoryImpl(
             playerMaxHp = saveGame.saveSession?.playerCharacter?.characterMaxHp ?: 0,
             playerCurrentMp = saveGame.saveSession?.playerCharacter?.characterMp ?: 0,
             playerMaxMp = saveGame.saveSession?.playerCharacter?.characterMaxMp ?: 0,
+            playerLevel = saveGame.saveSession?.playerCharacter?.characterLevel ?: 0,
             playerExp = saveGame.saveSession?.playerCharacter?.characterExp ?: 0,
             playerAbilityIds = playerAbilitiesIdList,
             musicEnabled = saveGame.userSettings.musicEnable,
