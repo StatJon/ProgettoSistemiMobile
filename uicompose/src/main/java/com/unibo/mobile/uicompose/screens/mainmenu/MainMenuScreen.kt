@@ -10,6 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.unibo.mobile.domain.model.entity.PlayerClass
 import com.unibo.mobile.uicompose.common.LargeButton
+import com.unibo.mobile.uicompose.common.LargeTitle
 
 @Composable
 fun MainMenuScreen(
@@ -25,7 +26,7 @@ fun MainMenuScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = stringResource(R.string.main_menu_title))
+        LargeTitle(stringResource(R.string.main_menu_title))
         NewGameButtons(playerClasses, winCounter, onNewGameElementTap)
         OptionsButton(onTap = onOptionsTap)
         ContinueButton(isContinuePossible, onContinueTap)
