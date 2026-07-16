@@ -5,4 +5,11 @@
     <string name="continue_button">Continue</string>
     <string name="options_button">Settings</string>
     <string name="dungeons_won">Dungeons Won: %1$s</string>
+    <string name="damage_label">%1$dd%2$d DMG</string>
+    <string name="heal_label">%1$dd%2$d HEAL</string>
+    <string name="one_target_label">to One</string>
+    <string name="all_target_label">to All</string>
+    <string name="full_action_label">Full Action</string>
+    <string name="bonus_action_label">Bonus Action</string>
+    <string name="cost_label">Cost: %1$dMP</string>
 </resources>

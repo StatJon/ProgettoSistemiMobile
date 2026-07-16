@@ -1,18 +1,17 @@
 package com.unibo.mobile.uicompose.screens.mainmenu
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.unibo.mobile.uicompose.R
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.unibo.mobile.domain.model.entity.PlayerClass
-import com.unibo.mobile.uicompose.common.LargeButton
+import com.unibo.mobile.uicompose.common.StandardButtonText
 import com.unibo.mobile.uicompose.common.LargeTitle
 import com.unibo.mobile.uicompose.common.ScreenLayoutStandard
 
+// --- --------------------------------------------------- ---//
+// --- Main --- //
 @Composable
 fun MainMenuScreen(
     isLandscape: Boolean,
@@ -38,8 +37,9 @@ fun MainMenuScreen(
         }
     )
 }
-
-// --- Composables --- //
+// --- Main --- //
+// --- --------------------------------------------------- ---//
+// --- Screen Composables --- //
 
 @Composable
 private fun DisplayContent(
@@ -62,10 +62,11 @@ private fun InputContent(
     NewGameButtons(playerClasses, winCounter, onNewGameElementTap)
     OptionsButton(onTap = onOptionsTap)
     ContinueButton(isContinuePossible, onContinueTap)
-
-
 }
 
+// --- Screen Composables --- //
+// --- --------------------------------------------------- ---//
+// --- Components Composables ---//
 @Composable
 private fun NewGameButtons(
     playerClasses: List<PlayerClass>,
@@ -73,7 +74,7 @@ private fun NewGameButtons(
     onTap: (PlayerClass) -> Unit
 ) {
     playerClasses.forEach { playerClass ->
-        LargeButton(
+        StandardButtonText(
             text = stringResource(R.string.new_game_button, playerClass.displayName),
             enabled = winCounter >= playerClass.unlockCountRequired,
             onTap = { onTap(playerClass) }
@@ -85,7 +86,7 @@ private fun NewGameButtons(
 private fun OptionsButton(
     onTap: () -> Unit
 ) {
-    LargeButton(
+    StandardButtonText(
         text = stringResource(R.string.options_button),
         onTap = onTap
     )
@@ -96,14 +97,15 @@ private fun ContinueButton(
     enabled: Boolean,
     onTap: () -> Unit
 ) {
-    LargeButton(
+    StandardButtonText(
         text = stringResource(R.string.continue_button),
         onTap = onTap,
         enabled = enabled
     )
 }
-// --- Composables --- //
 
+// --- Components Composables ---//
+// --- --------------------------------------------------- ---//
 // --- Preview --- //
 @Preview(showBackground = true)
 @Composable
@@ -146,3 +148,4 @@ private fun MainMenuScreenPreview() {
     )
 }
 // --- Preview --- //
+// --- --------------------------------------------------- ---//

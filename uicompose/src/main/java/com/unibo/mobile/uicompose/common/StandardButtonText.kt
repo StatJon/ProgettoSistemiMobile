@@ -7,17 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LargeButton(
+fun StandardButtonText(
     text: String,
     onTap: () -> Unit,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    Button(
-        onClick = onTap,
-        modifier = modifier.fillMaxWidth(),
+    StandardButtonComposable(
+        onTap = onTap,
         enabled = enabled
-
     ) {
         Text(text)
     }

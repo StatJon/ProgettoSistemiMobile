@@ -13,28 +13,33 @@ fun ScreenLayoutStandard(
     isLandscape: Boolean,
     displayWeight: Float = 0.5f,
     inputWeight: Float = 0.5f,
+    inputAlignBottom: Boolean = true,
     displayContent: @Composable () -> Unit,
     inputContent: @Composable () -> Unit
 ) {
     if (isLandscape) {
-        Row(modifier = Modifier
-            .fillMaxSize()
-            .padding(UiConstants.BASE_PADDING)) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(UiConstants.BASE_PADDING)
+        ) {
             DisplaySection(modifier = Modifier.weight(displayWeight)) {
                 displayContent()
             }
-            InputSection(modifier = Modifier.weight(inputWeight)) {
+            InputSection(modifier = Modifier.weight(inputWeight), alignBottom = inputAlignBottom) {
                 inputContent()
             }
         }
     } else {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(UiConstants.BASE_PADDING)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(UiConstants.BASE_PADDING)
+        ) {
             DisplaySection(modifier = Modifier.weight(displayWeight)) {
                 displayContent()
             }
-            InputSection(modifier = Modifier.weight(inputWeight)) {
+            InputSection(modifier = Modifier.weight(inputWeight), alignBottom = inputAlignBottom) {
                 inputContent()
             }
         }
