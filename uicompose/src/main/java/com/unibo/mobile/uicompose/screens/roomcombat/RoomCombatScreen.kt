@@ -1,17 +1,20 @@
 package com.unibo.mobile.uicompose.screens.roomcombat
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.ability.AbilityType
@@ -26,6 +29,7 @@ import com.unibo.mobile.domain.model.entity.PlayerClass
 import com.unibo.mobile.uicompose.R
 import com.unibo.mobile.uicompose.common.ScreenLayoutStandard
 import com.unibo.mobile.uicompose.common.StandardButtonComposable
+import com.unibo.mobile.uicompose.common.StandardCardComposable
 import com.unibo.mobile.uicompose.common.UiConstants
 
 // --- --------------------------------------------------- ---//
@@ -41,70 +45,79 @@ fun RoomCombatScreen(
 ) {
     ScreenLayoutStandard(
         isLandscape = isLandscape,
-        inputAlignBottom = false,
-        displayContent = { DisplayContent(combatState, onEntityTap) },
-        inputContent = { InputContent(abilityList, player, onAbilityTap) }
+        displayContent = {Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(UiConstants.BUTTON_SPACING)
+        ) {
+            FightUi(
+                combatState = combatState,
+                onEntityTap = onEntityTap,
+                modifier = Modifier.weight(0.7f)
+            )
+            LogUi(
+                combatState = combatState,
+                modifier = Modifier.weight(0.3f)
+            )
+        }
+        },
+        inputContent = {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(UiConstants.BUTTON_SPACING)
+            ) {
+                PlayerStatUi(player)
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(
+                                UiConstants.ROUNDED_CORNER_RADIUS
+                            )
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(UiConstants.BUTTON_SPACING)
+                ) {
+                    items(abilityList) { ability ->
+                        AbilityButton(ability = ability, onTap = { onAbilityTap(ability) })
+                    }
+                }
+            }
+        }
     )
 }
 
 // --- Main --- //
 // --- --------------------------------------------------- ---//
-// --- Screen Composables --- //
+// --- Components Composables ---//
 
 @Composable
-private fun DisplayContent(
+private fun FightUi(
     combatState: CombatState,
-    onEntityTap: (CombatEntity) -> Unit
+    onEntityTap: (CombatEntity) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    FightUi(combatState, onEntityTap)
-    LogUi(combatState)
+    StandardCardComposable(modifier = modifier) {
+        Text(stringResource(R.string.combat_screen_label))
+    }
 }
 
 @Composable
-private fun InputContent(
-    abilityList: List<Ability>,
-    player: Ally,
-    onAbilityTap: (Ability) -> Unit,
-) {
-    PlayerStatUi(player)
+private fun LogUi(combatState: CombatState, modifier: Modifier = Modifier) {
+    StandardCardComposable(modifier = modifier) {
+        Text(stringResource(R.string.log_section_label))
+        LazyColumn() {
+            items(combatState.log) { logEntry ->
+                Text("PLACEHOLDER LOG")
+            }
 
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(UiConstants.BUTTON_SPACING)
-    ) {
-        items(abilityList) { ability ->
-            AbilityButton(ability = ability, onTap = { onAbilityTap(ability) })
         }
     }
 }
 
-// --- Screen Composables --- //
-// --- --------------------------------------------------- ---//
-// --- Components Composables ---//
-
-@Composable
-private fun Button() {
-    // Dev, non usare
-}
-
-@Composable
-private fun FightUi(combatState: CombatState, onEntityTap: (CombatEntity) -> Unit) {
-
-}
-
-@Composable
-private fun LogUi(combatState: CombatState) {
-
-}
-
 @Composable
 private fun PlayerStatUi(player: Ally) {
-
-}
-
-@Composable
-private fun ActionList(abilityList: List<Ability>, onAbilityTap: (Ability) -> Unit) {
-    abilityList.forEach { ability ->
-        AbilityButton(ability = ability, onTap = { onAbilityTap(ability) })
+    StandardCardComposable() {
+        Text(player.displayName)
     }
 }
 

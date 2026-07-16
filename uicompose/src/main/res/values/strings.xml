@@ -12,4 +12,6 @@
     <string name="full_action_label">Full Action</string>
     <string name="bonus_action_label">Bonus Action</string>
     <string name="cost_label">Cost: %1$dMP</string>
+    <string name="log_section_label">Combat Log</string>
+    <string name="combat_screen_label">Combat Screen</string>
 </resources>

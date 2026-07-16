@@ -1,7 +1,12 @@
 package com.unibo.mobile.uicompose.screens.mainmenu
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.unibo.mobile.uicompose.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -9,6 +14,7 @@ import com.unibo.mobile.domain.model.entity.PlayerClass
 import com.unibo.mobile.uicompose.common.StandardButtonText
 import com.unibo.mobile.uicompose.common.LargeTitle
 import com.unibo.mobile.uicompose.common.ScreenLayoutStandard
+import com.unibo.mobile.uicompose.common.UiConstants
 
 // --- --------------------------------------------------- ---//
 // --- Main --- //
@@ -24,47 +30,25 @@ fun MainMenuScreen(
 ) {
     ScreenLayoutStandard(
         isLandscape = isLandscape,
-        displayContent = { DisplayContent(winCounter) },
+        displayContent = {
+            Column(modifier = Modifier.fillMaxSize()) {
+                LargeTitle(stringResource(R.string.main_menu_title))
+                Text(text = stringResource(R.string.dungeons_won, winCounter))
+            }
+        },
         inputContent = {
-            InputContent(
-                playerClasses = playerClasses,
-                winCounter = winCounter,
-                onNewGameElementTap = onNewGameElementTap,
-                isContinuePossible = isContinuePossible,
-                onContinueTap = onContinueTap,
-                onOptionsTap = onOptionsTap
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(UiConstants.BUTTON_SPACING, Alignment.Bottom)
+            ) {
+                NewGameButtons(playerClasses, winCounter, onNewGameElementTap)
+                OptionsButton(onTap = onOptionsTap)
+                ContinueButton(isContinuePossible, onContinueTap)
+            }
         }
     )
 }
 // --- Main --- //
-// --- --------------------------------------------------- ---//
-// --- Screen Composables --- //
-
-@Composable
-private fun DisplayContent(
-    winCounter: Int
-) {
-    LargeTitle(stringResource(R.string.main_menu_title))
-    Text(text = stringResource(R.string.dungeons_won, winCounter))
-
-}
-
-@Composable
-private fun InputContent(
-    playerClasses: List<PlayerClass>,
-    winCounter: Int,
-    onNewGameElementTap: (PlayerClass) -> Unit,
-    isContinuePossible: Boolean,
-    onContinueTap: () -> Unit,
-    onOptionsTap: () -> Unit
-) {
-    NewGameButtons(playerClasses, winCounter, onNewGameElementTap)
-    OptionsButton(onTap = onOptionsTap)
-    ContinueButton(isContinuePossible, onContinueTap)
-}
-
-// --- Screen Composables --- //
 // --- --------------------------------------------------- ---//
 // --- Components Composables ---//
 @Composable
@@ -83,20 +67,12 @@ private fun NewGameButtons(
 }
 
 @Composable
-private fun OptionsButton(
-    onTap: () -> Unit
-) {
-    StandardButtonText(
-        text = stringResource(R.string.options_button),
-        onTap = onTap
-    )
+private fun OptionsButton(onTap: () -> Unit) {
+    StandardButtonText(text = stringResource(R.string.options_button), onTap = onTap)
 }
 
 @Composable
-private fun ContinueButton(
-    enabled: Boolean,
-    onTap: () -> Unit
-) {
+private fun ContinueButton(enabled: Boolean, onTap: () -> Unit) {
     StandardButtonText(
         text = stringResource(R.string.continue_button),
         onTap = onTap,
