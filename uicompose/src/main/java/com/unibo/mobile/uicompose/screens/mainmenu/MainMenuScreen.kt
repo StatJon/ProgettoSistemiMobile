@@ -11,9 +11,11 @@ import androidx.compose.ui.unit.dp
 import com.unibo.mobile.domain.model.entity.PlayerClass
 import com.unibo.mobile.uicompose.common.LargeButton
 import com.unibo.mobile.uicompose.common.LargeTitle
+import com.unibo.mobile.uicompose.common.ScreenLayoutStandard
 
 @Composable
 fun MainMenuScreen(
+    isLandscape: Boolean,
     winCounter: Int,
     playerClasses: List<PlayerClass>,
     onNewGameElementTap: (PlayerClass) -> Unit,
@@ -21,20 +23,49 @@ fun MainMenuScreen(
     onContinueTap: () -> Unit,
     onOptionsTap: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        LargeTitle(stringResource(R.string.main_menu_title))
-        NewGameButtons(playerClasses, winCounter, onNewGameElementTap)
-        OptionsButton(onTap = onOptionsTap)
-        ContinueButton(isContinuePossible, onContinueTap)
-    }
-
+    ScreenLayoutStandard(
+        isLandscape = isLandscape,
+        displayContent = { DisplayContent(winCounter) },
+        inputContent = {
+            InputContent(
+                playerClasses = playerClasses,
+                winCounter = winCounter,
+                onNewGameElementTap = onNewGameElementTap,
+                isContinuePossible = isContinuePossible,
+                onContinueTap = onContinueTap,
+                onOptionsTap = onOptionsTap
+            )
+        }
+    )
 }
 
 // --- Composables --- //
+
+@Composable
+private fun DisplayContent(
+    winCounter: Int
+) {
+    LargeTitle(stringResource(R.string.main_menu_title))
+    Text(text = stringResource(R.string.dungeons_won, winCounter))
+
+}
+
+@Composable
+private fun InputContent(
+    playerClasses: List<PlayerClass>,
+    winCounter: Int,
+    onNewGameElementTap: (PlayerClass) -> Unit,
+    isContinuePossible: Boolean,
+    onContinueTap: () -> Unit,
+    onOptionsTap: () -> Unit
+) {
+    NewGameButtons(playerClasses, winCounter, onNewGameElementTap)
+    OptionsButton(onTap = onOptionsTap)
+    ContinueButton(isContinuePossible, onContinueTap)
+
+
+}
+
 @Composable
 private fun NewGameButtons(
     playerClasses: List<PlayerClass>,
@@ -105,6 +136,7 @@ private fun MainMenuScreenPreview() {
 
 
     MainMenuScreen(
+        isLandscape = false,
         winCounter = 0,
         playerClasses = fakeClasses,
         onNewGameElementTap = {},

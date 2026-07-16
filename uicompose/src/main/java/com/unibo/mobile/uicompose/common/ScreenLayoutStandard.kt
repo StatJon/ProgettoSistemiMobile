@@ -3,8 +3,10 @@ package com.unibo.mobile.uicompose.common
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.unibo.mobile.uicompose.common.UiConstants
 
 @Composable
 fun ScreenLayoutStandard(
@@ -15,7 +17,9 @@ fun ScreenLayoutStandard(
     inputContent: @Composable () -> Unit
 ) {
     if (isLandscape) {
-        Row(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier
+            .fillMaxSize()
+            .padding(UiConstants.BASE_PADDING)) {
             DisplaySection(modifier = Modifier.weight(displayWeight)) {
                 displayContent()
             }
@@ -24,7 +28,9 @@ fun ScreenLayoutStandard(
             }
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(UiConstants.BASE_PADDING)) {
             DisplaySection(modifier = Modifier.weight(displayWeight)) {
                 displayContent()
             }

@@ -4,4 +4,5 @@
     <string name="new_game_button">New Game: %1$s</string>
     <string name="continue_button">Continue</string>
     <string name="options_button">Settings</string>
+    <string name="dungeons_won">Dungeons Won: %1$s</string>
 </resources>
