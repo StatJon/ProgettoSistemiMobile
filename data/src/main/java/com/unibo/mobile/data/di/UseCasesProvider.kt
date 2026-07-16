@@ -16,7 +16,7 @@ import com.unibo.mobile.domain.usecases.RoomCombatUseCase
 import com.unibo.mobile.domain.usecases.RoomSafeUseCase
 import com.unibo.mobile.domain.usecases.SaveUseCase
 
-object UseCaseProvider {
+object UseCasesProvider {
     lateinit var roomCombatUseCase: RoomCombatUseCase
     lateinit var roomSafeUseCase: RoomSafeUseCase
     lateinit var dungeonUseCase: DungeonUseCase
