@@ -1,4 +1,7 @@
 package com.unibo.mobile.uicompose.screens.endscreen
 
-class EndScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun EndScreen () {
 }

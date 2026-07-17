@@ -12,6 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -40,11 +44,26 @@ fun RoomCombatScreen(
     combatState: CombatState,
     abilityList: List<Ability>,
     player: Ally,
-    onAbilityTap: (Ability) -> Unit,
-    onEntityTap: (CombatEntity) -> Unit
+    onAbilityAndEntityConfirmed: (Ability, CombatEntity) -> Unit,
+    modifier: Modifier = Modifier
 ) {
+
+    var selectedAbilityId by remember { mutableStateOf<String?>(null) }
+
+    val onAbilityTap: (Ability) -> Unit = { ability ->
+        selectedAbilityId = ability.abilityId
+    }
+
+    val onEntityTap: (CombatEntity) -> Unit = { entity ->
+        abilityList.firstOrNull { it.abilityId == selectedAbilityId }?.let { ability ->
+            onAbilityAndEntityConfirmed(ability, entity)
+            selectedAbilityId = null
+        }
+    }
+
     ScreenLayoutStandard(
         isLandscape = isLandscape,
+        modifier = modifier,
         displayContent = {Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(UiConstants.BUTTON_SPACING)
@@ -278,8 +297,7 @@ private fun RoomCombatPreview() {
         combatState = fakeCombatState,
         abilityList = fakeAbilities,
         player = fakeAlly,
-        onAbilityTap = {},
-        onEntityTap = {}
+        onAbilityAndEntityConfirmed = { _, _ -> },
     )
 }
 

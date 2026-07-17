@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main_menu_title">Dungeons &amp; Dungeons</string>
+    <string name="loading_label">Now Loading…</string>
     <string name="new_game_button">New Game: %1$s</string>
     <string name="continue_button">Continue</string>
     <string name="options_button">Settings</string>

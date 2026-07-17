@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ScreenLayoutStandard(
     isLandscape: Boolean,
+    modifier: Modifier = Modifier,
     displayWeight: Float = 0.5f,
     inputWeight: Float = 0.5f,
     displayContent: @Composable BoxScope.() -> Unit,
@@ -20,7 +21,7 @@ fun ScreenLayoutStandard(
 ) {
     if (isLandscape) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(UiConstants.EDGE_BASE_PADDING),
             horizontalArrangement = Arrangement.spacedBy(UiConstants.SECTION_SPACING)
@@ -30,7 +31,7 @@ fun ScreenLayoutStandard(
         }
     } else {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(UiConstants.EDGE_BASE_PADDING),
             verticalArrangement = Arrangement.spacedBy(UiConstants.SECTION_SPACING)

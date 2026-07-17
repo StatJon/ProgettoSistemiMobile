@@ -26,10 +26,12 @@ fun MainMenuScreen(
     onNewGameElementTap: (PlayerClass) -> Unit,
     isContinuePossible: Boolean,
     onContinueTap: () -> Unit,
-    onOptionsTap: () -> Unit
+    onOptionsTap: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     ScreenLayoutStandard(
         isLandscape = isLandscape,
+        modifier = modifier,
         displayContent = {
             Column(modifier = Modifier.fillMaxSize()) {
                 LargeTitle(stringResource(R.string.main_menu_title))

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun StandardButtonComposable(
     onTap: () -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
     content: @Composable RowScope.() -> Unit,
@@ -23,7 +24,7 @@ fun StandardButtonComposable(
         enabled = enabled,
         shape = RoundedCornerShape(UiConstants.ROUNDED_CORNER_RADIUS),
         colors = ButtonDefaults.buttonColors(containerColor = color),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         content = content
     )
 }

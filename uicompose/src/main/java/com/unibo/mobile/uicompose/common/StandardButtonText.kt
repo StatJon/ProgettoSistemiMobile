@@ -10,10 +10,12 @@ import androidx.compose.ui.Modifier
 fun StandardButtonText(
     text: String,
     onTap: () -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
     StandardButtonComposable(
         onTap = onTap,
+        modifier = modifier,
         enabled = enabled
     ) {
         Text(text)

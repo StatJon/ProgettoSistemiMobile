@@ -1,4 +1,7 @@
 package com.unibo.mobile.uicompose.screens.roomsafe
 
-class RoomSafeScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun RoomSafeScreen () {
 }

@@ -11,12 +11,13 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun LargeTitle(
     text: String,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.headlineLarge,
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     )
 
 }
