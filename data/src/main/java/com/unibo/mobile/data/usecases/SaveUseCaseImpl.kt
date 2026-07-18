@@ -1,7 +1,9 @@
 package com.unibo.mobile.data.usecases
 
 import com.unibo.mobile.data.models.save.SaveGameImpl
+import com.unibo.mobile.data.models.save.SaveSessionImpl
 import com.unibo.mobile.data.models.save.UserSettingsImpl
+import com.unibo.mobile.domain.model.save.PlayerCharacter
 import com.unibo.mobile.domain.model.save.SaveGame
 import com.unibo.mobile.domain.repositories.LocalRepository
 import com.unibo.mobile.domain.usecases.SaveUseCase
@@ -11,6 +13,19 @@ class SaveUseCaseImpl(
 ) : SaveUseCase {
     override suspend fun loadGame(): SaveGame {
         return searchExistingSave() ?: createNewSave()
+    }
+
+    override suspend fun newSession(playerCharacter: PlayerCharacter): SaveGame {
+        val current = loadGame()
+        val newSave = SaveGameImpl(
+            saveSession = SaveSessionImpl(
+                currentRoomIndex = 0,
+                playerCharacter = playerCharacter
+            ),
+            userSettings = current.userSettings,
+            winCounter = current.winCounter
+        )
+        return saveGameProgress(newSave)
     }
 
     override suspend fun saveGameProgress(saveGame: SaveGame): SaveGame {

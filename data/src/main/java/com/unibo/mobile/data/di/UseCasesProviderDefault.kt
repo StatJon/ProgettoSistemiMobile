@@ -2,6 +2,7 @@ package com.unibo.mobile.data.di
 
 import com.unibo.mobile.data.models.strategy.CommonActionStrategyDefault
 import com.unibo.mobile.data.models.strategy.DiceThrowStrategyDefault
+import com.unibo.mobile.data.models.strategy.DungeonCreationStrategyDefault
 import com.unibo.mobile.data.models.strategy.LevelUpStrategyDefault
 import com.unibo.mobile.data.models.strategy.NpcStrategyDefault
 import com.unibo.mobile.data.models.strategy.ResourceCostDefault
@@ -28,13 +29,15 @@ class UseCasesProviderDefault(
     private val commonActionStrategy = CommonActionStrategyDefault()
     private val resourceCost = ResourceCostDefault()
     private val levelUpStrategy = LevelUpStrategyDefault()
+    private val dungeonCreationStrategy = DungeonCreationStrategyDefault()
 
     override val roomCombatUseCase: RoomCombatUseCase = RoomCombatUseCaseImpl(
         turnCalculator = turnCalculator,
         npcStrategy = npcStrategy,
         diceThrowStrategy = diceThrowStrategy,
         commonActionStrategy = commonActionStrategy,
-        resourceCost = resourceCost
+        resourceCost = resourceCost,
+        apiRepository = repositoryProvider.apiRepository
     )
 
     override val roomSafeUseCase: RoomSafeUseCase = RoomSafeUseCaseImpl(
@@ -42,7 +45,9 @@ class UseCasesProviderDefault(
         levelUpStrategy = levelUpStrategy
     )
 
-    override val dungeonUseCase: DungeonUseCase = DungeonUseCaseImpl()
+    override val dungeonUseCase: DungeonUseCase = DungeonUseCaseImpl(
+        dungeonCreationStrategy = dungeonCreationStrategy
+    )
 
     override val saveUseCase: SaveUseCase = SaveUseCaseImpl(
         localRepository = repositoryProvider.localRepository

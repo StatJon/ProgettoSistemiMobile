@@ -25,7 +25,7 @@ data class AllyImpl(
     override val abilities: List<Ability>
 ) : Ally {
     override fun getCurrentLevel(): Int {
-        TODO("Not yet implemented")
+        return (playerExp / 100) + 1
     }
 
     override fun changeMp(amount: Int): Ally {

@@ -73,17 +73,30 @@ private fun GameContent(
             modifier = modifier
         )
         is GameState.Loading -> LoadingScreen()
-        is GameState.RoomSafe -> RoomSafeScreen()
-        is GameState.RoomCombat -> RoomCombatScreen(
+        is GameState.RoomSafe -> RoomSafeScreen(
             isLandscape = isLandscape,
-            combatState = state.combatState,
-            abilityList = state.playerCharacter.abilityList,
-            player = state.combatState.getAllAllies() as Ally,
-            onAbilityAndEntityConfirmed = TODO(),
+            player = state.player,
+            availableActions = state.availableActions,
+            onRoomActionTap = viewModel::onRoomAction,
+            onEnterNextRoomTap = viewModel::onEnterNextRoom,
             modifier = modifier
         )
-        is GameState.EndScreen -> EndScreen()
-        // Altri stati (RoomSafe, RoomCombat, EndScreen) da collegare in seguito.
-        else -> Unit
+        is GameState.RoomCombat -> {
+            val ally = state.combatState.getAllAllies().first()
+            RoomCombatScreen(
+                isLandscape = isLandscape,
+                combatState = state.combatState,
+                abilityList = ally.abilities,
+                player = ally,
+                onAbilityAndEntityConfirmed = viewModel::onAbilityAndEntityConfirmed,
+                modifier = modifier
+            )
+        }
+        is GameState.EndScreen -> EndScreen(
+            isWon = state.isWon,
+            onBackToMenuTap = viewModel::onBackToMenu,
+            isLandscape = isLandscape,
+            modifier = modifier
+        )
     }
 }

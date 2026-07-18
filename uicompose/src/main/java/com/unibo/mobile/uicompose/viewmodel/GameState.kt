@@ -1,6 +1,7 @@
 package com.unibo.mobile.uicompose.viewmodel
 
 import com.unibo.mobile.domain.model.combat.CombatState
+import com.unibo.mobile.domain.model.dungeon.RoomAction
 import com.unibo.mobile.domain.model.entity.PlayerClass
 import com.unibo.mobile.domain.model.save.PlayerCharacter
 
@@ -14,7 +15,8 @@ sealed class GameState {
     ) : GameState()
 
     data class RoomSafe(
-        val player: PlayerCharacter
+        val player: PlayerCharacter,
+        val availableActions: List<RoomAction>
     ) : GameState()
 
     data class RoomCombat(
@@ -23,8 +25,7 @@ sealed class GameState {
     ) : GameState()
 
     data class EndScreen(
-        val isWon: Boolean,
-        val winCombat: RoomCombat
+        val isWon: Boolean
     ) : GameState()
 
 }

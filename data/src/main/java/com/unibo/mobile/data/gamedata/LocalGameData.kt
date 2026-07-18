@@ -2,6 +2,9 @@ package com.unibo.mobile.data.gamedata
 
 import com.unibo.mobile.data.models.entity.EnemyTypeImpl
 import com.unibo.mobile.data.models.entity.PlayerClassImpl
+import com.unibo.mobile.domain.model.ability.Ability
+import com.unibo.mobile.domain.model.ability.AbilityType
+import com.unibo.mobile.domain.model.ability.Dice
 import com.unibo.mobile.domain.model.dungeon.RoomAction
 import com.unibo.mobile.domain.model.entity.EnemyType
 import com.unibo.mobile.domain.model.entity.PlayerClass
@@ -15,6 +18,23 @@ object LocalGameData {
     const val BASE_ROOMS = 3
     const val MAX_ENEMIES_PER_ROOM = 3
     const val SINGLE_ENEMY_PER_ROOM = 1
+    const val FINAL_ROOM_ADDED_CR = 3
+
+    const val PLAYER_ENTITY_ID = "player"
+    const val BASE_ACTION_POINTS = 2
+    const val BASE_ARMOR_CLASS = 10
+
+    val baseAbilities: List<Ability> = listOf(
+        object : Ability {
+            override val abilityId = "guiding_bolt"
+            override val displayName = "Guiding Bolt"
+            override val actionCost = 2
+            override val level = 0
+            override val abilityType = AbilityType.DAMAGE_AOE
+            override val diceCount = 4
+            override val diceType = Dice.D6
+            override val flatExtraAmount = 0
+            },)
 
     val playerClasses: List<PlayerClass> = listOf(
         PlayerClassImpl(

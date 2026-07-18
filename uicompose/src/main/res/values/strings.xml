@@ -15,4 +15,17 @@
     <string name="cost_label">Cost: %1$dMP</string>
     <string name="log_section_label">Combat Log</string>
     <string name="combat_screen_label">Combat Screen</string>
+    <string name="room_safe_title">Safe Room</string>
+    <string name="enter_next_room_button">Enter Next Room</string>
+    <string name="action_rest">Rest</string>
+    <string name="action_levelup">Level Up</string>
+    <string name="char_class_label">%1$s (Lv. %2$d)</string>
+    <string name="char_hp_label">HP: %1$d / %2$d</string>
+    <string name="char_mp_label">MP: %1$d / %2$d</string>
+    <string name="char_exp_label">EXP: %1$d</string>
+    <string name="char_ap_label">AP: %1$d / %2$d</string>
+    <string name="entity_hp_label">HP: %1$d / %2$d</string>
+    <string name="end_victory_title">Victory!</string>
+    <string name="end_defeat_title">Defeat</string>
+    <string name="back_to_menu_button">Back to Menu</string>
 </resources>

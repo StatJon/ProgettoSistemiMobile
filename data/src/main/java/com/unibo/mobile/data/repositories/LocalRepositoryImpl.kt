@@ -101,7 +101,7 @@ class LocalRepositoryImpl(
             musicEnabled = saveGame.userSettings.musicEnable,
             musicVolume = saveGame.userSettings.musicVolume,
             soundEnabled = saveGame.userSettings.soundEnable,
-            soundVolume = saveGame.userSettings.musicVolume,
+            soundVolume = saveGame.userSettings.soundVolume,
             language = saveGame.userSettings.language,
         )
         saveGameDao.insertOrUpdateSaveGame(

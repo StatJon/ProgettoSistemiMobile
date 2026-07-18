@@ -18,7 +18,7 @@ interface CombatEntity {
     val charisma: Int
     val abilities: List<Ability>
     fun isTurnOver(): Boolean = currentAp <= 0
-    fun isAlive(): Boolean = currentAp > 0
+    fun isAlive(): Boolean = currentHp > 0
 
     fun resetAp(): CombatEntity = changeAp(maxAp)
     fun changeHp(amount: Int): CombatEntity

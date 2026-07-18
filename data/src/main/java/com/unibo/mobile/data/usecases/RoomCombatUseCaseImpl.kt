@@ -4,6 +4,7 @@ import com.unibo.mobile.data.gamedata.LocalGameData
 import com.unibo.mobile.data.models.combat.CombatStateImpl
 import com.unibo.mobile.data.models.combat.CombatLogEntryImpl
 import com.unibo.mobile.data.models.combat.PostCombatRewardImpl
+import com.unibo.mobile.data.models.entity.AllyImpl
 import com.unibo.mobile.domain.model.ability.Ability
 import com.unibo.mobile.domain.model.ability.AbilityType
 import com.unibo.mobile.domain.model.ability.Dice
@@ -11,6 +12,7 @@ import com.unibo.mobile.domain.model.combat.Action
 import com.unibo.mobile.domain.model.combat.CombatOutcome
 import com.unibo.mobile.domain.model.combat.CombatState
 import com.unibo.mobile.domain.model.combat.PostCombatReward
+import com.unibo.mobile.domain.model.dungeon.RoomTypeCombat
 import com.unibo.mobile.domain.model.entity.Ally
 import com.unibo.mobile.domain.model.entity.CombatEntity
 import com.unibo.mobile.domain.model.entity.Enemy
@@ -20,6 +22,7 @@ import com.unibo.mobile.domain.model.strategy.DiceThrowStrategy
 import com.unibo.mobile.domain.model.strategy.NpcStrategy
 import com.unibo.mobile.domain.model.strategy.ResourceCost
 import com.unibo.mobile.domain.model.strategy.TurnCalculator
+import com.unibo.mobile.domain.repositories.ApiRepository
 import com.unibo.mobile.domain.usecases.RoomCombatUseCase
 
 class RoomCombatUseCaseImpl(
@@ -27,8 +30,18 @@ class RoomCombatUseCaseImpl(
     private val npcStrategy: NpcStrategy,
     private val diceThrowStrategy: DiceThrowStrategy,
     private val commonActionStrategy: CommonActionStrategy,
-    private val resourceCost: ResourceCost
+    private val resourceCost: ResourceCost,
+    private val apiRepository: ApiRepository
 ) : RoomCombatUseCase {
+
+    override suspend fun startCombat(
+        playerCharacter: PlayerCharacter,
+        room: RoomTypeCombat
+    ): CombatState {
+        val ally = buildAlly(playerCharacter)
+        val enemies = apiRepository.getEnemies(room)
+        return initCombat(listOf(ally), enemies)
+    }
 
     override fun initCombat(allies: List<Ally>, enemies: List<Enemy>): CombatState {
         val allEntities: List<CombatEntity> = allies + enemies
@@ -39,6 +52,58 @@ class RoomCombatUseCaseImpl(
             log = emptyList(),
             status = CombatOutcome.ONGOING
         )
+    }
+
+    override fun playerTurn(
+        currentState: CombatState,
+        ability: Ability,
+        target: CombatEntity
+    ): List<CombatState> {
+        val activeAlly = currentState.getActiveEntity()
+        if (activeAlly !is Ally || !canAfford(activeAlly, ability)) {
+            return emptyList()
+        }
+
+        val sequence = mutableListOf<CombatState>()
+
+        // 1) azione del giocatore
+        val playerAction = resolveAttackPlayer(activeAlly, ability, target, currentState.turnOrder)
+        var current = executeAction(currentState, playerAction)
+        sequence.add(current)
+        if (current.status != CombatOutcome.ONGOING) {
+            return sequence
+        }
+
+        // 2) se il giocatore può ancora agire, aspetta un nuovo input
+        val allyAfter = current.getActiveEntity()
+        if (allyAfter is Ally && canStillAct(allyAfter)) {
+            return sequence
+        }
+
+        // 3) turni automatici dei nemici finché non torna il giocatore o il combattimento finisce
+        current = advanceTurn(current)
+        while (current.status == CombatOutcome.ONGOING) {
+            current = resetActiveAp(current)
+            val active = current.getActiveEntity()
+            if (active is Ally) {
+                sequence.add(current) // turno del giocatore con AP rigenerati
+                break
+            }
+            if (!active.isAlive() || active.abilities.isEmpty()) {
+                current = advanceTurn(current)
+                continue
+            }
+            val enemyActions = resolveAttackNpc(active, current.turnOrder)
+            for (enemyAction in enemyActions) {
+                current = executeAction(current, enemyAction)
+                sequence.add(current)
+                if (current.status != CombatOutcome.ONGOING) {
+                    return sequence
+                }
+            }
+            current = advanceTurn(current)
+        }
+        return sequence
     }
 
     override fun resolveAttackPlayer(
@@ -166,5 +231,52 @@ class RoomCombatUseCaseImpl(
         }
 
         return updated
+    }
+
+    // --- Costruzione Ally dal personaggio salvato ---
+    private fun buildAlly(playerCharacter: PlayerCharacter): Ally {
+        val playerClass = playerCharacter.characterClass
+        return AllyImpl(
+            entityId = LocalGameData.PLAYER_ENTITY_ID,
+            displayName = playerClass.displayName,
+            currentMp = playerCharacter.characterMp,
+            maxMp = playerCharacter.characterMaxMp,
+            playerClass = playerClass,
+            playerExp = playerCharacter.characterExp,
+            currentHp = playerCharacter.characterHp,
+            maxHp = playerCharacter.characterMaxHp,
+            currentAp = LocalGameData.BASE_ACTION_POINTS,
+            maxAp = LocalGameData.BASE_ACTION_POINTS,
+            armorClass = LocalGameData.BASE_ARMOR_CLASS + abilityModifier(playerClass.dexterity),
+            strength = playerClass.strength,
+            dexterity = playerClass.dexterity,
+            constitution = playerClass.constitution,
+            intelligence = playerClass.intelligence,
+            wisdom = playerClass.wisdom,
+            charisma = playerClass.charisma,
+            abilities = playerCharacter.abilityList
+        )
+    }
+
+    private fun abilityModifier(score: Int): Int = (score - 10) / 2
+
+    private fun canAfford(ally: Ally, ability: Ability): Boolean =
+        ability.actionCost <= ally.currentAp && ability.level <= ally.currentMp
+
+    private fun canStillAct(ally: Ally): Boolean =
+        !ally.isTurnOver() && ally.abilities.any { canAfford(ally, it) }
+
+    private fun resetActiveAp(state: CombatState): CombatState {
+        val active = state.getActiveEntity()
+        val refreshed = active.changeAp(active.maxAp - active.currentAp)
+        val newTurnOrder = state.turnOrder.map { entity ->
+            if (entity.entityId == active.entityId) refreshed else entity
+        }
+        return CombatStateImpl(
+            turnOrder = newTurnOrder,
+            turnIndex = state.turnIndex,
+            log = state.log,
+            status = state.status
+        )
     }
 }

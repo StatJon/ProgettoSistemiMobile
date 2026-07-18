@@ -84,7 +84,7 @@ fun RoomCombatScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(UiConstants.BUTTON_SPACING)
             ) {
-                PlayerStatUi(player)
+                PlayerStatUi(player, onEntityTap)
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
@@ -117,6 +117,20 @@ private fun FightUi(
 ) {
     StandardCardComposable(modifier = modifier) {
         Text(stringResource(R.string.combat_screen_label))
+        combatState.getAllEnemies().forEach { enemy ->
+            StandardButtonComposable(
+                onTap = { onEntityTap(enemy) },
+                enabled = enemy.isAlive()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(enemy.displayName)
+                    Text(stringResource(R.string.entity_hp_label, enemy.currentHp, enemy.maxHp))
+                }
+            }
+        }
     }
 }
 
@@ -134,9 +148,17 @@ private fun LogUi(combatState: CombatState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun PlayerStatUi(player: Ally) {
-    StandardCardComposable() {
-        Text(player.displayName)
+private fun PlayerStatUi(player: Ally, onEntityTap: (CombatEntity) -> Unit) {
+    StandardButtonComposable(onTap = { onEntityTap(player) }) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(player.displayName)
+            Text(stringResource(R.string.entity_hp_label, player.currentHp, player.maxHp))
+            Text(stringResource(R.string.char_ap_label, player.currentAp, player.maxAp))
+            Text(stringResource(R.string.char_mp_label, player.currentMp, player.maxMp))
+        }
     }
 }
 

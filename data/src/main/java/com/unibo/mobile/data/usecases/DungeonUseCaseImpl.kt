@@ -9,9 +9,12 @@ import com.unibo.mobile.domain.model.dungeon.ChallengeRating
 import com.unibo.mobile.domain.model.dungeon.Dungeon
 import com.unibo.mobile.domain.model.entity.PlayerClass
 import com.unibo.mobile.domain.model.save.PlayerCharacter
+import com.unibo.mobile.domain.model.strategy.DungeonCreationStrategy
 import com.unibo.mobile.domain.usecases.DungeonUseCase
 
-class DungeonUseCaseImpl : DungeonUseCase {
+class DungeonUseCaseImpl(
+    private val dungeonCreationStrategy: DungeonCreationStrategy
+) : DungeonUseCase {
     override fun initDungeon(
         winCounter: Int,
         savedDungeon: Dungeon?
@@ -19,32 +22,8 @@ class DungeonUseCaseImpl : DungeonUseCase {
         if (savedDungeon != null) {
             return savedDungeon
         }
-
-        val totalRooms = LocalGameData.BASE_ROOMS + winCounter
-
-        val rooms = (0 until totalRooms).map { index ->
-            val isLastRoom = index == totalRooms - 1
-            val crIndex = if (isLastRoom) {
-                (index * 2).coerceAtMost(ChallengeRating.entries.size - 1)
-            } else {
-                index
-            }
-            val roomCr = ChallengeRating.entries[crIndex]
-
-            RoomImpl(
-                roomIndex = index,
-                roomType = RoomTypeCombatImpl(
-                    roomTypeId = "combat_$index",
-                    displayName = "Room $index",
-                    minEnemyCr = ChallengeRating.CR_0,
-                    maxTotalCr = roomCr,
-                    maxNumEnemies = LocalGameData.MAX_ENEMIES_PER_ROOM
-                )
-            )
-        }
-
         return DungeonImpl(
-            rooms = rooms,
+            rooms = dungeonCreationStrategy.generateRooms(winCounter),
             currentRoomIndex = 0
         )
     }
@@ -53,8 +32,8 @@ class DungeonUseCaseImpl : DungeonUseCase {
         return dungeon.advanceRoomIndex()
     }
 
-    override fun checkVictory(dungeon: Dungeon): Boolean {
-        return dungeon.currentRoomIndex >= dungeon.rooms.size
+    override fun checkVictory(dungeon: Dungeon, currentRoomIndex: Int): Boolean {
+        return currentRoomIndex >= dungeon.rooms.size
     }
 
     override fun checkDefeat(playerCharacter: PlayerCharacter): Boolean {
@@ -70,7 +49,7 @@ class DungeonUseCaseImpl : DungeonUseCase {
             characterMaxMp = playerClass.intelligence,
             characterExp = 0,
             characterLevel = 1,
-            abilityList = emptyList()
+            abilityList = LocalGameData.baseAbilities
         )
     }
 }

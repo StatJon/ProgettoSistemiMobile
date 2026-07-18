@@ -12,7 +12,7 @@ interface DungeonUseCase {
 
     fun advanceToNextRoom(dungeon: Dungeon): Dungeon
 
-    fun checkVictory(dungeon: Dungeon): Boolean
+    fun checkVictory(dungeon: Dungeon, currentRoomIndex: Int): Boolean
 
     fun checkDefeat(playerCharacter: PlayerCharacter): Boolean
 
