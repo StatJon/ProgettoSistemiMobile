@@ -6,9 +6,9 @@ import com.unibo.mobile.domain.model.save.PlayerCharacter
 
 interface DungeonUseCase {
     fun initDungeon(
-        victoryCount: Int,
+        winCounter: Int,
         savedDungeon: Dungeon?
-    ) : Dungeon
+    ): Dungeon
 
     fun advanceToNextRoom(dungeon: Dungeon): Dungeon
 

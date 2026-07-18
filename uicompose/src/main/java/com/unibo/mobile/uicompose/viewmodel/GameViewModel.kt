@@ -3,6 +3,7 @@ package com.unibo.mobile.uicompose.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unibo.mobile.domain.model.entity.PlayerClass
+import com.unibo.mobile.domain.model.save.SaveGame
 import com.unibo.mobile.domain.usecases.DungeonUseCase
 import com.unibo.mobile.domain.usecases.RoomCombatUseCase
 import com.unibo.mobile.domain.usecases.RoomSafeUseCase
@@ -22,24 +23,21 @@ class GameViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow<GameState>(GameState.Loading)
     val state: StateFlow<GameState> = _state.asStateFlow()
-
+    private lateinit var saveGame:
+            SaveGame
     init {
         viewModelScope.launch {
-            val saveGame = saveUseCase.loadGame()
-            val playerClasses = staticDataUseCase.getPlayerClasses()
-            _state.value = GameState.MainMenu(
-                winCounter = saveGame.winCounter,
-                playerClasses = playerClasses,
-                isContinuePossible = saveGame.saveSession != null
-            )
+            loadMainMenu()
         }
     }
 
-    private fun createMainMenu(): GameState.MainMenu {
-        return GameState.MainMenu(
-            winCounter = 0,
-            playerClasses = emptyList(),
-            isContinuePossible = false
+    private suspend fun loadMainMenu() {
+        saveGame = saveUseCase.loadGame()
+        val playerClasses = staticDataUseCase.getPlayerClasses()
+        _state.value = GameState.MainMenu(
+            winCounter = saveGame.winCounter,
+            playerClasses = playerClasses,
+            isContinuePossible = saveGame.saveSession != null
         )
     }
 

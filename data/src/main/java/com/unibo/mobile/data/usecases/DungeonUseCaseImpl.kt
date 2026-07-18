@@ -13,14 +13,14 @@ import com.unibo.mobile.domain.usecases.DungeonUseCase
 
 class DungeonUseCaseImpl : DungeonUseCase {
     override fun initDungeon(
-        victoryCount: Int,
+        winCounter: Int,
         savedDungeon: Dungeon?
     ): Dungeon {
         if (savedDungeon != null) {
             return savedDungeon
         }
 
-        val totalRooms = LocalGameData.BASE_ROOMS + victoryCount
+        val totalRooms = LocalGameData.BASE_ROOMS + winCounter
 
         val rooms = (0 until totalRooms).map { index ->
             val isLastRoom = index == totalRooms - 1

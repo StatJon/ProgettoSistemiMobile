@@ -14,6 +14,7 @@ object LocalGameData {
 
     const val BASE_ROOMS = 3
     const val MAX_ENEMIES_PER_ROOM = 3
+    const val SINGLE_ENEMY_PER_ROOM = 1
 
     val playerClasses: List<PlayerClass> = listOf(
         PlayerClassImpl(
