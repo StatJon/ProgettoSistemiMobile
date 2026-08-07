@@ -1,4 +1,4 @@
-package com.unibo.mobile.data
+package com.unibo.mobile.domain
 
 import org.junit.Test
 
