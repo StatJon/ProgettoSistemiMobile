@@ -20,12 +20,17 @@ class MainMenuViewModel(
 
     /* ----- Dichiarazione tramite StateFlow ----- */
     //(private MutableStateFlow + public StateFlow)
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
     private val _playerClassesList = MutableStateFlow<List<PlayerClass>>(emptyList())
     val playerClassesList: StateFlow<List<PlayerClass>> = _playerClassesList
 
+
     /* ----- Operazioni all'avvio ----- */
     init {
+        _isLoading.value = true
         fetchPlayerClasses()
+        _isLoading.value = false
     }
 
     /* ----- Funzioni interne ----- */

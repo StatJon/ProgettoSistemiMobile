@@ -8,4 +8,5 @@ object UiConstants {
     val SECTION_SPACING = 12.dp
     val BUTTON_SPACING = 8.dp
     val ROUNDED_CORNER_RADIUS = 16.dp
+    val BUTTON_HEIGHT = 56.dp
 }
