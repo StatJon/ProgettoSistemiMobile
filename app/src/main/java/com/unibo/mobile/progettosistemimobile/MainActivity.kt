@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.unibo.mobile.progettosistemimobile.ui.theme.ProgettoSistemiMobileTheme
-import com.unibo.mobile.uicompose.GameScreenSelector
+import com.unibo.mobile.uicompose.GameScreenManager
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ProgettoSistemiMobileTheme {
-                GameScreenSelector()
+                GameScreenManager()
             }
         }
     }
