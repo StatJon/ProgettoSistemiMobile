@@ -1,9 +1,7 @@
 package com.unibo.mobile.uicompose.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,7 +23,7 @@ import com.unibo.mobile.domain.di.UseCaseProvider
 import com.unibo.mobile.domain.models.PlayerClass
 import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
 import com.unibo.mobile.uicompose.R
-import com.unibo.mobile.uicompose.common.UiConstants
+import com.unibo.mobile.uicompose.components.common.UiConstants
 import com.unibo.mobile.uicompose.viewmodel.MainMenuViewModel
 import com.unibo.mobile.uicompose.viewmodel.MainMenuViewModelFactory
 
@@ -38,18 +36,18 @@ fun MainMenu(
         )
     )
 ) {
-    // Recupero variabili da ViewModel
+    // --- Recupero variabili da ViewModel
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
     val playerClassesList = viewModel.playerClassesList.collectAsStateWithLifecycle()
     // val winCounter = viewModel.winCounter.collectAsStateWithLifecycle() DA IMPLEMENTARE
     val winCounter = 1 //!!!TEMP!!!
 
-    // LoadingScreen Check
+    // --- LoadingScreen Check
     if (isLoading.value) {
         LoadingScreen()
     }
 
-    // MainMenu UI
+    // --- MainMenu UI
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -131,7 +129,7 @@ private fun NewGameButtonsWithClasses(
 
 @Preview(showBackground = true)
 @Composable
-fun MainMenuPreview() {
+private fun MainMenuPreview() {
     val mockViewModel = remember { mainMenuViewModelMock() }
     MainMenu(viewModel = mockViewModel)
 }

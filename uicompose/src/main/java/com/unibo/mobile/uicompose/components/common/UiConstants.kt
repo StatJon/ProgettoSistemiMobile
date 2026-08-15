@@ -1,4 +1,4 @@
-package com.unibo.mobile.uicompose.common
+package com.unibo.mobile.uicompose.components.common
 
 import androidx.compose.ui.unit.dp
 

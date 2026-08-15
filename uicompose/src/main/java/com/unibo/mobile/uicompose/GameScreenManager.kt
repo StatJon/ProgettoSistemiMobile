@@ -10,7 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.unibo.mobile.uicompose.common.UiConstants
+import com.unibo.mobile.uicompose.components.common.UiConstants
+import com.unibo.mobile.uicompose.screens.GameScreen
 import com.unibo.mobile.uicompose.screens.MainMenu
 
 /**
@@ -19,7 +20,7 @@ import com.unibo.mobile.uicompose.screens.MainMenu
 @Composable
 fun GameScreenManager() {
     //---Apre la prima Screen (.MENU = iniziale)
-    var currentScreen by rememberSaveable { mutableStateOf(GameScreenStatus.MENU) }
+    var currentScreen by rememberSaveable { mutableStateOf(ScreenStatus.MENU) }
 
     //--- Contenitore generale Ui
     Scaffold(
@@ -32,16 +33,16 @@ fun GameScreenManager() {
             .padding(innerPadding)) {
             //--- Selettore Screen
             when (currentScreen) {
-                GameScreenStatus.MENU -> MainMenu()
-                GameScreenStatus.GAME -> TODO("Creare prima lo Screen")
-                GameScreenStatus.END_SCREEN -> TODO("Creare prima lo Screen")
+                ScreenStatus.MENU -> MainMenu()
+                ScreenStatus.GAME -> GameScreen()
+                ScreenStatus.END_SCREEN -> TODO("Creare prima lo Screen")
             }
         }
     }
 }
 
 
-enum class GameScreenStatus {
+enum class ScreenStatus {
     MENU,
     GAME,
     END_SCREEN
