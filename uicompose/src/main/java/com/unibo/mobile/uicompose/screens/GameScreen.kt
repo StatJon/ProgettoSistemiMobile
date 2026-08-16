@@ -1,7 +1,9 @@
 package com.unibo.mobile.uicompose.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,11 +31,11 @@ fun GameScreen(
     */
     // --- GameScreen UI
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
-        GameView(modifier = Modifier.weight(0.5f))
-        PlayerControls(modifier = Modifier.weight(0.5f))
+        //TODO Aggiungere Logica per decidere il contenuto Combat/Safe
+        GameView(modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth())
+        PlayerControls(modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth())
     }
 }
 

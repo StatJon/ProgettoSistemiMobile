@@ -40,7 +40,7 @@ fun MainMenu(
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
     val playerClassesList = viewModel.playerClassesList.collectAsStateWithLifecycle()
     // val winCounter = viewModel.winCounter.collectAsStateWithLifecycle() DA IMPLEMENTARE
-    val winCounter = 1 //!!!TEMP!!!
+    val winCounter = 1 //TODO!!!TEMP!!!
 
     // --- LoadingScreen Check
     if (isLoading.value) {
@@ -65,7 +65,7 @@ fun MainMenu(
         )
         // --- WinCounter
         Text(
-            text = stringResource(R.string.dungeons_won)+winCounter,
+            text = stringResource(R.string.dungeons_won) + winCounter,
             style = MaterialTheme.typography.displaySmall,
             modifier = Modifier
                 .fillMaxWidth()
@@ -109,7 +109,7 @@ private fun NewGameButtonsWithClasses(
                     .fillMaxWidth()
                     .height(UiConstants.BUTTON_HEIGHT)
             ) {
-                Column{
+                Column {
                     Text(
                         text = stringResource(R.string.new_game_button),
                         textAlign = TextAlign.Center
@@ -197,7 +197,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseAttackBonus = 2,
                 healthGrowth = 8,
                 manaGrowth = 2
-            ),             PlayerClass(
+            ), PlayerClass(
                 name = "Suor Mazzate",
                 className = "cleric",
                 baseHealthPoints = 12,
