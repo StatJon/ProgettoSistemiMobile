@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.unibo.mobile.uicompose.components.common.UiConstants
+import com.unibo.mobile.uicompose.screens.EndScreen
 import com.unibo.mobile.uicompose.screens.GameScreen
 import com.unibo.mobile.uicompose.screens.MainMenu
 
@@ -35,7 +36,7 @@ fun GameScreenManager() {
             when (currentScreen) {
                 ScreenStatus.MENU -> MainMenu()
                 ScreenStatus.GAME -> GameScreen()
-                ScreenStatus.END_SCREEN -> TODO("Creare prima lo Screen")
+                ScreenStatus.END_SCREEN -> EndScreen()
             }
         }
     }

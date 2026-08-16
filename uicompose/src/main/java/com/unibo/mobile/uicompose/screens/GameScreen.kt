@@ -40,10 +40,6 @@ fun GameScreen(
 }
 
 // --- --- --- --- --- --- --- --- --- --- //
-// --- Composables --- //
-
-
-// --- --- --- --- --- --- --- --- --- --- //
 //----- Preview -----//
 
 @Preview(showBackground = true)
