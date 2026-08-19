@@ -8,8 +8,8 @@ import com.unibo.mobile.data.local.entities.SaveGameEntity
 
 @Dao
 interface SaveGameDao {
-    @Query("SELECT * FROM save_game WHERE id = 0")
-    suspend fun getSaveGame(): SaveGameEntity?
+    @Query("SELECT * FROM save_game LIMIT 1")
+    suspend fun loadSaveGame(): SaveGameEntity?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveSaveGame(entity: SaveGameEntity)
 }

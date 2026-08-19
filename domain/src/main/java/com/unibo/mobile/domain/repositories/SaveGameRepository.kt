@@ -4,5 +4,5 @@ import com.unibo.mobile.domain.models.SaveGame
 
 interface SaveGameRepository {
     suspend fun loadOrCreateGame(): SaveGame
-    suspend fun saveGame(saveGame: SaveGame)
+    suspend fun saveSaveGame(saveGame: SaveGame)
 }

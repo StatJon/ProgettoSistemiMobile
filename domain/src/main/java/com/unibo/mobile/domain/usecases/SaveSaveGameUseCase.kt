@@ -11,6 +11,6 @@ class SaveSaveGameUseCaseImpl(
     private val saveGameRepository: SaveGameRepository
 ) : SaveSaveGameUseCase {
     override suspend fun invoke(saveGame: SaveGame) {
-        saveGameRepository.saveGame(saveGame)
+        saveGameRepository.saveSaveGame(saveGame)
     }
 }
