@@ -1,6 +1,5 @@
 package com.unibo.mobile.domain.models
 
-
 /**
  * Represents a player-controlled character in the game, extends base [Character].
  *
