@@ -10,7 +10,7 @@ data class SaveGameEntity(
     @PrimaryKey val id: Int = 0,
     val winCounter: Int,
     val dungeonIndex: Int?,
-    val playerClass: PlayerClass?,
+    val playerClassName: String?,
     val currentManaPoints: Int?,
     val maxManaPoints: Int?,
     val name: String?,
