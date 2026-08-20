@@ -1,8 +1,9 @@
 package com.unibo.mobile.domain.models
 
 data class PlayerClass(
-    val name : String,
+    val name: String,
     val className: String,
+    val unlockCounter: Int,
     val baseHealthPoints: Int,
     val baseManaPoints: Int,
     val baseArmorClass: Int,

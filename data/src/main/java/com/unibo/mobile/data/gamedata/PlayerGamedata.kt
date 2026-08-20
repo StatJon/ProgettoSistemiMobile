@@ -7,6 +7,7 @@ object PlayerGamedata {
         PlayerClass(
             name = "Suor Mazzate",
             className = "cleric",
+            unlockCounter = 0,
             baseHealthPoints = 12,
             baseManaPoints = 4,
             baseArmorClass = 14,

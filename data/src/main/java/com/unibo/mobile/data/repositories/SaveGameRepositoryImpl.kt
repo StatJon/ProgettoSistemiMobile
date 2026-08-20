@@ -2,6 +2,7 @@ package com.unibo.mobile.data.repositories
 
 import com.unibo.mobile.data.gamedata.PlayerGamedata
 import com.unibo.mobile.data.local.dao.SaveGameDao
+import com.unibo.mobile.data.local.db.AppDatabase
 import com.unibo.mobile.data.local.entities.SaveGameEntity
 import com.unibo.mobile.domain.models.Character
 import com.unibo.mobile.domain.models.PlayerCharacter
@@ -15,6 +16,7 @@ class SaveGameRepositoryImpl(
     private val saveGameDao: SaveGameDao,
     private val playerClassRepository: PlayerClassRepository
 ) : SaveGameRepository {
+
     override suspend fun loadOrCreateGame(): SaveGame {
         val rawSaveData: SaveGameEntity? = saveGameDao.loadSaveGame()
         return if (rawSaveData != null) {
@@ -70,11 +72,6 @@ class SaveGameRepositoryImpl(
                 saveSession = null
             )
         }
-    }
-
-    private fun getPlayerClassByName(playerClassName: String): PlayerClass {
-        return PlayerGamedata.PlayerClassList.find { it.className == playerClassName }
-            ?: error("PlayerClass $playerClassName missing")
     }
 
     private fun mapSaveGameToRaw(saveGame: SaveGame): SaveGameEntity {

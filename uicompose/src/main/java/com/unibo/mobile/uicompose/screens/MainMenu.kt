@@ -150,7 +150,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ), PlayerClass(
                 name = "Fra Casso",
                 className = "cleric",
@@ -159,7 +159,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ), PlayerClass(
                 name = "Gigi",
                 className = "cleric",
@@ -168,7 +168,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ),
             PlayerClass(
                 name = "Suor Mazzate",
@@ -178,7 +178,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ), PlayerClass(
                 name = "Fra Casso",
                 className = "cleric",
@@ -187,7 +187,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ), PlayerClass(
                 name = "Gigi",
                 className = "cleric",
@@ -196,7 +196,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ), PlayerClass(
                 name = "Suor Mazzate",
                 className = "cleric",
@@ -205,7 +205,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ), PlayerClass(
                 name = "Fra Casso",
                 className = "cleric",
@@ -214,7 +214,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             ), PlayerClass(
                 name = "Gigi",
                 className = "cleric",
@@ -223,7 +223,7 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2
+                manaGrowth = 2,
             )
         )
     }

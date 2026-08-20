@@ -19,7 +19,7 @@ import com.unibo.mobile.uicompose.screens.MainMenu
  * Contains the UI and manages navigation of the Screens to show
  */
 @Composable
-fun GameScreenManager() {
+fun ScreenManager() {
     //---Apre la prima Screen (.MENU = iniziale)
     var currentScreen by rememberSaveable { mutableStateOf(ScreenStatus.MENU) }
 

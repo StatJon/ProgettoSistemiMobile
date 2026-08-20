@@ -27,5 +27,6 @@ object UseCaseProvider {
         getPlayerClassByClassNameUseCase = GetPlayerClassByClassNameUseCaseImpl(
             playerClassRepository = repositoryProvider.playerClassRepository
         )
+
     }
 }
