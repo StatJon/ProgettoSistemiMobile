@@ -60,10 +60,6 @@ fun MainMenu(
                 .padding(UiConstants.EDGE_BASE_PADDING),
             verticalArrangement = Arrangement.spacedBy(UiConstants.SECTION_SPACING),
         ) {
-            Text(
-                text = "TEST",
-                color = androidx.compose.ui.graphics.Color.Red
-            )
             // --- Title
             Text(
                 text = stringResource(R.string.main_menu_title),
