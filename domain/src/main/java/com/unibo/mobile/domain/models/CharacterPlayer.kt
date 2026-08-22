@@ -8,20 +8,20 @@ package com.unibo.mobile.domain.models
  * @property maxManaPoints The maximum mana points the player can have.
  * @property character The underlying [Character] data containing health and armor attributes.
  */
-data class PlayerCharacter(
+data class CharacterPlayer(
     val playerClass: PlayerClass,
     val currentManaPoints: Int,
     val maxManaPoints: Int,
     val character: Character
 ) {
-    fun applyManaCost(costValue: Int): PlayerCharacter =
+    fun applyManaCost(costValue: Int): CharacterPlayer =
         copy(currentManaPoints = (currentManaPoints - costValue).coerceAtLeast(0))
 
-    fun applyManaGain(gainValue: Int): PlayerCharacter =
+    fun applyManaGain(gainValue: Int): CharacterPlayer =
         copy(currentManaPoints = (currentManaPoints + gainValue).coerceAtMost(maxManaPoints))
 
     companion object {
-        fun createNewPlayer(playerClass: PlayerClass): PlayerCharacter = PlayerCharacter(
+        fun createNewPlayer(playerClass: PlayerClass): CharacterPlayer = CharacterPlayer(
             playerClass = playerClass,
             currentManaPoints = playerClass.baseManaPoints,
             maxManaPoints = playerClass.baseManaPoints,
@@ -37,7 +37,7 @@ data class PlayerCharacter(
             playerClass: PlayerClass,
             currentManaPoints: Int,
             currentHealthPoints: Int,
-        ): PlayerCharacter = PlayerCharacter(
+        ): CharacterPlayer = CharacterPlayer(
             playerClass = playerClass,
             currentManaPoints = currentManaPoints,
             maxManaPoints = playerClass.baseManaPoints,

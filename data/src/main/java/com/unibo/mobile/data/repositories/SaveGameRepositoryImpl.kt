@@ -1,12 +1,9 @@
 package com.unibo.mobile.data.repositories
 
-import com.unibo.mobile.data.gamedata.PlayerGamedata
 import com.unibo.mobile.data.local.dao.SaveGameDao
-import com.unibo.mobile.data.local.db.AppDatabase
 import com.unibo.mobile.data.local.entities.SaveGameEntity
 import com.unibo.mobile.domain.models.Character
-import com.unibo.mobile.domain.models.PlayerCharacter
-import com.unibo.mobile.domain.models.PlayerClass
+import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.SaveGame
 import com.unibo.mobile.domain.models.SaveSession
 import com.unibo.mobile.domain.repositories.PlayerClassRepository
@@ -52,7 +49,7 @@ class SaveGameRepositoryImpl(
                 winCounter = rawSaveData.winCounter,
                 saveSession = SaveSession(
                     dungeonIndex = rawSaveData.dungeonIndex,
-                    playerCharacter = PlayerCharacter(
+                    playerCharacter = CharacterPlayer(
                         playerClass = playerClassRepository.getPlayerClassByName(rawSaveData.playerClassName!!)
                             ?: error("PlayerClass $rawSaveData.playerClassName missing"),
                         currentManaPoints = rawSaveData.currentManaPoints!!,
