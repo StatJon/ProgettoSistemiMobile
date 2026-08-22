@@ -21,7 +21,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unibo.mobile.domain.di.UseCaseProvider
 import com.unibo.mobile.domain.models.PlayerClass
+import com.unibo.mobile.domain.models.SaveGame
+import com.unibo.mobile.domain.models.SaveSession
 import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
+import com.unibo.mobile.domain.usecases.LoadSaveGameUseCase
 import com.unibo.mobile.uicompose.R
 import com.unibo.mobile.uicompose.components.common.UiConstants
 import com.unibo.mobile.uicompose.viewmodel.MainMenuViewModel
@@ -32,63 +35,73 @@ fun MainMenu(
     modifier: Modifier = Modifier,
     viewModel: MainMenuViewModel = viewModel(
         factory = MainMenuViewModelFactory(
-            getAllPlayerClassesUseCase = UseCaseProvider.getAllPlayerClassesUseCase
+            getAllPlayerClassesUseCase = UseCaseProvider.getAllPlayerClassesUseCase,
+            loadSaveGameUseCase = UseCaseProvider.loadSaveGameUseCase
         )
     )
 ) {
     // --- Recupero variabili da ViewModel
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
     val playerClassesList = viewModel.playerClassesList.collectAsStateWithLifecycle()
-    // val winCounter = viewModel.winCounter.collectAsStateWithLifecycle() DA IMPLEMENTARE
-    val winCounter = 1 //TODO!!!TEMP!!!
+    val saveGame = viewModel.saveGame.collectAsStateWithLifecycle()
+    val winCounter = saveGame.value.winCounter
 
     // --- LoadingScreen Check
     if (isLoading.value) {
         LoadingScreen()
-    }
+    } else {
 
-    // --- MainMenu UI
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(UiConstants.EDGE_BASE_PADDING),
-        verticalArrangement = Arrangement.spacedBy(UiConstants.SECTION_SPACING),
-    ) {
-        // --- Title
-        Text(
-            text = stringResource(R.string.main_menu_title),
-            style = MaterialTheme.typography.displayLarge,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.4f),
-            textAlign = TextAlign.Center
-        )
-        // --- WinCounter
-        Text(
-            text = stringResource(R.string.dungeons_won) + winCounter,
-            style = MaterialTheme.typography.displaySmall,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.1f),
-            textAlign = TextAlign.Center
-        )
-        // --- NewGame Buttons with Classes
-        NewGameButtonsWithClasses(
-            playerClassesList.value,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.4f)
-        )
-        // --- Continue
-        Button(
-            onClick = { },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(UiConstants.BUTTON_HEIGHT)
+        println("Accessing Main Menu")
+        println("SaveGame.winCounter: $winCounter")
+        // --- MainMenu UI
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(UiConstants.EDGE_BASE_PADDING),
+            verticalArrangement = Arrangement.spacedBy(UiConstants.SECTION_SPACING),
         ) {
-            Text(text = stringResource(R.string.continue_button))
+            Text(
+                text = "TEST",
+                color = androidx.compose.ui.graphics.Color.Red
+            )
+            // --- Title
+            Text(
+                text = stringResource(R.string.main_menu_title),
+                style = MaterialTheme.typography.displayLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.4f),
+                textAlign = TextAlign.Center,
+
+            )
+            // --- WinCounter
+            Text(
+                text = stringResource(R.string.dungeons_won) + winCounter,
+                style = MaterialTheme.typography.displaySmall,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.1f),
+                textAlign = TextAlign.Center
+            )
+            // --- NewGame Buttons with Classes
+            NewGameButtonsWithClasses(
+                playerClassesList.value,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.4f)
+            )
+            // --- Continue
+            Button(
+                onClick = { },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(UiConstants.BUTTON_HEIGHT)
+            ) {
+                Text(text = stringResource(R.string.continue_button))
+            }
         }
     }
+    println("Completed MainMenu Construction")
 }
 
 // --- --- --- --- --- --- --- --- --- --- //
@@ -126,7 +139,7 @@ private fun NewGameButtonsWithClasses(
 
 // --- --- --- --- --- --- --- --- --- --- //
 //----- Preview -----//
-
+/*
 @Preview(showBackground = true)
 @Composable
 private fun MainMenuPreview() {
@@ -135,9 +148,13 @@ private fun MainMenuPreview() {
 }
 
 private fun mainMenuViewModelMock(): MainMenuViewModel {
-    val mockUseCase = GetAllPlayerClassesUseCaseMock()
-    return MainMenuViewModel(mockUseCase)
+    val mockPlayerUseCase = GetAllPlayerClassesUseCaseMock()
+    return MainMenuViewModel(
+        mockPlayerUseCase,
+        loadSaveGameUseCase = mockSaveUseCase
+    )
 }
+
 
 private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
     override suspend fun invoke(): List<PlayerClass> {
@@ -145,86 +162,42 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
             PlayerClass(
                 name = "Suor Mazzate",
                 className = "cleric",
+                unlockCounter = 0,
                 baseHealthPoints = 12,
                 baseManaPoints = 4,
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
                 healthGrowth = 8,
-                manaGrowth = 2,
-            ), PlayerClass(
-                name = "Fra Casso",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
-                baseArmorClass = 14,
-                baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
-            ), PlayerClass(
-                name = "Gigi",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
-                baseArmorClass = 14,
-                baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
+                manaGrowth = 2
             ),
             PlayerClass(
-                name = "Suor Mazzate",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
+                name = "William",
+                className = "sorcerer",
+                unlockCounter = 2,
+                baseHealthPoints = 10,
+                baseManaPoints = 6,
                 baseArmorClass = 14,
                 baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
-            ), PlayerClass(
-                name = "Fra Casso",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
-                baseArmorClass = 14,
-                baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
-            ), PlayerClass(
-                name = "Gigi",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
-                baseArmorClass = 14,
-                baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
-            ), PlayerClass(
-                name = "Suor Mazzate",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
-                baseArmorClass = 14,
-                baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
-            ), PlayerClass(
-                name = "Fra Casso",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
-                baseArmorClass = 14,
-                baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
-            ), PlayerClass(
-                name = "Gigi",
-                className = "cleric",
-                baseHealthPoints = 12,
-                baseManaPoints = 4,
-                baseArmorClass = 14,
-                baseAttackBonus = 2,
-                healthGrowth = 8,
-                manaGrowth = 2,
+                healthGrowth = 6,
+                manaGrowth = 4
             )
         )
+
     }
 }
+
+private class mockSaveGame : SaveGame(1,mockSaveSession) {
+
+}
+
+private class mockSaveSession : SaveSession() {
+
+}
+
+private class LoadSaveGameUseCaseMock : LoadSaveGameUseCase {
+    override suspend fun invoke(): SaveGame {
+        TODO("Not yet implemented")
+    }
+
+}
+*/

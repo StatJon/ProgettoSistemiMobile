@@ -20,6 +20,7 @@ fun GameScreen(
     //    )
     //) TODO: SOSTITUIRE CON VIEWMODEL E FACTORY
 ) {
+    println("Accessing GameScreen")
     /*
     // --- Recupero variabili da ViewModel
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()

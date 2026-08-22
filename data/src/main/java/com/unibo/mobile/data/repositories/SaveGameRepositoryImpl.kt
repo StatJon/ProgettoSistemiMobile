@@ -37,7 +37,7 @@ class SaveGameRepositoryImpl(
     // --- Private Helpers
     private fun createNewSave(): SaveGame {
         return SaveGame(
-            winCounter = 0,
+            winCounter = 10, //TODO RIMETTERE A 0
             saveSession = null
         )
     }

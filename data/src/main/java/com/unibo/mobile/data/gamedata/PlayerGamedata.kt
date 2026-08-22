@@ -14,6 +14,17 @@ object PlayerGamedata {
             baseAttackBonus = 2,
             healthGrowth = 8,
             manaGrowth = 2
+        ),
+        PlayerClass(
+            name = "William",
+            className = "sorcerer",
+            unlockCounter = 2   ,
+            baseHealthPoints = 10,
+            baseManaPoints = 6,
+            baseArmorClass = 14,
+            baseAttackBonus = 2,
+            healthGrowth = 6,
+            manaGrowth = 4
         )
     )
 }

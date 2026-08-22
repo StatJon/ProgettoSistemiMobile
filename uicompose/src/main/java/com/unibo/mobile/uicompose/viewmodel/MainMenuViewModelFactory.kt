@@ -3,15 +3,20 @@ package com.unibo.mobile.uicompose.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
+import com.unibo.mobile.domain.usecases.LoadSaveGameUseCase
 
 class MainMenuViewModelFactory(
     /* ----- Costruttore, parametri -----*/
     //contiene gli usecase per le dipendenze usate nella classe
-    private val getAllPlayerClassesUseCase: GetAllPlayerClassesUseCase
+    private val getAllPlayerClassesUseCase: GetAllPlayerClassesUseCase,
+    private val loadSaveGameUseCase: LoadSaveGameUseCase
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainMenuViewModel::class.java)) {
-            return MainMenuViewModel(getAllPlayerClassesUseCase) as T
+            return MainMenuViewModel(
+                getAllPlayerClassesUseCase,
+                loadSaveGameUseCase,
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

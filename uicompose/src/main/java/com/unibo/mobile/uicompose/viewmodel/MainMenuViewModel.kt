@@ -2,6 +2,7 @@ package com.unibo.mobile.uicompose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unibo.mobile.domain.models.PlayerClass
 import com.unibo.mobile.domain.models.SaveGame
 import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
@@ -36,22 +37,19 @@ class MainMenuViewModel(
     // --- Operazioni all'avvio
     init {
         _isLoading.value = true
-        fetchPlayerClasses()
-        fetchSaveData()
+        viewModelScope.launch {
+            fetchPlayerClasses()
+            fetchSaveData()
+        }
         _isLoading.value = false
     }
 
     // --- Funzioni interne
-    private fun fetchPlayerClasses() {
-        // Nota: viewModelScope sostituisce suspend perchè crea una coroutine
-        viewModelScope.launch {
-            _playerClassesList.value = getAllPlayerClassesUseCase.invoke()
-        }
+    private suspend fun fetchPlayerClasses() {
+        _playerClassesList.value = getAllPlayerClassesUseCase.invoke()
     }
 
-    private fun fetchSaveData() {
-        viewModelScope.launch {
-            _saveGame.value = loadSaveGameUseCase.invoke()
-        }
+    private suspend fun fetchSaveData() {
+        _saveGame.value = loadSaveGameUseCase.invoke()
     }
 }
