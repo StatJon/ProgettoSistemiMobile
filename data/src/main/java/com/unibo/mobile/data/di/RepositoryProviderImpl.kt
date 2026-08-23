@@ -14,16 +14,17 @@ import com.unibo.mobile.domain.repositories.SaveGameRepository
 
 class RepositoryProviderImpl(
     saveGameDao: SaveGameDao,
-    playerClassRepository: PlayerClassRepository,
     dndApi: DndApi,
 ) : RepositoryProvider {
 
     override val playerClassRepository: PlayerClassRepository = PlayerClassRepositoryImpl()
+
     override val abilityRepository: AbilityRepository = AbilityRepositoryImpl(
         dndApi = dndApi,
         safeApiCaller = SafeApiCaller(),
-        spellToAbilityMapper = TODO()
+        spellToAbilityMapper = SpellToAbilityMapper()
     )
+
     override val saveGameRepository: SaveGameRepository = SaveGameRepositoryImpl(
         saveGameDao = saveGameDao,
         playerClassRepository = playerClassRepository,

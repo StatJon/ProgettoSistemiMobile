@@ -23,7 +23,6 @@ class GameApp : Application() {
         UseCaseProvider.setup(
             repositoryProvider = RepositoryProviderImpl(
                 saveGameDao = database.saveGameDao(),
-                playerClassRepository = PlayerClassRepositoryImpl(),
                 dndApi = dndApi,
             )
         )

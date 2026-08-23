@@ -4,8 +4,8 @@ import okio.IOException
 import retrofit2.HttpException
 
 /**
- * Custom Class to handle API calls and errors (instead of wrapper for every single call)
- * To be used by Repository classes for every API call as a wrapper
+ * Custom Class to handle API calls and errors (instead of wrapper for every single call).
+ * To be used by Repository classes for every API call as a wrapper.
  * Example:
  * class RepositoryExampleImpl (safeApiCaller: SafeApiCaller){
  *  val example = safeApiCaller.invoke { dndApi.apiCall() }

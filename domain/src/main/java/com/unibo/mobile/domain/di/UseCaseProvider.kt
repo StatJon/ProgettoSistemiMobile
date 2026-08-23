@@ -1,6 +1,8 @@
 package com.unibo.mobile.domain.di
 
 import com.unibo.mobile.domain.repositories.SaveGameRepository
+import com.unibo.mobile.domain.usecases.FetchAbilityByNameUseCase
+import com.unibo.mobile.domain.usecases.FetchAbilityByNameUseCaseImpl
 import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
 import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCaseImpl
 import com.unibo.mobile.domain.usecases.GetPlayerClassByClassNameUseCase
@@ -20,6 +22,7 @@ object UseCaseProvider {
     lateinit var getPlayerClassByClassNameUseCase: GetPlayerClassByClassNameUseCase
     lateinit var loadSaveGameUseCase: LoadSaveGameUseCase
     lateinit var saveSaveGameUseCase: SaveSaveGameUseCase
+    lateinit var fetchAbilityByNameUseCase: FetchAbilityByNameUseCase
 
     /**
      * Constructor
@@ -42,6 +45,8 @@ object UseCaseProvider {
         saveSaveGameUseCase = SaveSaveGameUseCaseImpl(
             saveGameRepository = repositoryProvider.saveGameRepository
         )
-
+        fetchAbilityByNameUseCase = FetchAbilityByNameUseCaseImpl(
+            abilityRepository = repositoryProvider.abilityRepository
+        )
     }
 }
