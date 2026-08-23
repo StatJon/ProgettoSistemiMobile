@@ -1,4 +1,4 @@
-package com.unibo.mobile.domain.usecases
+package com.unibo.mobile.domain.usecases.savegame
 
 import com.unibo.mobile.domain.models.SaveGame
 import com.unibo.mobile.domain.repositories.SaveGameRepository

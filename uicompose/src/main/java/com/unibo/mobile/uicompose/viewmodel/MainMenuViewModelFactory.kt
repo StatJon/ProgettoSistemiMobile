@@ -2,8 +2,8 @@ package com.unibo.mobile.uicompose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
-import com.unibo.mobile.domain.usecases.LoadSaveGameUseCase
+import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
+import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 
 class MainMenuViewModelFactory(
     /* ----- Costruttore, parametri -----*/

@@ -1,16 +1,15 @@
 package com.unibo.mobile.domain.di
 
-import com.unibo.mobile.domain.repositories.SaveGameRepository
-import com.unibo.mobile.domain.usecases.FetchAbilityByNameUseCase
-import com.unibo.mobile.domain.usecases.FetchAbilityByNameUseCaseImpl
-import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
-import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCaseImpl
-import com.unibo.mobile.domain.usecases.GetPlayerClassByClassNameUseCase
-import com.unibo.mobile.domain.usecases.GetPlayerClassByClassNameUseCaseImpl
-import com.unibo.mobile.domain.usecases.LoadSaveGameUseCase
-import com.unibo.mobile.domain.usecases.LoadSaveGameUseCaseImpl
-import com.unibo.mobile.domain.usecases.SaveSaveGameUseCase
-import com.unibo.mobile.domain.usecases.SaveSaveGameUseCaseImpl
+import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCase
+import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
+import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCase
+import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCaseImpl
+import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
+import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCaseImpl
+import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
+import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCaseImpl
 
 /**
  * Wiring Object Class

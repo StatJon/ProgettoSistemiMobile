@@ -1,4 +1,4 @@
-package com.unibo.mobile.domain.usecases
+package com.unibo.mobile.domain.usecases.gamedata
 
 import com.unibo.mobile.domain.models.PlayerClass
 import com.unibo.mobile.domain.repositories.PlayerClassRepository

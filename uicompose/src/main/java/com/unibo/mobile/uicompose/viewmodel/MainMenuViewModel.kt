@@ -2,11 +2,10 @@ package com.unibo.mobile.uicompose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unibo.mobile.domain.models.PlayerClass
 import com.unibo.mobile.domain.models.SaveGame
-import com.unibo.mobile.domain.usecases.GetAllPlayerClassesUseCase
-import com.unibo.mobile.domain.usecases.LoadSaveGameUseCase
+import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
+import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
