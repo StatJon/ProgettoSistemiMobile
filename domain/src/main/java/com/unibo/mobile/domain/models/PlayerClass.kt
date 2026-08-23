@@ -9,5 +9,6 @@ data class PlayerClass(
     val baseArmorClass: Int,
     val baseAttackBonus: Int,
     val healthGrowth: Int,
-    val manaGrowth: Int
+    val manaGrowth: Int,
+    val baseAbilityList: List<Ability>
 )

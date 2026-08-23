@@ -1,5 +1,6 @@
 package com.unibo.mobile.domain.models
 
+//TODO VALUTARE SE RIMUOVERE
 enum class DiceTypes (val diceFaces: Int) {
     D2(2),
     D4(4),

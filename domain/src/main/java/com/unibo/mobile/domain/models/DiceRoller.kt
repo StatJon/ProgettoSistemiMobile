@@ -5,7 +5,7 @@ import kotlin.random.Random
 class DiceRoller(dicesToRoll: DicesToRoll) {
 
     fun rollDices(dicesToRoll: DicesToRoll): Int {
-        val diceFaces = dicesToRoll.diceType.diceFaces
+        val diceFaces = dicesToRoll.diceFaces
         val times = dicesToRoll.diceNumber
         var total = 0
         for (i in 0 until times) {

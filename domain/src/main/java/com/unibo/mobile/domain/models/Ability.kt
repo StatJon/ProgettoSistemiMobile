@@ -4,4 +4,5 @@ sealed interface Ability {
     val name: String
     val level: Int
     val isAoe: Boolean
+    val actionCost: ActionCost
 }

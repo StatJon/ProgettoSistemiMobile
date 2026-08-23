@@ -6,12 +6,14 @@ import com.unibo.mobile.domain.models.Character
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.SaveGame
 import com.unibo.mobile.domain.models.SaveSession
+import com.unibo.mobile.domain.repositories.AbilityRepository
 import com.unibo.mobile.domain.repositories.PlayerClassRepository
 import com.unibo.mobile.domain.repositories.SaveGameRepository
 
 class SaveGameRepositoryImpl(
     private val saveGameDao: SaveGameDao,
-    private val playerClassRepository: PlayerClassRepository
+    private val playerClassRepository: PlayerClassRepository,
+    private val abilityRepository: AbilityRepository
 ) : SaveGameRepository {
 
     override suspend fun loadOrCreateGame(): SaveGame {
@@ -58,9 +60,15 @@ class SaveGameRepositoryImpl(
                             name = rawSaveData.name!!,
                             maxHealthPoints = rawSaveData.maxHealthPoints!!,
                             currentHealthPoints = rawSaveData.currentHealthPoints!!,
-                            armorClass = rawSaveData.armorClass!!
+                            armorClass = rawSaveData.armorClass!!,
+                            abilityList = abilityRepository.getAbilityFromList(
+                                rawSaveData.abilityNames?.split(
+                                    ","
+                                )!!
+                            )
+                        ),
+
                         )
-                    )
                 )
             )
         } else {
@@ -72,16 +80,20 @@ class SaveGameRepositoryImpl(
     }
 
     private fun mapSaveGameToRaw(saveGame: SaveGame): SaveGameEntity {
+        val saveSession = saveGame.saveSession
+        val playerCharacter = saveGame.saveSession?.playerCharacter
+        val character = saveGame.saveSession?.playerCharacter?.character
         return SaveGameEntity(
             winCounter = saveGame.winCounter,
-            dungeonIndex = saveGame.saveSession?.dungeonIndex,
-            playerClassName = saveGame.saveSession?.playerCharacter?.playerClass?.className,
-            currentManaPoints = saveGame.saveSession?.playerCharacter?.currentManaPoints,
-            maxManaPoints = saveGame.saveSession?.playerCharacter?.maxManaPoints,
-            name = saveGame.saveSession?.playerCharacter?.character?.name,
-            maxHealthPoints = saveGame.saveSession?.playerCharacter?.character?.maxHealthPoints,
-            currentHealthPoints = saveGame.saveSession?.playerCharacter?.character?.currentHealthPoints,
-            armorClass = saveGame.saveSession?.playerCharacter?.character?.armorClass
+            dungeonIndex = saveSession?.dungeonIndex,
+            playerClassName = playerCharacter?.playerClass?.className,
+            currentManaPoints = playerCharacter?.currentManaPoints,
+            maxManaPoints = playerCharacter?.maxManaPoints,
+            name = playerCharacter?.character?.name,
+            maxHealthPoints = character?.maxHealthPoints,
+            currentHealthPoints = character?.currentHealthPoints,
+            armorClass = character?.armorClass,
+            abilityNames = character?.abilityList?.map { it.name }?.joinToString { (",") }
         )
     }
 }

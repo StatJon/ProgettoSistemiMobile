@@ -29,7 +29,8 @@ data class CharacterPlayer(
                 name = playerClass.name,
                 maxHealthPoints = playerClass.baseHealthPoints,
                 currentHealthPoints = playerClass.baseHealthPoints,
-                armorClass = playerClass.baseArmorClass
+                armorClass = playerClass.baseArmorClass,
+                abilityList = playerClass.baseAbilityList
             )
         )
 
@@ -37,6 +38,7 @@ data class CharacterPlayer(
             playerClass: PlayerClass,
             currentManaPoints: Int,
             currentHealthPoints: Int,
+            abilityList: List<Ability>
         ): CharacterPlayer = CharacterPlayer(
             playerClass = playerClass,
             currentManaPoints = currentManaPoints,
@@ -45,7 +47,8 @@ data class CharacterPlayer(
                 name = playerClass.name,
                 maxHealthPoints = playerClass.baseHealthPoints,
                 currentHealthPoints = currentHealthPoints,
-                armorClass = playerClass.baseArmorClass
+                armorClass = playerClass.baseArmorClass,
+                abilityList = abilityList
             )
         )
     }

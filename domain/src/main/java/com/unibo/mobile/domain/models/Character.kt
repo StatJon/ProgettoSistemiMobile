@@ -12,7 +12,8 @@ data class Character(
     val name: String,
     val maxHealthPoints: Int,
     val currentHealthPoints: Int,
-    val armorClass: Int
+    val armorClass: Int,
+    val abilityList: List<Ability>
 ) {
     fun applyDamage(damageValue: Int): Character {
         return this.copy(currentHealthPoints = (currentHealthPoints - damageValue).coerceAtLeast(0))
