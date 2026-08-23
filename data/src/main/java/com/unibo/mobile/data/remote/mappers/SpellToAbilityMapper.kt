@@ -7,7 +7,7 @@ import com.unibo.mobile.domain.models.AbilityHeal
 import com.unibo.mobile.domain.models.ActionCost
 import com.unibo.mobile.domain.models.DicesToRoll
 
-class SpellToAbilityMapper(spellDto: SpellDto) {
+class SpellToAbilityMapper{
     fun invoke(spellDto: SpellDto): Ability? {
         if (!isCompatibleSpell(spellDto)) return null
         return assembleAbility(spellDto)
