@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.CombatSnapshot
+import com.unibo.mobile.domain.models.GamePhase
 import com.unibo.mobile.domain.models.SaveGame
+import com.unibo.mobile.domain.models.TurnPhase
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByClassNameUseCase
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByEnemyUseCase
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCase
@@ -49,6 +51,8 @@ class GameScreenViewModel(
 
 ) : ViewModel() {
 
+    // --- StateFlow
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -73,31 +77,22 @@ class GameScreenViewModel(
     private val _lastActionMessage = MutableStateFlow<String?>(null)
     val lastActionMessage: StateFlow<String?> = _lastActionMessage
 
+    // --- Init
+
     init {
         viewModelScope.launch {
 
         }
     }
 
-    // funzioni pubbliche qui
+    // --- Public Functions
 
-    // funzioni private qui
+    // --- Orchestrator Functions
+
+    // --- Private Functions
 
 }
 
-enum class CombatStatus {
-    ONGOING,
-    VICTORY,
-    DEFEAT
-}
 
-enum class TurnPhase {
-    PLAYER_TURN,
-    ENEMY_TURN,
-    RESOLVING
-}
 
-enum class GamePhase {
-    COMBAT,
-    CHECKPOINT
-}
+
