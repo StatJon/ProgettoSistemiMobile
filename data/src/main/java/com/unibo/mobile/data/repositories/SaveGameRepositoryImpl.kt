@@ -36,21 +36,22 @@ class SaveGameRepositoryImpl(
     // --- Private Helpers
     private fun createNewSave(): SaveGame {
         return SaveGame(
-            winCounter = 10, //TODO RIMETTERE A 0
+            winCounter = 0,
             saveSession = null
         )
     }
 
-    // Nota: Valutare (anche di tempo) se sostituire !! con 2 DAO/Tabelle
+    // TODO Nota: Valutare (anche di tempo) se sostituire !! con 2 DAO/Tabelle
     private suspend fun mapRawToSaveGame(
         rawSaveData: SaveGameEntity,
         playerClassRepository: PlayerClassRepository
     ): SaveGame {
-        return if (rawSaveData.dungeonIndex != null) {
+        return if (rawSaveData.dungeonIndex != null && rawSaveData.dungeonSize != null) {
             SaveGame(
                 winCounter = rawSaveData.winCounter,
                 saveSession = SaveSession(
                     dungeonIndex = rawSaveData.dungeonIndex,
+                    dungeonSize = rawSaveData.dungeonSize,
                     playerCharacter = CharacterPlayer(
                         playerClass = playerClassRepository.getPlayerClassByName(rawSaveData.playerClassName!!)
                             ?: error("PlayerClass $rawSaveData.playerClassName missing"),
@@ -86,6 +87,7 @@ class SaveGameRepositoryImpl(
         return SaveGameEntity(
             winCounter = saveGame.winCounter,
             dungeonIndex = saveSession?.dungeonIndex,
+            dungeonSize = saveSession?.dungeonSize,
             playerClassName = playerCharacter?.playerClass?.className,
             currentManaPoints = playerCharacter?.currentManaPoints,
             maxManaPoints = playerCharacter?.maxManaPoints,

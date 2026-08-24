@@ -62,6 +62,9 @@ class GameScreenViewModel(
     private val _dungeonIndex = MutableStateFlow(0)
     val dungeonIndex: StateFlow<Int> = _dungeonIndex
 
+    private val _dungeonSize = MutableStateFlow(0)
+    val dungeonSize: StateFlow<Int> = _dungeonSize
+
     private val _characterPlayer = MutableStateFlow<CharacterPlayer?>(null)
     val characterPlayer: StateFlow<CharacterPlayer?> = _characterPlayer
 
@@ -80,16 +83,34 @@ class GameScreenViewModel(
     // --- Init
 
     init {
+        _isLoading.value = true
         viewModelScope.launch {
-
+            loadSaveAndConstructPlayer()
+            decideGamePhase()
         }
+        _isLoading.value = false
     }
 
     // --- Public Functions
 
-    // --- Orchestrator Functions
+    // --- Orchestrator Private Functions
 
-    // --- Private Functions
+    private fun decideGamePhase() {
+
+    }
+
+
+    // --- Logic Private Functions
+
+    private suspend fun loadSaveAndConstructPlayer() {
+        val loadedSaveGame = loadSaveGameUseCase.invoke()
+        _saveGame.value = loadedSaveGame
+        _dungeonIndex.value = loadedSaveGame.saveSession!!.dungeonIndex
+        _dungeonSize.value = loadedSaveGame.saveSession!!.dungeonSize
+        _characterPlayer.value = loadedSaveGame.saveSession!!.playerCharacter
+    }
+
+
 
 }
 
