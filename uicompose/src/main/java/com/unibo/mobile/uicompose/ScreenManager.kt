@@ -29,14 +29,25 @@ fun ScreenManager() {
             .fillMaxSize()
             .padding(UiConstants.EDGE_BASE_PADDING)
     ) { innerPadding ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             //--- Selettore Screen
             when (currentScreen) {
-                ScreenStatus.MENU -> MainMenu()
-                ScreenStatus.GAME -> GameScreen()
-                ScreenStatus.END_SCREEN -> EndScreen()
+                ScreenStatus.MENU -> MainMenu(
+                    onNavigateToGame = { currentScreen = ScreenStatus.GAME }
+                )
+
+                ScreenStatus.GAME -> GameScreen(
+                    onNavigateToMenu = { currentScreen = ScreenStatus.MENU },
+                    onNavigateToEndScreen = { currentScreen = ScreenStatus.END_SCREEN }
+                )
+
+                ScreenStatus.END_SCREEN -> EndScreen(
+                    onNavigateToMenu = { currentScreen = ScreenStatus.MENU }
+                )
             }
         }
     }

@@ -27,6 +27,7 @@ import com.unibo.mobile.uicompose.viewmodel.MainMenuViewModelFactory
 @Composable
 fun MainMenu(
     modifier: Modifier = Modifier,
+    onNavigateToGame: () -> Unit,
     viewModel: MainMenuViewModel = viewModel(
         factory = MainMenuViewModelFactory(
             getAllPlayerClassesUseCase = UseCaseProvider.getAllPlayerClassesUseCase,
@@ -82,7 +83,7 @@ fun MainMenu(
             )
             // --- Continue
             Button(
-                onClick = { },
+                onClick = onNavigateToGame,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(UiConstants.BUTTON_HEIGHT)

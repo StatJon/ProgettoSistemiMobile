@@ -14,6 +14,8 @@ import com.unibo.mobile.uicompose.components.gamescreen.PlayerControls
 @Composable
 fun GameScreen(
     modifier: Modifier = Modifier,
+    onNavigateToMenu: () -> Unit,
+    onNavigateToEndScreen: () -> Unit //TODO: Aggiungere boolean o simili per win/loss verso EndScreen
     //viewModel: GameScreenViewModel = viewModel(
     //    factory = GameScreenViewModelFactory(
     //        [...]UseCase = UseCaseProvider.[...]UseCase
@@ -46,6 +48,9 @@ fun GameScreen(
 @Preview(showBackground = true)
 @Composable
 fun GameScreenPreview() {
-    GameScreen()
+    GameScreen(
+        onNavigateToMenu = TODO(),
+        onNavigateToEndScreen = TODO()
+    )
 
 }
