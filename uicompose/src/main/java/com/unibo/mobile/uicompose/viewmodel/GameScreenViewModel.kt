@@ -2,11 +2,13 @@ package com.unibo.mobile.uicompose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unibo.mobile.domain.di.UseCaseProvider.loadSaveGameUseCase
 import com.unibo.mobile.domain.models.Ability
 import com.unibo.mobile.domain.models.ChallengeRating
 import com.unibo.mobile.domain.models.CharacterEnemy
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.CombatSnapshot
+import com.unibo.mobile.domain.models.CombatStatus
 import com.unibo.mobile.domain.models.GamePhase
 import com.unibo.mobile.domain.models.SaveGame
 import com.unibo.mobile.domain.models.TurnPhase
@@ -23,6 +25,7 @@ import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CombatLossUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CombatWinUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.TurnCheckUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +49,7 @@ class GameScreenViewModel(
     private val combatLossUseCase: CombatLossUseCase,
     private val combatWinUseCase: CombatWinUseCase,
     private val decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase,
+    private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
     private val dungeonUseCase: SetupDungeonUseCase,
     private val turnCheckUseCase: TurnCheckUseCase
 
@@ -83,33 +87,30 @@ class GameScreenViewModel(
     // --- Init
 
     init {
-        _isLoading.value = true
         viewModelScope.launch {
+            _isLoading.value = true
             loadSaveAndConstructPlayer()
             decideGamePhase()
+            _isLoading.value = false
         }
-        _isLoading.value = false
     }
 
     // --- Public Functions
 
+    fun onAbilitySelected(ability: Ability) {
+
+    }
+
     // --- Orchestrator Private Functions
 
     private suspend fun decideGamePhase() {
-        when {
-            _dungeonIndex.value <= _dungeonLength.value -> { combatGameLoop() }
-            // _dungeon.Index.value % _dungeonCheckpointStep.value == 0 -> { checkpointGameLoop } TODO non MVP
-            _dungeonIndex.value > dungeonLength.value -> { endGame() }
+        val gamePhase = determineGamePhaseUseCase.invoke(_dungeonIndex.value, _dungeonLength.value)
+        when (gamePhase){
+            GamePhase.COMBAT -> initCombat() // prepares the combat, awaits user input
+            GamePhase.CHECKPOINT -> { /* checkpointGameLoop */ } //TODO non MVP
+            GamePhase.END -> endGame()
+            }
         }
-    }
-
-    private suspend fun combatGameLoop() {
-        _isLoading.value = true
-        initCombat()
-        _isLoading.value = false
-
-
-    }
 
     // TODO: Implementare dopo primo collaudo, non MVP
     private fun checkpointGameLoop() {
@@ -119,8 +120,6 @@ class GameScreenViewModel(
     private fun endGame() {
 
     }
-
-
 
     // --- Logic Private Functions
 
@@ -133,36 +132,46 @@ class GameScreenViewModel(
     }
 
     private suspend fun initCombat() {
-        val enemy: CharacterEnemy = fetchEnemyByChallengeRatingUseCase.invoke(ChallengeRating.entries[_dungeonIndex.value])
+        _isLoading.value = true
+        val enemy: CharacterEnemy =
+            fetchEnemyByChallengeRatingUseCase.invoke(ChallengeRating.entries[_dungeonIndex.value])
         _combatSnapshot.value = CombatSnapshot(
             player = _characterPlayer.value!!,
             enemy = enemy,
             isPlayerTurn = true,
-            isOver = false
+            isOver = false,
+            combatStatus = CombatStatus.ONGOING
         )
+        _isLoading.value = false
     }
 
-    private fun combatLoop() {
-        /*
-        when (playerTurn){
+    private suspend fun combatLoop() {
+        when (_combatSnapshot.value!!.isPlayerTurn) {
             true -> playerTurn()
             false -> enemyTurn()
+        }
+        resolveActionAndUpdateCombatSnapshot()
+        when (_combatSnapshot.value!!.combatStatus) {
+            CombatStatus.ONGOING -> combatLoop()
+            CombatStatus.VICTORY -> nextDungeonStep()
+            CombatStatus.DEFEAT -> endGame() // TODO aggiungere flag isDungeonWon: Boolean
+        }
+    }
 
-            TODO AGGIUNGERE CombatStatus IN CombatSnapshot
-
-
-        when (combatStatus){
-            ONGOING -> combatLoop()
-            DEFEAT ->
-            VICTORY ->
-         */
+    private fun playerTurn() {
 
     }
 
+    private fun enemyTurn() {
 
+    }
 
+    private fun resolveActionAndUpdateCombatSnapshot() {
+
+    }
+
+    private suspend fun nextDungeonStep() {
+        _dungeonIndex.value++
+        decideGamePhase()
+    }
 }
-
-
-
-

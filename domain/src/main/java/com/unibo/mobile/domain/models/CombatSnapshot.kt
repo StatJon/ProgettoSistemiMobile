@@ -4,5 +4,6 @@ data class CombatSnapshot(
     val player: CharacterPlayer,
     val enemy: CharacterEnemy,
     val isPlayerTurn: Boolean,
-    val isOver: Boolean
+    val isOver: Boolean,
+    val combatStatus: CombatStatus
 )
