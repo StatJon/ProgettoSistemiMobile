@@ -2,7 +2,9 @@ package com.unibo.mobile.uicompose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.unibo.mobile.domain.models.Ability
+import com.unibo.mobile.domain.models.ChallengeRating
+import com.unibo.mobile.domain.models.CharacterEnemy
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.CombatSnapshot
 import com.unibo.mobile.domain.models.GamePhase
@@ -37,8 +39,6 @@ class GameScreenViewModel(
     private val fetchAbilityByNameUseCase: FetchAbilityByNameUseCase,
     private val fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase,
 
-    private val setupDungeonUseCase: SetupDungeonUseCase,
-
     private val applyAbilityResultUseCase: ApplyAbilityResultUseCase,
     private val calculateAbilityUseCase: CalculateAbilityUseCase,
     private val checkCombatStatusUseCase: CheckCombatStatusUseCase,
@@ -62,8 +62,8 @@ class GameScreenViewModel(
     private val _dungeonIndex = MutableStateFlow(0)
     val dungeonIndex: StateFlow<Int> = _dungeonIndex
 
-    private val _dungeonSize = MutableStateFlow(0)
-    val dungeonSize: StateFlow<Int> = _dungeonSize
+    private val _dungeonLength = MutableStateFlow(0)
+    val dungeonLength: StateFlow<Int> = _dungeonLength
 
     private val _characterPlayer = MutableStateFlow<CharacterPlayer?>(null)
     val characterPlayer: StateFlow<CharacterPlayer?> = _characterPlayer
@@ -95,9 +95,31 @@ class GameScreenViewModel(
 
     // --- Orchestrator Private Functions
 
-    private fun decideGamePhase() {
+    private suspend fun decideGamePhase() {
+        when {
+            _dungeonIndex.value <= _dungeonLength.value -> { combatGameLoop() }
+            // _dungeon.Index.value % _dungeonCheckpointStep.value == 0 -> { checkpointGameLoop } TODO non MVP
+            _dungeonIndex.value > dungeonLength.value -> { endGame() }
+        }
+    }
+
+    private suspend fun combatGameLoop() {
+        _isLoading.value = true
+        initCombat()
+        _isLoading.value = false
+
 
     }
+
+    // TODO: Implementare dopo primo collaudo, non MVP
+    private fun checkpointGameLoop() {
+
+    }
+
+    private fun endGame() {
+
+    }
+
 
 
     // --- Logic Private Functions
@@ -105,9 +127,36 @@ class GameScreenViewModel(
     private suspend fun loadSaveAndConstructPlayer() {
         val loadedSaveGame = loadSaveGameUseCase.invoke()
         _saveGame.value = loadedSaveGame
-        _dungeonIndex.value = loadedSaveGame.saveSession!!.dungeonIndex
-        _dungeonSize.value = loadedSaveGame.saveSession!!.dungeonSize
+        _dungeonIndex.value = loadedSaveGame.saveSession!!.dungeon.dungeonIndex
+        _dungeonLength.value = loadedSaveGame.saveSession!!.dungeon.dungeonLength
         _characterPlayer.value = loadedSaveGame.saveSession!!.playerCharacter
+    }
+
+    private suspend fun initCombat() {
+        val enemy: CharacterEnemy = fetchEnemyByChallengeRatingUseCase.invoke(ChallengeRating.entries[_dungeonIndex.value])
+        _combatSnapshot.value = CombatSnapshot(
+            player = _characterPlayer.value!!,
+            enemy = enemy,
+            isPlayerTurn = true,
+            isOver = false
+        )
+    }
+
+    private fun combatLoop() {
+        /*
+        when (playerTurn){
+            true -> playerTurn()
+            false -> enemyTurn()
+
+            TODO AGGIUNGERE CombatStatus IN CombatSnapshot
+
+
+        when (combatStatus){
+            ONGOING -> combatLoop()
+            DEFEAT ->
+            VICTORY ->
+         */
+
     }
 
 

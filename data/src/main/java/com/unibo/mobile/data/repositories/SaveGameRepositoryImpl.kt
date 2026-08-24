@@ -4,6 +4,7 @@ import com.unibo.mobile.data.local.dao.SaveGameDao
 import com.unibo.mobile.data.local.entities.SaveGameEntity
 import com.unibo.mobile.domain.models.Character
 import com.unibo.mobile.domain.models.CharacterPlayer
+import com.unibo.mobile.domain.models.Dungeon
 import com.unibo.mobile.domain.models.SaveGame
 import com.unibo.mobile.domain.models.SaveSession
 import com.unibo.mobile.domain.repositories.AbilityRepository
@@ -46,12 +47,14 @@ class SaveGameRepositoryImpl(
         rawSaveData: SaveGameEntity,
         playerClassRepository: PlayerClassRepository
     ): SaveGame {
-        return if (rawSaveData.dungeonIndex != null && rawSaveData.dungeonSize != null) {
+        return if (rawSaveData.dungeonIndex != null && rawSaveData.dungeonLength != null) {
             SaveGame(
                 winCounter = rawSaveData.winCounter,
                 saveSession = SaveSession(
-                    dungeonIndex = rawSaveData.dungeonIndex,
-                    dungeonSize = rawSaveData.dungeonSize,
+                    dungeon = Dungeon(
+                        dungeonIndex = rawSaveData.dungeonIndex,
+                        dungeonLength = rawSaveData.dungeonLength,
+                    ),
                     playerCharacter = CharacterPlayer(
                         playerClass = playerClassRepository.getPlayerClassByName(rawSaveData.playerClassName!!)
                             ?: error("PlayerClass $rawSaveData.playerClassName missing"),
@@ -86,8 +89,8 @@ class SaveGameRepositoryImpl(
         val character = saveGame.saveSession?.playerCharacter?.character
         return SaveGameEntity(
             winCounter = saveGame.winCounter,
-            dungeonIndex = saveSession?.dungeonIndex,
-            dungeonSize = saveSession?.dungeonSize,
+            dungeonIndex = saveSession?.dungeon?.dungeonIndex,
+            dungeonLength = saveSession?.dungeon?.dungeonLength,
             playerClassName = playerCharacter?.playerClass?.className,
             currentManaPoints = playerCharacter?.currentManaPoints,
             maxManaPoints = playerCharacter?.maxManaPoints,
