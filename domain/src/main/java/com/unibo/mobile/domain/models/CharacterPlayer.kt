@@ -1,19 +1,19 @@
 package com.unibo.mobile.domain.models
 
 /**
- * Represents a player-controlled character in the game, extends base [Character].
+ * Represents a player-controlled character in the game, extends base [CharacterData].
  *
  * @property playerClass The class of the player character, defining base stats and abilities.
  * @property currentManaPoints The current mana points available to the player.
  * @property maxManaPoints The maximum mana points the player can have.
- * @property character The underlying [Character] data containing health and armor attributes.
+ * @property characterData The underlying [CharacterData] data containing health and armor attributes.
  */
 data class CharacterPlayer(
     val playerClass: PlayerClass,
     val currentManaPoints: Int,
     val maxManaPoints: Int,
-    val character: Character
-) {
+    override val characterData: CharacterData
+) : Character {
     fun applyManaCost(costValue: Int): CharacterPlayer =
         copy(currentManaPoints = (currentManaPoints - costValue).coerceAtLeast(0))
 
@@ -25,7 +25,7 @@ data class CharacterPlayer(
             playerClass = playerClass,
             currentManaPoints = playerClass.baseManaPoints,
             maxManaPoints = playerClass.baseManaPoints,
-            character = Character(
+            characterData = CharacterData(
                 name = playerClass.name,
                 maxHealthPoints = playerClass.baseHealthPoints,
                 currentHealthPoints = playerClass.baseHealthPoints,
@@ -43,7 +43,7 @@ data class CharacterPlayer(
             playerClass = playerClass,
             currentManaPoints = currentManaPoints,
             maxManaPoints = playerClass.baseManaPoints,
-            character = Character(
+            characterData = CharacterData(
                 name = playerClass.name,
                 maxHealthPoints = playerClass.baseHealthPoints,
                 currentHealthPoints = currentHealthPoints,

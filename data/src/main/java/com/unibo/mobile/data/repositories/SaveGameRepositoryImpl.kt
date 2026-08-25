@@ -2,7 +2,7 @@ package com.unibo.mobile.data.repositories
 
 import com.unibo.mobile.data.local.dao.SaveGameDao
 import com.unibo.mobile.data.local.entities.SaveGameEntity
-import com.unibo.mobile.domain.models.Character
+import com.unibo.mobile.domain.models.CharacterData
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.Dungeon
 import com.unibo.mobile.domain.models.SaveGame
@@ -60,7 +60,7 @@ class SaveGameRepositoryImpl(
                             ?: error("PlayerClass $rawSaveData.playerClassName missing"),
                         currentManaPoints = rawSaveData.currentManaPoints!!,
                         maxManaPoints = rawSaveData.maxManaPoints!!,
-                        character = Character(
+                        characterData = CharacterData(
                             name = rawSaveData.name!!,
                             maxHealthPoints = rawSaveData.maxHealthPoints!!,
                             currentHealthPoints = rawSaveData.currentHealthPoints!!,
@@ -86,7 +86,7 @@ class SaveGameRepositoryImpl(
     private fun mapSaveGameToRaw(saveGame: SaveGame): SaveGameEntity {
         val saveSession = saveGame.saveSession
         val playerCharacter = saveGame.saveSession?.playerCharacter
-        val character = saveGame.saveSession?.playerCharacter?.character
+        val character = saveGame.saveSession?.playerCharacter?.characterData
         return SaveGameEntity(
             winCounter = saveGame.winCounter,
             dungeonIndex = saveSession?.dungeon?.dungeonIndex,
@@ -94,7 +94,7 @@ class SaveGameRepositoryImpl(
             playerClassName = playerCharacter?.playerClass?.className,
             currentManaPoints = playerCharacter?.currentManaPoints,
             maxManaPoints = playerCharacter?.maxManaPoints,
-            name = playerCharacter?.character?.name,
+            name = playerCharacter?.characterData?.name,
             maxHealthPoints = character?.maxHealthPoints,
             currentHealthPoints = character?.currentHealthPoints,
             armorClass = character?.armorClass,

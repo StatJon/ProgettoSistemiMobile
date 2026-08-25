@@ -83,7 +83,7 @@ class SaveGameRepositoryImplTest {
 
         assertEquals(3, result.winCounter)
         assertEquals(2, result.saveSession?.dungeonIndex)
-        assertEquals(8, result.saveSession?.playerCharacter?.character?.currentHealthPoints)
+        assertEquals(8, result.saveSession?.playerCharacter?.characterData?.currentHealthPoints)
     }
 
     @Test
