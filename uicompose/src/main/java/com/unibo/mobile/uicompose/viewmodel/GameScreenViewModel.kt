@@ -3,6 +3,7 @@ package com.unibo.mobile.uicompose.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unibo.mobile.domain.models.Ability
+import com.unibo.mobile.domain.models.CharacterData
 import com.unibo.mobile.domain.models.CharacterEnemy
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.CombatSnapshot
@@ -167,73 +168,16 @@ class GameScreenViewModel(
                     println("DEBUG: Waiting for ability...")
                     val playerAbility = _abilitySelectedChannel.receive()
                     println("DEBUG: Received ability: ${playerAbility.name}")
-
-                    try {
-                        println("DEBUG: Before calculateAbilityResultUseCase")
-                        val abilityResult = calculateAbilityResultUseCase.invoke(
-                            target = combatSnapshot.enemy,
-                            ability = playerAbility
-                        )
-                        println("DEBUG: After calculateAbilityResultUseCase: $abilityResult")
-
-                        println("DEBUG: Before applyAbilityResultUseCase")
-                        val updatedCharacterDataEnemy = applyAbilityResultUseCase.invoke(
-                            target = combatSnapshot.enemy,
-                            abilityResult = abilityResult
-                        )
-                        println("DEBUG: After applyAbilityResultUseCase")
-
-                        println("DEBUG: Before applyPlayerAbilityCostUseCase")
-                        val updatedCharacterDataPlayer = applyPlayerAbilityCostUseCase.invoke(
-                            player = combatSnapshot.player,
-                            ability = abilityResult.ability
-                        )
-                        println("DEBUG: After applyPlayerAbilityCostUseCase")
-
-                        val updatedSnapshot = combatSnapshot.copy(
-                            player = combatSnapshot.player.copy(
-                                currentManaPoints = updatedCharacterDataPlayer.currentManaPoints,
-                                characterData = updatedCharacterDataPlayer.characterData
-                            ),
-                            enemy = combatSnapshot.enemy.copy(characterData = updatedCharacterDataEnemy)
-                        )
-
-                        println("DEBUG: Before checkCombatStatusUseCase")
-                        val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
-                        println("DEBUG: New combat status: $newCombatStatus")
-
-                        _combatSnapshot.value = updatedSnapshot.copy(
-                            combatStatus = newCombatStatus
-                        )
-                        println("DEBUG: Snapshot updated")
-                    } catch (e: Exception) {
-                        println("DEBUG: EXCEPTION in PLAYER_TURN: ${e.message}")
-                        e.printStackTrace()
-                    }
+                    executeTurn(combatSnapshot, playerAbility, isPlayerTurn = true)
                 }
 
                 CombatStatus.ENEMY_TURN -> {
+                    println("DEBUG: Enemy turn started")
                     val enemyAbility = decideEnemyAbilityUseCase.invoke(
                         enemy = combatSnapshot.enemy
                     )
-                    val abilityResult = calculateAbilityResultUseCase.invoke(
-                        target = combatSnapshot.player,
-                        ability = enemyAbility
-                    )
-                    val updatedCharacterDataPlayer = applyAbilityResultUseCase.invoke(
-                        target = combatSnapshot.player,
-                        abilityResult = abilityResult
-                    )
-
-                    val updatedSnapshot = combatSnapshot.copy(
-                        player = combatSnapshot.player.copy(characterData = updatedCharacterDataPlayer)
-                    )
-
-                    val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
-
-                    _combatSnapshot.value = updatedSnapshot.copy(
-                        combatStatus = newCombatStatus
-                    )
+                    println("DEBUG: Enemy ability: ${enemyAbility.name}")
+                    executeTurn(combatSnapshot, enemyAbility, isPlayerTurn = false)
                 }
 
                 CombatStatus.VICTORY -> {
@@ -299,4 +243,52 @@ class GameScreenViewModel(
         )
         _isLoading.value = false
     }
+
+    private fun executeTurn(
+        combatSnapshot: CombatSnapshot,
+        ability: Ability,
+        isPlayerTurn: Boolean
+    ) {
+        try {
+            val target = if (isPlayerTurn) combatSnapshot.enemy else combatSnapshot.player
+
+            println("DEBUG: Before calculateAbilityResultUseCase")
+            val abilityResult = calculateAbilityResultUseCase.invoke(target, ability)
+            println("DEBUG: After calculateAbilityResultUseCase: $abilityResult")
+
+            println("DEBUG: Before applyAbilityResultUseCase")
+            val updatedTargetData = applyAbilityResultUseCase.invoke(target, abilityResult)
+            println("DEBUG: After applyAbilityResultUseCase")
+
+            val updatedSnapshot = if (isPlayerTurn) {
+                println("DEBUG: Before applyPlayerAbilityCostUseCase")
+                val updatedPlayer = applyPlayerAbilityCostUseCase.invoke(
+                    combatSnapshot.player,
+                    abilityResult.ability
+                )
+                println("DEBUG: After applyPlayerAbilityCostUseCase")
+                combatSnapshot.copy(
+                    player = updatedPlayer,
+                    enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
+                )
+            } else {
+                combatSnapshot.copy(
+                    player = combatSnapshot.player.copy(characterData = updatedTargetData),
+                    enemy = combatSnapshot.enemy
+                )
+            }
+
+            println("DEBUG: Before checkCombatStatusUseCase")
+            val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
+            println("DEBUG: New combat status: $newCombatStatus")
+
+            _combatSnapshot.value = updatedSnapshot.copy(combatStatus = newCombatStatus)
+            _characterPlayer.value = updatedSnapshot.player
+            println("DEBUG: Snapshot updated")
+        } catch (e: Exception) {
+            println("DEBUG: EXCEPTION in executeTurn: ${e.message}")
+            e.printStackTrace()
+        }
+    }
+
 }
