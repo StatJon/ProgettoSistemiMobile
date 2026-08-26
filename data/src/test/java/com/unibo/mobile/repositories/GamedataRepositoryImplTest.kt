@@ -1,13 +1,13 @@
 package com.unibo.mobile.repositories
 
-import com.unibo.mobile.data.repositories.PlayerClassRepositoryImpl
+import com.unibo.mobile.data.repositories.GamedataRepositoryImpl
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-class PlayerClassRepositoryImplTest {
+class GamedataRepositoryImplTest {
 
-    private val repository = PlayerClassRepositoryImpl()
+    private val repository = GamedataRepositoryImpl()
 
     @Test
     fun getAll() = runBlocking {

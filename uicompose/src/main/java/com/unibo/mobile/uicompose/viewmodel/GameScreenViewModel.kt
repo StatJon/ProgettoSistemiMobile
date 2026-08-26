@@ -233,7 +233,7 @@ class GameScreenViewModel(
         _saveGame.value = loadedSaveGame
         _dungeonIndex.value = loadedSaveSession.dungeon.dungeonIndex
         _dungeonLength.value = loadedSaveSession.dungeon.dungeonLength
-        _characterPlayer.value = loadedSaveSession.playerCharacter
+        _characterPlayer.value = loadedSaveSession.characterPlayer
         _isLoading.value = false
     }
 

@@ -5,7 +5,12 @@ import com.unibo.mobile.domain.models.ActionCost
 import com.unibo.mobile.domain.models.DicesToRoll
 import com.unibo.mobile.domain.models.PlayerClass
 
-object PlayerGamedata {
+object Gamedata {
+
+    val baseDungeonLength = 5
+    // val checkpointStep = 3 TODO: Aggiungere dopo primo collaudo gioco, non MVP
+    // val baseActionPointsPerTurn = 2 TODO: Se serve aggiungere
+
     val PlayerClassList: List<PlayerClass> = listOf(
         PlayerClass(
             name = "Suor Mazzate",

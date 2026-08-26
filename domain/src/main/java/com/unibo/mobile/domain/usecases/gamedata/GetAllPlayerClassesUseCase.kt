@@ -1,16 +1,16 @@
 package com.unibo.mobile.domain.usecases.gamedata
 
 import com.unibo.mobile.domain.models.PlayerClass
-import com.unibo.mobile.domain.repositories.PlayerClassRepository
+import com.unibo.mobile.domain.repositories.GamedataRepository
 
 interface GetAllPlayerClassesUseCase {
     suspend fun invoke(): List<PlayerClass>
 }
 
 class GetAllPlayerClassesUseCaseImpl(
-    private val playerClassRepository: PlayerClassRepository
+    private val gamedataRepository: GamedataRepository
 ) : GetAllPlayerClassesUseCase{
     override suspend fun invoke(): List<PlayerClass> {
-        return playerClassRepository.getAllPlayerClasses()
+        return gamedataRepository.getAllPlayerClasses()
     }
 }

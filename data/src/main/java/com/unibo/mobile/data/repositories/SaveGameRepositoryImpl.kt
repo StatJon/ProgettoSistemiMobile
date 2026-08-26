@@ -8,12 +8,12 @@ import com.unibo.mobile.domain.models.Dungeon
 import com.unibo.mobile.domain.models.SaveGame
 import com.unibo.mobile.domain.models.SaveSession
 import com.unibo.mobile.domain.repositories.AbilityRepository
-import com.unibo.mobile.domain.repositories.PlayerClassRepository
+import com.unibo.mobile.domain.repositories.GamedataRepository
 import com.unibo.mobile.domain.repositories.SaveGameRepository
 
 class SaveGameRepositoryImpl(
     private val saveGameDao: SaveGameDao,
-    private val playerClassRepository: PlayerClassRepository,
+    private val gamedataRepository: GamedataRepository,
     private val abilityRepository: AbilityRepository
 ) : SaveGameRepository {
 
@@ -21,8 +21,7 @@ class SaveGameRepositoryImpl(
         val rawSaveData: SaveGameEntity? = saveGameDao.loadSaveGame()
         return if (rawSaveData != null) {
             mapRawToSaveGame(
-                rawSaveData,
-                playerClassRepository = playerClassRepository
+                rawSaveData, gamedataRepository = gamedataRepository
             )
         } else {
             createNewSave()
@@ -34,29 +33,38 @@ class SaveGameRepositoryImpl(
         saveGameDao.saveSaveGame(saveGameEntity)
     }
 
+    override suspend fun createNewSaveSessionAndSave(
+        saveGame: SaveGame,
+        playerClassName: String
+    ): SaveGame {
+        val newSaveSession = createNewSaveSession(saveGame, playerClassName)
+        val newSaveGame = SaveGame(
+            winCounter = saveGame.winCounter,
+            saveSession = newSaveSession
+        )
+        saveSaveGame(newSaveGame)
+        return newSaveGame
+    }
+
     // --- Private Helpers
     private fun createNewSave(): SaveGame {
         return SaveGame(
-            winCounter = 0,
-            saveSession = null
+            winCounter = 0, saveSession = null
         )
     }
 
     // TODO Nota: Valutare (anche di tempo) se sostituire !! con 2 DAO/Tabelle
     private suspend fun mapRawToSaveGame(
-        rawSaveData: SaveGameEntity,
-        playerClassRepository: PlayerClassRepository
+        rawSaveData: SaveGameEntity, gamedataRepository: GamedataRepository
     ): SaveGame {
         return if (rawSaveData.dungeonIndex != null && rawSaveData.dungeonLength != null) {
             SaveGame(
-                winCounter = rawSaveData.winCounter,
-                saveSession = SaveSession(
+                winCounter = rawSaveData.winCounter, saveSession = SaveSession(
                     dungeon = Dungeon(
                         dungeonIndex = rawSaveData.dungeonIndex,
                         dungeonLength = rawSaveData.dungeonLength,
-                    ),
-                    playerCharacter = CharacterPlayer(
-                        playerClass = playerClassRepository.getPlayerClassByName(rawSaveData.playerClassName!!)
+                    ), characterPlayer = CharacterPlayer(
+                        playerClass = gamedataRepository.getPlayerClassByName(rawSaveData.playerClassName!!)
                             ?: error("PlayerClass $rawSaveData.playerClassName missing"),
                         currentManaPoints = rawSaveData.currentManaPoints!!,
                         maxManaPoints = rawSaveData.maxManaPoints!!,
@@ -77,16 +85,15 @@ class SaveGameRepositoryImpl(
             )
         } else {
             SaveGame(
-                winCounter = rawSaveData.winCounter,
-                saveSession = null
+                winCounter = rawSaveData.winCounter, saveSession = null
             )
         }
     }
 
     private fun mapSaveGameToRaw(saveGame: SaveGame): SaveGameEntity {
         val saveSession = saveGame.saveSession
-        val playerCharacter = saveGame.saveSession?.playerCharacter
-        val character = saveGame.saveSession?.playerCharacter?.characterData
+        val playerCharacter = saveGame.saveSession?.characterPlayer
+        val character = saveGame.saveSession?.characterPlayer?.characterData
         return SaveGameEntity(
             winCounter = saveGame.winCounter,
             dungeonIndex = saveSession?.dungeon?.dungeonIndex,
@@ -98,7 +105,29 @@ class SaveGameRepositoryImpl(
             maxHealthPoints = character?.maxHealthPoints,
             currentHealthPoints = character?.currentHealthPoints,
             armorClass = character?.armorClass,
-            abilityNames = character?.abilityList?.map { it.name }?.joinToString { (",") }
+            abilityNames = character?.abilityList?.map { it.name }?.joinToString { (",") })
+    }
+
+    private fun createNewSaveSession(saveGame: SaveGame, playerClassName: String): SaveSession {
+        val playerClass = gamedataRepository.getPlayerClassByName(playerClassName)
+            ?: error("Error: PlayerClass not found")
+        val newSaveSession = SaveSession(
+            dungeon = Dungeon(
+                dungeonIndex = 0,
+                dungeonLength = gamedataRepository.getDungeonBaseLength() + saveGame.winCounter
+            ), characterPlayer = CharacterPlayer(
+                playerClass = playerClass,
+                currentManaPoints = playerClass.baseManaPoints,
+                maxManaPoints = playerClass.baseManaPoints,
+                characterData = CharacterData(
+                    name = playerClass.name,
+                    maxHealthPoints = playerClass.baseHealthPoints,
+                    currentHealthPoints = playerClass.baseHealthPoints,
+                    armorClass = playerClass.baseArmorClass,
+                    abilityList = playerClass.baseAbilityList
+                )
+            )
         )
+        return newSaveSession
     }
 }

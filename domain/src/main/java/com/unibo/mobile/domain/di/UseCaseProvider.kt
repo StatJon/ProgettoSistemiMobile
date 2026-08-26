@@ -16,13 +16,14 @@ import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCaseImpl
-import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCaseImpl
+import com.unibo.mobile.domain.usecases.savegame.NewSaveSessionUseCase
+import com.unibo.mobile.domain.usecases.savegame.NewSaveSessionUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCaseImpl
 
@@ -36,6 +37,7 @@ object UseCaseProvider {
     lateinit var getPlayerClassByClassNameUseCase: GetPlayerClassByClassNameUseCase
     lateinit var loadSaveGameUseCase: LoadSaveGameUseCase
     lateinit var saveSaveGameUseCase: SaveSaveGameUseCase
+    lateinit var newSaveSessionUseCase: NewSaveSessionUseCase
     lateinit var fetchAbilityByNameUseCase: FetchAbilityByNameUseCase
     lateinit var calculateAbilityResultUseCase: CalculateAbilityResultUseCase
     lateinit var determineGamePhaseUseCase: DetermineGamePhaseUseCase
@@ -55,15 +57,18 @@ object UseCaseProvider {
         repositoryProvider: RepositoryProvider
     ) {
         getAllPlayerClassesUseCase = GetAllPlayerClassesUseCaseImpl(
-            playerClassRepository = repositoryProvider.playerClassRepository
+            gamedataRepository = repositoryProvider.gamedataRepository
         )
         getPlayerClassByClassNameUseCase = GetPlayerClassByClassNameUseCaseImpl(
-            playerClassRepository = repositoryProvider.playerClassRepository
+            gamedataRepository = repositoryProvider.gamedataRepository
         )
         loadSaveGameUseCase = LoadSaveGameUseCaseImpl(
             saveGameRepository = repositoryProvider.saveGameRepository
         )
         saveSaveGameUseCase = SaveSaveGameUseCaseImpl(
+            saveGameRepository = repositoryProvider.saveGameRepository
+        )
+        newSaveSessionUseCase = NewSaveSessionUseCaseImpl(
             saveGameRepository = repositoryProvider.saveGameRepository
         )
         fetchAbilityByNameUseCase = FetchAbilityByNameUseCaseImpl(

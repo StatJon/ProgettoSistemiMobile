@@ -28,10 +28,12 @@ import com.unibo.mobile.uicompose.viewmodel.MainMenuViewModelFactory
 fun MainMenu(
     modifier: Modifier = Modifier,
     onNavigateToGame: () -> Unit,
+    onNewGameSelected: (PlayerClass) -> Unit,
     viewModel: MainMenuViewModel = viewModel(
         factory = MainMenuViewModelFactory(
             getAllPlayerClassesUseCase = UseCaseProvider.getAllPlayerClassesUseCase,
-            loadSaveGameUseCase = UseCaseProvider.loadSaveGameUseCase
+            loadSaveGameUseCase = UseCaseProvider.loadSaveGameUseCase,
+            newSaveSessionUseCase = UseCaseProvider.newSaveSessionUseCase,
         )
     )
 ) {
@@ -64,7 +66,7 @@ fun MainMenu(
                     .weight(0.4f),
                 textAlign = TextAlign.Center,
 
-            )
+                )
             // --- WinCounter
             Text(
                 text = stringResource(R.string.dungeons_won) + winCounter,
@@ -77,6 +79,7 @@ fun MainMenu(
             // --- NewGame Buttons with Classes
             NewGameButtonsWithClasses(
                 playerClassesList.value,
+                onNewGameSelected = onNewGameSelected,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.4f)
@@ -100,7 +103,9 @@ fun MainMenu(
 @Composable
 private fun NewGameButtonsWithClasses(
     playerClasses: List<PlayerClass>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNewGameSelected: (PlayerClass) -> Unit
+
 ) {
     LazyColumn(
         modifier = modifier,
@@ -108,7 +113,7 @@ private fun NewGameButtonsWithClasses(
     ) {
         items(playerClasses) { playerClass ->
             Button(
-                onClick = { },
+                onClick = { onNewGameSelected(playerClass) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(UiConstants.BUTTON_HEIGHT)

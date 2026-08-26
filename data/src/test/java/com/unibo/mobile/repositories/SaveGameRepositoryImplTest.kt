@@ -4,7 +4,7 @@ import com.unibo.mobile.data.local.dao.SaveGameDao
 import com.unibo.mobile.data.local.entities.SaveGameEntity
 import com.unibo.mobile.data.repositories.SaveGameRepositoryImpl
 import com.unibo.mobile.domain.models.PlayerClass
-import com.unibo.mobile.domain.repositories.PlayerClassRepository
+import com.unibo.mobile.domain.repositories.GamedataRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -21,7 +21,7 @@ class FakeSaveGameDao : SaveGameDao {
 }
 
 /** Fake manuale del PlayerClassRepository: dati di test isolati. */
-class FakePlayerClassRepository : PlayerClassRepository {
+class FakeGamedataRepository : GamedataRepository {
     private val classes = listOf(
         PlayerClass(
             name = "Suor Mazzate",
@@ -45,13 +45,13 @@ class FakePlayerClassRepository : PlayerClassRepository {
 class SaveGameRepositoryImplTest {
 
     private lateinit var dao: FakeSaveGameDao
-    private lateinit var playerClassRepository: FakePlayerClassRepository
+    private lateinit var playerClassRepository: FakeGamedataRepository
     private lateinit var saveRepository: SaveGameRepositoryImpl
 
     @Before
     fun setup() {
         dao = FakeSaveGameDao()
-        playerClassRepository = FakePlayerClassRepository()
+        playerClassRepository = FakeGamedataRepository()
         saveRepository = SaveGameRepositoryImpl(dao, playerClassRepository)
     }
 
@@ -83,7 +83,7 @@ class SaveGameRepositoryImplTest {
 
         assertEquals(3, result.winCounter)
         assertEquals(2, result.saveSession?.dungeonIndex)
-        assertEquals(8, result.saveSession?.playerCharacter?.characterData?.currentHealthPoints)
+        assertEquals(8, result.saveSession?.characterPlayer?.characterData?.currentHealthPoints)
     }
 
     @Test

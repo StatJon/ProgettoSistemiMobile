@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.unibo.mobile.data.di.RepositoryProviderImpl
 import com.unibo.mobile.data.local.db.AppDatabase
 import com.unibo.mobile.data.remote.api.RetrofitClient
-import com.unibo.mobile.data.repositories.PlayerClassRepositoryImpl
 
 import com.unibo.mobile.domain.di.UseCaseProvider
 
