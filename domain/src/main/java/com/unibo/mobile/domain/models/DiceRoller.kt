@@ -2,9 +2,9 @@ package com.unibo.mobile.domain.models
 
 import kotlin.random.Random
 
-class DiceRoller(dicesToRoll: DicesToRoll) {
+class DiceRoller(){
 
-    fun rollDices(dicesToRoll: DicesToRoll): Int {
+    fun invoke(dicesToRoll: DicesToRoll): Int {
         val diceFaces = dicesToRoll.diceFaces
         val times = dicesToRoll.diceNumber
         var total = 0

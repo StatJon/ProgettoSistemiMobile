@@ -6,6 +6,8 @@ import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
@@ -22,6 +24,7 @@ object UseCaseProvider {
     lateinit var loadSaveGameUseCase: LoadSaveGameUseCase
     lateinit var saveSaveGameUseCase: SaveSaveGameUseCase
     lateinit var fetchAbilityByNameUseCase: FetchAbilityByNameUseCase
+    lateinit var calculateAbilityResultUseCase: CalculateAbilityResultUseCase
 
     /**
      * Constructor
@@ -47,5 +50,7 @@ object UseCaseProvider {
         fetchAbilityByNameUseCase = FetchAbilityByNameUseCaseImpl(
             abilityRepository = repositoryProvider.abilityRepository
         )
+        calculateAbilityResultUseCase = CalculateAbilityResultUseCaseImpl()
+
     }
 }

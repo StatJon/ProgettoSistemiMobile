@@ -6,5 +6,6 @@ data class AbilityDamage(
     override val isAoe: Boolean,
     override val actionCost: ActionCost,
     override val manaCost: Int,
-    val damageDices: DicesToRoll,
+    override val dicesToRoll: DicesToRoll,
+    override val requiresHitRoll: Boolean = true
     ) : Ability

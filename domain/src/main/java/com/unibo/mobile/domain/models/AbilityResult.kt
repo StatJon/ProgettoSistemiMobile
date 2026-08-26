@@ -2,7 +2,7 @@ package com.unibo.mobile.domain.models
 
 data class AbilityResult(
     val target: Character,
-    val amount: Int,
     val ability: Ability,
-    val diceResult: Int
+    val effectDiceRoll: Int, // damage or heal amount
+    val hitDiceRoll: Int
 )

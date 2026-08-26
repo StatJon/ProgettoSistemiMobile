@@ -6,4 +6,6 @@ sealed interface Ability {
     val isAoe: Boolean
     val actionCost: ActionCost
     val manaCost: Int
+    val dicesToRoll: DicesToRoll
+    val requiresHitRoll : Boolean
 }
