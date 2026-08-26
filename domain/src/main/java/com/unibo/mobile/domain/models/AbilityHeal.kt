@@ -5,5 +5,6 @@ data class AbilityHeal(
     override val level: Int,
     override val isAoe: Boolean,
     override val actionCost: ActionCost,
-    val healDicesToRoll: DicesToRoll
-): Ability
+    override val manaCost: Int,
+    val healDicesToRoll: DicesToRoll,
+    ) : Ability

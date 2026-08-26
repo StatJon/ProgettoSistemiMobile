@@ -5,4 +5,5 @@ sealed interface Ability {
     val level: Int
     val isAoe: Boolean
     val actionCost: ActionCost
+    val manaCost: Int
 }

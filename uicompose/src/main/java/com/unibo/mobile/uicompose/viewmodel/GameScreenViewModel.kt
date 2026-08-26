@@ -16,6 +16,7 @@ import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCase
 import com.unibo.mobile.domain.usecases.api.FetchEnemyByChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
 import com.unibo.mobile.domain.usecases.gamedata.SetupDungeonUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
@@ -42,6 +43,7 @@ class GameScreenViewModel(
     private val fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase,
 
     private val applyAbilityResultUseCase: ApplyAbilityResultUseCase,
+    private val applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase,
     private val calculateAbilityResultUseCase: CalculateAbilityResultUseCase,
     private val checkCombatStatusUseCase: CheckCombatStatusUseCase,
     private val checkpointUseCase: CheckpointUseCase,
@@ -82,6 +84,11 @@ class GameScreenViewModel(
 
     private val _abilitySelectedChannel = Channel<Ability>(Channel.RENDEZVOUS)
 
+    override fun onCleared() {
+        _abilitySelectedChannel.close()
+        super.onCleared()
+    }
+
     // --- Init
 
     init {
@@ -102,26 +109,24 @@ class GameScreenViewModel(
     // --- Orchestrator Private Functions
 
     private suspend fun gameLoop() {
-        while (true) {
-
-            val gamePhase: GamePhase =
-                if (_gamePhase.value != GamePhase.DUNGEON_LOST && gamePhase.value != GamePhase.DUNGEON_WON) {
-                    determineGamePhaseUseCase.invoke(
-                        _dungeonIndex.value,
-                        _dungeonLength.value
-                    )
-                } else {
-                    _gamePhase.value //should always be WON/LOST
-                }
+        while (_gamePhase.value !in listOf(GamePhase.DUNGEON_LOST, GamePhase.DUNGEON_WON)) {
+            val gamePhase = determineGamePhaseUseCase.invoke(
+                _dungeonIndex.value,
+                _dungeonLength.value
+            )
 
             when (gamePhase) {
                 GamePhase.COMBAT -> combatLoop()
-
                 GamePhase.CHECKPOINT -> checkpointLoop()
+                GamePhase.DUNGEON_WON -> {
+                    endGame(true)
+                    return
+                }
 
-                GamePhase.DUNGEON_WON -> endGame(true)
-
-                GamePhase.DUNGEON_LOST -> endGame(false)
+                GamePhase.DUNGEON_LOST -> {
+                    endGame(false)
+                    return
+                }
             }
         }
     }
@@ -150,13 +155,23 @@ class GameScreenViewModel(
                     abilityResult = abilityResult
                 )
 
-                // TODO
-                // val updatadCharacterDataPlayer = TODO applyAbilityCostUseCase.invoke()
+                val updatedCharacterDataPlayer = applyPlayerAbilityCostUseCase.invoke(
+                    player = combatSnapshot.player,
+                    ability = abilityResult.ability
+                )
 
-                _combatSnapshot.value = combatSnapshot.copy(
-                    // player = , no change, TODO add USECASE for mana cost and implement
-                    enemy = combatSnapshot.enemy.copy(characterData = updatedCharacterDataEnemy),
-                    combatStatus = CombatStatus.ENEMY_TURN,
+                val updatedSnapshot = combatSnapshot.copy(
+                    player = combatSnapshot.player.copy(
+                        currentManaPoints = updatedCharacterDataPlayer.currentManaPoints,
+                        characterData = updatedCharacterDataPlayer.characterData
+                    ),
+                    enemy = combatSnapshot.enemy.copy(characterData = updatedCharacterDataEnemy)
+                )
+
+                val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
+
+                _combatSnapshot.value = updatedSnapshot.copy(
+                    combatStatus = newCombatStatus
                 )
 
             }
@@ -174,14 +189,15 @@ class GameScreenViewModel(
                     abilityResult = abilityResult
                 )
 
-                _combatSnapshot.value = combatSnapshot.copy(
-                    player = combatSnapshot.player.copy(characterData = updatedCharacterDataPlayer),
-                    // enemy = , no change
-                    combatStatus = CombatStatus.PLAYER_TURN,
+                val updatedSnapshot = combatSnapshot.copy(
+                    player = combatSnapshot.player.copy(characterData = updatedCharacterDataPlayer)
                 )
 
-                checkCombatStatusUseCase.invoke(combatSnapshot)
+                val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
 
+                _combatSnapshot.value = updatedSnapshot.copy(
+                    combatStatus = newCombatStatus
+                )
             }
 
             CombatStatus.VICTORY -> {
@@ -203,11 +219,12 @@ class GameScreenViewModel(
     }
 
     private fun endGame(isWon: Boolean) {
-        //onNavigation TODO
+        _gamePhase.value = if (isWon) GamePhase.DUNGEON_WON else GamePhase.DUNGEON_LOST
+        _combatSnapshot.value = null
+        //TODO add onNavigation
     }
 
     // --- Logic Private Functions
-
 
     private suspend fun loadSaveAndConstructPlayer() {
         _isLoading.value = true
@@ -226,7 +243,8 @@ class GameScreenViewModel(
         val enemy: CharacterEnemy =
             fetchEnemyByChallengeRatingUseCase.invoke(ChallengeRating.entries[_dungeonIndex.value])
         _combatSnapshot.value = CombatSnapshot(
-            player = _characterPlayer.value!!,
+            player = _characterPlayer.value
+                ?: throw IllegalStateException("Player not initialized"),
             enemy = enemy,
             combatStatus = CombatStatus.PLAYER_TURN,
         )

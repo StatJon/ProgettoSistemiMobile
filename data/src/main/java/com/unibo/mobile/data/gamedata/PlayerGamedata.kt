@@ -23,6 +23,7 @@ object PlayerGamedata {
                     level = 0,
                     isAoe = false,
                     actionCost = ActionCost.ACTION,
+                    manaCost = 0,
                     damageDices = DicesToRoll(1, 6)
                 )
             )
@@ -43,6 +44,7 @@ object PlayerGamedata {
                     level = 0,
                     isAoe = false,
                     actionCost = ActionCost.ACTION,
+                    manaCost = 0,
                     damageDices = DicesToRoll(1, 8)
                 )
             )
