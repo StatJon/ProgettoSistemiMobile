@@ -25,6 +25,7 @@ import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCas
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.TurnCheckUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
+import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,24 +33,25 @@ import kotlinx.coroutines.launch
 
 class GameScreenViewModel(
 
-    private val getAllPlayerClassesUseCase: GetAllPlayerClassesUseCase,
+    //private val getAllPlayerClassesUseCase: GetAllPlayerClassesUseCase,
     private val loadSaveGameUseCase: LoadSaveGameUseCase,
+    private val saveSaveGameUseCase: SaveSaveGameUseCase,
 
-    private val fetchAbilityByClassNameUseCase: FetchAbilityByClassNameUseCase,
-    private val fetchAbilityByEnemyUseCase: FetchAbilityByEnemyUseCase,
-    private val fetchAbilityByNameUseCase: FetchAbilityByNameUseCase,
+    //private val fetchAbilityByClassNameUseCase: FetchAbilityByClassNameUseCase,
+    //private val fetchAbilityByEnemyUseCase: FetchAbilityByEnemyUseCase,
+    //private val fetchAbilityByNameUseCase: FetchAbilityByNameUseCase,
     private val fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase,
 
     private val applyAbilityResultUseCase: ApplyAbilityResultUseCase,
     private val applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase,
     private val calculateAbilityResultUseCase: CalculateAbilityResultUseCase,
     private val checkCombatStatusUseCase: CheckCombatStatusUseCase,
-    private val checkpointUseCase: CheckpointUseCase,
+    //private val checkpointUseCase: CheckpointUseCase,
     private val decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase,
     private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase,
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
-    private val dungeonUseCase: SetupDungeonUseCase,
-    private val turnCheckUseCase: TurnCheckUseCase
+    //private val dungeonUseCase: SetupDungeonUseCase,
+    //private val turnCheckUseCase: TurnCheckUseCase
 
 ) : ViewModel() {
 
@@ -79,6 +81,9 @@ class GameScreenViewModel(
     private val _lastActionMessage = MutableStateFlow<String?>(null)
     val lastActionMessage: StateFlow<String?> = _lastActionMessage
 
+    private val _navigateToEndScreen = MutableStateFlow<Boolean?>(null)
+    val navigateToEndScreen: StateFlow<Boolean?> = _navigateToEndScreen
+
     private val _abilitySelectedChannel = Channel<Ability>(Channel.RENDEZVOUS)
 
     override fun onCleared() {
@@ -101,6 +106,10 @@ class GameScreenViewModel(
         viewModelScope.launch {
             _abilitySelectedChannel.send(ability)
         }
+    }
+
+    fun resetNavigateToEndScreen() {
+        _navigateToEndScreen.value = null
     }
 
     // --- Orchestrator Private Functions
@@ -220,7 +229,15 @@ class GameScreenViewModel(
     private fun endGame(isWon: Boolean) {
         _gamePhase.value = if (isWon) GamePhase.DUNGEON_WON else GamePhase.DUNGEON_LOST
         _combatSnapshot.value = null
-        //TODO add onNavigation
+        _navigateToEndScreen.value = isWon
+        if (isWon) {
+            val updatedSaveGame = _saveGame.value.copy(
+                winCounter = _saveGame.value.winCounter + 1
+            )
+            viewModelScope.launch {
+                saveSaveGameUseCase.invoke(updatedSaveGame)
+            }
+        }
     }
 
     // --- Logic Private Functions

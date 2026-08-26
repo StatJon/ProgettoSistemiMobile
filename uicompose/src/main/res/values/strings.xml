@@ -6,4 +6,7 @@
     <string name="continue_button">Continue</string>
     <string name="dungeons_won">Dungeons Won: </string>
     <string name="background">Background</string>
+    <string name="end_victory">Victory!</string>
+    <string name="end_defeat">Defeat!</string>
+    <string name="return_to_menu">Return to main menu</string>
 </resources>

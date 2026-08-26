@@ -16,6 +16,8 @@ import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
@@ -46,6 +48,7 @@ object UseCaseProvider {
     lateinit var applyAbilityResultUseCase: ApplyAbilityResultUseCase
     lateinit var checkCombatStatusUseCase: CheckCombatStatusUseCase
     lateinit var applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase
+    lateinit var decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase
 
     /**
      * Constructor
@@ -90,6 +93,8 @@ object UseCaseProvider {
         checkCombatStatusUseCase = CheckCombatStatusUseCaseImpl()
 
         applyPlayerAbilityCostUseCase = ApplyPlayerAbilityCostUseCaseImpl()
+
+        decideEnemyAbilityUseCase = DecideEnemyAbilityUseCaseImpl()
 
     }
 }

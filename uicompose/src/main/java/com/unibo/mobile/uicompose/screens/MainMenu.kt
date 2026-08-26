@@ -35,6 +35,7 @@ fun MainMenu(
             getAllPlayerClassesUseCase = UseCaseProvider.getAllPlayerClassesUseCase,
             loadSaveGameUseCase = UseCaseProvider.loadSaveGameUseCase,
             newSaveSessionUseCase = UseCaseProvider.newSaveSessionUseCase,
+            saveSaveGameUseCase = UseCaseProvider.saveSaveGameUseCase
         )
     )
 ) {

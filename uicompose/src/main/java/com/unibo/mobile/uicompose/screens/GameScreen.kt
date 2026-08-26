@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unibo.mobile.domain.di.UseCaseProvider
 import com.unibo.mobile.uicompose.components.gamescreen.GameView
@@ -19,17 +21,19 @@ import com.unibo.mobile.uicompose.viewmodel.GameScreenViewModelFactory
 fun GameScreen(
     modifier: Modifier = Modifier,
     onNavigateToMenu: () -> Unit,
-    onNavigateToEndScreen: () -> Unit, //TODO: Aggiungere boolean o simili per win/loss verso EndScreen
+    onNavigateToEndScreen: (Boolean) -> Unit,
     viewModel: GameScreenViewModel = viewModel(
         factory = GameScreenViewModelFactory(
-            calculateAbilityResultUseCase = UseCaseProvider.calculateAbilityResultUseCase,
-            fetchEnemyByChallengeRatingUseCase = UseCaseProvider.fetchEnemyByChallengeRatingUseCase,
-            fetchAbilityByNameUseCase = UseCaseProvider.fetchAbilityByNameUseCase,
-            determineGamePhaseUseCase = UseCaseProvider.determineGamePhaseUseCase,
-            determineChallengeRatingUseCase = UseCaseProvider.determineChallengeRatingUseCase,
+            applyAbilityResultUseCase = UseCaseProvider.applyAbilityResultUseCase,
             applyPlayerAbilityCostUseCase = UseCaseProvider.applyPlayerAbilityCostUseCase,
+            calculateAbilityResultUseCase = UseCaseProvider.calculateAbilityResultUseCase,
             checkCombatStatusUseCase = UseCaseProvider.checkCombatStatusUseCase,
-            applyAbilityResultUseCase = UseCaseProvider.applyAbilityResultUseCase
+            decideEnemyAbilityUseCase = UseCaseProvider.decideEnemyAbilityUseCase,
+            determineChallengeRatingUseCase = UseCaseProvider.determineChallengeRatingUseCase,
+            determineGamePhaseUseCase = UseCaseProvider.determineGamePhaseUseCase,
+            fetchEnemyByChallengeRatingUseCase = UseCaseProvider.fetchEnemyByChallengeRatingUseCase,
+            loadSaveGameUseCase = UseCaseProvider.loadSaveGameUseCase,
+            saveSaveGameUseCase = UseCaseProvider.saveSaveGameUseCase
         )
     )
 ) {
@@ -43,17 +47,31 @@ fun GameScreen(
         LoadingScreen()
     }
     */
+    val navigateToEndScreen = viewModel.navigateToEndScreen.collectAsStateWithLifecycle()
+    val isWon = navigateToEndScreen.value
+
+    if (isWon != null) {
+        LaunchedEffect(Unit) {
+            onNavigateToEndScreen(isWon)
+            viewModel.resetNavigateToEndScreen()
+        }
+    }
+
     // --- GameScreen UI
     Column(
         modifier = modifier.fillMaxSize()
     ) {
         //TODO Aggiungere Logica per decidere il contenuto Combat/Safe
-        GameView(modifier = Modifier
-            .fillMaxHeight(0.5f)
-            .fillMaxWidth())
-        PlayerControls(modifier = Modifier
-            .fillMaxHeight(0.5f)
-            .fillMaxWidth())
+        GameView(
+            modifier = Modifier
+                .fillMaxHeight(0.5f)
+                .fillMaxWidth()
+        )
+        PlayerControls(
+            modifier = Modifier
+                .fillMaxHeight(0.5f)
+                .fillMaxWidth()
+        )
     }
 }
 

@@ -12,20 +12,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-/* Classe ViewModel di riferimento,
- * con commenti di spiegazione per la creazione degli alti viewmodel
-*/
-
 class MainMenuViewModel(
-    // --- Costruttore, parametri
-    // inserire gli usecase che verranno usati nella classe
     private val getAllPlayerClassesUseCase: GetAllPlayerClassesUseCase,
     private val loadSaveGameUseCase: LoadSaveGameUseCase,
-    private val newSaveSessionUseCase: NewSaveSessionUseCase
+    private val newSaveSessionUseCase: NewSaveSessionUseCase,
+    private val saveSaveGameUseCase: SaveSaveGameUseCase
 ) : ViewModel() {
 
-    // --- Dichiarazione tramite StateFlow
-    // (private MutableStateFlow + public StateFlow)
+    // --- StateFlow
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -39,7 +33,7 @@ class MainMenuViewModel(
     private val _navigateToGame = MutableStateFlow(false)
     val navigateToGame: StateFlow<Boolean> = _navigateToGame
 
-    // --- Operazioni all'avvio
+    // --- Init
     init {
         _isLoading.value = true
         viewModelScope.launch {
@@ -49,7 +43,7 @@ class MainMenuViewModel(
         }
     }
 
-    // --- Funzioni pubbliche
+    // --- Public Functions
     fun onNewGameSelected(playerClass: PlayerClass) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -69,7 +63,7 @@ class MainMenuViewModel(
         _navigateToGame.value = false
     }
 
-    // --- Funzioni interne
+    // --- Private Functions
     private suspend fun fetchPlayerClasses() {
         _playerClassesList.value = getAllPlayerClassesUseCase.invoke()
     }
@@ -80,5 +74,6 @@ class MainMenuViewModel(
 
     private suspend fun createNewSaveSession(playerClass: PlayerClass) {
         _saveGame.value = newSaveSessionUseCase.invoke(_saveGame.value, playerClass)
+        saveSaveGameUseCase.invoke(_saveGame.value)
     }
 }

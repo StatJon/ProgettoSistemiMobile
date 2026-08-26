@@ -22,6 +22,7 @@ import com.unibo.mobile.uicompose.screens.MainMenu
 fun ScreenManager() {
     //---Apre la prima Screen (.MENU = iniziale)
     var currentScreen by rememberSaveable { mutableStateOf(ScreenStatus.MENU) }
+    var sessionResult: Boolean? by rememberSaveable { mutableStateOf(null) }
 
     //--- Contenitore generale Ui
     Scaffold(
@@ -37,15 +38,22 @@ fun ScreenManager() {
             //--- Selettore Screen
             when (currentScreen) {
                 ScreenStatus.MENU -> MainMenu(
-                    onNavigateToGame = { currentScreen = ScreenStatus.GAME },
+                    onNavigateToGame = {
+                        currentScreen = ScreenStatus.GAME
+                        sessionResult = null
+                    },
                 )
 
                 ScreenStatus.GAME -> GameScreen(
                     onNavigateToMenu = { currentScreen = ScreenStatus.MENU },
-                    onNavigateToEndScreen = { currentScreen = ScreenStatus.END_SCREEN }
+                    onNavigateToEndScreen = { isWon ->
+                        currentScreen = ScreenStatus.END_SCREEN
+                        sessionResult = isWon
+                    }
                 )
 
                 ScreenStatus.END_SCREEN -> EndScreen(
+                    isWon = sessionResult ?: false,
                     onNavigateToMenu = { currentScreen = ScreenStatus.MENU }
                 )
             }
