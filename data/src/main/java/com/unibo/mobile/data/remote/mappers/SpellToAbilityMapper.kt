@@ -37,8 +37,8 @@ class SpellToAbilityMapper{
             spellDto.damage!!.damageAtSlotLevel.entries.first()
         }
         val splitRawDice = rawDice.value.split("d", " ")
-        val diceNumber = splitRawDice[0].toInt()
-        val diceFaces = splitRawDice[1].toInt()
+        val diceNumber = splitRawDice.getOrNull(0)?.toIntOrNull() ?: 1
+        val diceFaces = splitRawDice.getOrNull(1)?.toIntOrNull() ?: 1
         return DicesToRoll(
             diceNumber = diceNumber,
             diceFaces = diceFaces

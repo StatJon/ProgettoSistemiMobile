@@ -58,14 +58,15 @@ class SaveGameRepositoryImpl(
         rawSaveData: SaveGameEntity, gamedataRepository: GamedataRepository
     ): SaveGame {
         return if (rawSaveData.dungeonIndex != null && rawSaveData.dungeonLength != null) {
+            val playerClass = gamedataRepository.getPlayerClassByName(rawSaveData.playerClassName!!)
+                ?: error("PlayerClass $rawSaveData.playerClassName missing")
             SaveGame(
                 winCounter = rawSaveData.winCounter, saveSession = SaveSession(
                     dungeon = Dungeon(
                         dungeonIndex = rawSaveData.dungeonIndex,
                         dungeonLength = rawSaveData.dungeonLength,
                     ), characterPlayer = CharacterPlayer(
-                        playerClass = gamedataRepository.getPlayerClassByName(rawSaveData.playerClassName!!)
-                            ?: error("PlayerClass $rawSaveData.playerClassName missing"),
+                        playerClass = playerClass,
                         currentManaPoints = rawSaveData.currentManaPoints!!,
                         maxManaPoints = rawSaveData.maxManaPoints!!,
                         characterData = CharacterData(
@@ -73,14 +74,15 @@ class SaveGameRepositoryImpl(
                             maxHealthPoints = rawSaveData.maxHealthPoints!!,
                             currentHealthPoints = rawSaveData.currentHealthPoints!!,
                             armorClass = rawSaveData.armorClass!!,
-                            abilityList = abilityRepository.getAbilityFromIndexList(
-                                rawSaveData.abilityNames?.split(
-                                    ","
-                                )!!
-                            )
+                            abilityList = (playerClass.baseAbilityList +
+                                    abilityRepository.getAbilityFromIndexList(
+                                        rawSaveData.abilityNames?.split(
+                                            ","
+                                        ) ?: emptyList()
+                                    ))
+                                .distinctBy { it.name }
                         ),
-
-                        )
+                    )
                 )
             )
         } else {

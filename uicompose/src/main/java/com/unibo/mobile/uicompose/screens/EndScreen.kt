@@ -15,6 +15,7 @@ fun EndScreen (
     isWon: Boolean,
     onNavigateToMenu: () -> Unit,
 ) {
+    println("DEBUG: Accessing EndScreen")
     Column() {
         val endText = if (isWon) {
             stringResource(R.string.end_victory)

@@ -16,7 +16,7 @@ class FetchEnemyByChallengeRatingUseCaseImpl(
     private val enemyRepository: EnemyRepository,
 ) : FetchEnemyByChallengeRatingUseCase {
     override suspend fun invoke(challengeRating: ChallengeRating): CharacterEnemy {
-
+        println("DEBUG: Fetching enemy for CR: $challengeRating")
         val enemyIndexList: List<String> =
             enemyRepository.getEnemyListByChallengeRating(challengeRating)
                 ?: error("Error: Monsters not found by filter ")
@@ -24,6 +24,7 @@ class FetchEnemyByChallengeRatingUseCaseImpl(
             ?: error("Error: No monsters to choose from")
         val enemy = enemyRepository.getEnemyByIndex(enemyIndex)
             ?: error("Error: Monster not found by index")
+        println("DEBUG: Enemy from repo: $enemy")
         return enemy
     }
 

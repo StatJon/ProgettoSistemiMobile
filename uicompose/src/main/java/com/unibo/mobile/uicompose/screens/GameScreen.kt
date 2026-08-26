@@ -37,7 +37,7 @@ fun GameScreen(
         )
     )
 ) {
-    println("Accessing GameScreen")
+    println("DEBUG: Accessing GameScreen")
 
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
     val combatSnapshot = viewModel.combatSnapshot.collectAsStateWithLifecycle()

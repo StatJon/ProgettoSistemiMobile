@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview
 @Composable
 fun LoadingScreen() {
-    println("Accessing LoadingScreen")
+    println("DEBUG: Accessing LoadingScreen")
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

@@ -103,7 +103,9 @@ class GameScreenViewModel(
     // --- Public Functions
 
     fun onAbilitySelected(ability: Ability) {
+        println("DEBUG: onAbilitySelected called: ${ability.name}")
         viewModelScope.launch {
+            println("DEBUG: Sending to channel: ${ability.name}")
             _abilitySelectedChannel.send(ability)
         }
     }
@@ -115,26 +117,35 @@ class GameScreenViewModel(
     // --- Orchestrator Private Functions
 
     private suspend fun gameLoop() {
-        when (_gamePhase.value) {
-            GamePhase.DUNGEON_WON -> {
-                endGame(true)
-                return
-            }
+        println("DEBUG: gameLoop started, phase: ${_gamePhase.value}")
+        while (true) {
+            when (_gamePhase.value) {
+                GamePhase.DUNGEON_WON -> {
+                    endGame(true)
+                    return
+                }
 
-            GamePhase.DUNGEON_LOST -> {
-                endGame(false)
-                return
-            }
+                GamePhase.DUNGEON_LOST -> {
+                    endGame(false)
+                    return
+                }
 
-            else -> {
-                val gamePhase = determineGamePhaseUseCase.invoke(
-                    _dungeonIndex.value,
-                    _dungeonLength.value
-                )
-                when (gamePhase) {
-                    GamePhase.COMBAT -> combatLoop()
-                    GamePhase.CHECKPOINT -> checkpointLoop()
-                    else -> throw IllegalStateException("Error: Unexpected game phase: $gamePhase")
+                else -> {
+                    val gamePhase = determineGamePhaseUseCase.invoke(
+                        _dungeonIndex.value,
+                        _dungeonLength.value
+                    )
+                    println("DEBUG: Determined phase: $gamePhase")
+                    when (gamePhase) {
+                        GamePhase.COMBAT -> {
+                            println("DEBUG: Starting combatLoop")
+                            combatLoop()
+                            println("DEBUG: combatLoop finished")
+                        }
+
+                        GamePhase.CHECKPOINT -> checkpointLoop()
+                        else -> throw IllegalStateException("Error: Unexpected game phase: $gamePhase")
+                    }
                 }
             }
         }
@@ -147,77 +158,94 @@ class GameScreenViewModel(
         }
 
         // --- LOOP
-        val combatSnapshot = _combatSnapshot.value
-            ?: throw IllegalStateException("Error: combatSnapshot not initialized")
+        while (true) {
+            val combatSnapshot = _combatSnapshot.value
+                ?: throw IllegalStateException("Error: combatSnapshot not initialized")
 
-        when (combatSnapshot.combatStatus) {
-            CombatStatus.PLAYER_TURN -> {
-                val playerAbility = _abilitySelectedChannel.receive()
+            when (combatSnapshot.combatStatus) {
+                CombatStatus.PLAYER_TURN -> {
+                    println("DEBUG: Waiting for ability...")
+                    val playerAbility = _abilitySelectedChannel.receive()
+                    println("DEBUG: Received ability: ${playerAbility.name}")
 
-                val abilityResult = calculateAbilityResultUseCase.invoke(
-                    target = combatSnapshot.enemy,
-                    ability = playerAbility
-                )
+                    try {
+                        println("DEBUG: Before calculateAbilityResultUseCase")
+                        val abilityResult = calculateAbilityResultUseCase.invoke(
+                            target = combatSnapshot.enemy,
+                            ability = playerAbility
+                        )
+                        println("DEBUG: After calculateAbilityResultUseCase: $abilityResult")
 
-                val updatedCharacterDataEnemy = applyAbilityResultUseCase.invoke(
-                    target = combatSnapshot.enemy,
-                    abilityResult = abilityResult
-                )
+                        println("DEBUG: Before applyAbilityResultUseCase")
+                        val updatedCharacterDataEnemy = applyAbilityResultUseCase.invoke(
+                            target = combatSnapshot.enemy,
+                            abilityResult = abilityResult
+                        )
+                        println("DEBUG: After applyAbilityResultUseCase")
 
-                val updatedCharacterDataPlayer = applyPlayerAbilityCostUseCase.invoke(
-                    player = combatSnapshot.player,
-                    ability = abilityResult.ability
-                )
+                        println("DEBUG: Before applyPlayerAbilityCostUseCase")
+                        val updatedCharacterDataPlayer = applyPlayerAbilityCostUseCase.invoke(
+                            player = combatSnapshot.player,
+                            ability = abilityResult.ability
+                        )
+                        println("DEBUG: After applyPlayerAbilityCostUseCase")
 
-                val updatedSnapshot = combatSnapshot.copy(
-                    player = combatSnapshot.player.copy(
-                        currentManaPoints = updatedCharacterDataPlayer.currentManaPoints,
-                        characterData = updatedCharacterDataPlayer.characterData
-                    ),
-                    enemy = combatSnapshot.enemy.copy(characterData = updatedCharacterDataEnemy)
-                )
+                        val updatedSnapshot = combatSnapshot.copy(
+                            player = combatSnapshot.player.copy(
+                                currentManaPoints = updatedCharacterDataPlayer.currentManaPoints,
+                                characterData = updatedCharacterDataPlayer.characterData
+                            ),
+                            enemy = combatSnapshot.enemy.copy(characterData = updatedCharacterDataEnemy)
+                        )
 
-                val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
+                        println("DEBUG: Before checkCombatStatusUseCase")
+                        val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
+                        println("DEBUG: New combat status: $newCombatStatus")
 
-                _combatSnapshot.value = updatedSnapshot.copy(
-                    combatStatus = newCombatStatus
-                )
+                        _combatSnapshot.value = updatedSnapshot.copy(
+                            combatStatus = newCombatStatus
+                        )
+                        println("DEBUG: Snapshot updated")
+                    } catch (e: Exception) {
+                        println("DEBUG: EXCEPTION in PLAYER_TURN: ${e.message}")
+                        e.printStackTrace()
+                    }
+                }
 
-            }
+                CombatStatus.ENEMY_TURN -> {
+                    val enemyAbility = decideEnemyAbilityUseCase.invoke(
+                        enemy = combatSnapshot.enemy
+                    )
+                    val abilityResult = calculateAbilityResultUseCase.invoke(
+                        target = combatSnapshot.player,
+                        ability = enemyAbility
+                    )
+                    val updatedCharacterDataPlayer = applyAbilityResultUseCase.invoke(
+                        target = combatSnapshot.player,
+                        abilityResult = abilityResult
+                    )
 
-            CombatStatus.ENEMY_TURN -> {
-                val enemyAbility = decideEnemyAbilityUseCase.invoke(
-                    enemy = combatSnapshot.enemy
-                )
-                val abilityResult = calculateAbilityResultUseCase.invoke(
-                    target = combatSnapshot.player,
-                    ability = enemyAbility
-                )
-                val updatedCharacterDataPlayer = applyAbilityResultUseCase.invoke(
-                    target = combatSnapshot.player,
-                    abilityResult = abilityResult
-                )
+                    val updatedSnapshot = combatSnapshot.copy(
+                        player = combatSnapshot.player.copy(characterData = updatedCharacterDataPlayer)
+                    )
 
-                val updatedSnapshot = combatSnapshot.copy(
-                    player = combatSnapshot.player.copy(characterData = updatedCharacterDataPlayer)
-                )
+                    val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
 
-                val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
+                    _combatSnapshot.value = updatedSnapshot.copy(
+                        combatStatus = newCombatStatus
+                    )
+                }
 
-                _combatSnapshot.value = updatedSnapshot.copy(
-                    combatStatus = newCombatStatus
-                )
-            }
+                CombatStatus.VICTORY -> {
+                    _dungeonIndex.value++
+                    _combatSnapshot.value = null
+                    return
+                }
 
-            CombatStatus.VICTORY -> {
-                _dungeonIndex.value++
-                _combatSnapshot.value = null
-                return
-            }
-
-            CombatStatus.DEFEAT -> {
-                _gamePhase.value = GamePhase.DUNGEON_LOST
-                return
+                CombatStatus.DEFEAT -> {
+                    _gamePhase.value = GamePhase.DUNGEON_LOST
+                    return
+                }
             }
         }
     }
@@ -259,8 +287,10 @@ class GameScreenViewModel(
         val enemyChallengeRating = determineChallengeRatingUseCase.invoke(
             dungeonIndex = _dungeonIndex.value
         )
+        println("DEBUG: ChallengeRating = $enemyChallengeRating")
         val enemy: CharacterEnemy =
             fetchEnemyByChallengeRatingUseCase.invoke(enemyChallengeRating)
+        println("DEBUG: Enemy = $enemy")
         _combatSnapshot.value = CombatSnapshot(
             player = _characterPlayer.value
                 ?: throw IllegalStateException("Player not initialized"),

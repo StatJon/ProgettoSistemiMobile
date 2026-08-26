@@ -58,8 +58,8 @@ fun MainMenu(
         LoadingScreen()
     } else {
 
-        println("Accessing Main Menu")
-        println("SaveGame.winCounter: $winCounter")
+        println("DEBUG: Accessing Main Menu")
+        println("DEBUG: SaveGame.winCounter: $winCounter")
         // --- MainMenu UI
         Column(
             modifier = modifier

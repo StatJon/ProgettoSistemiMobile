@@ -12,14 +12,22 @@ class AbilityRepositoryImpl(
     private val spellToAbilityMapper: SpellToAbilityMapper
 ) : AbilityRepository {
     override suspend fun getAbilityByName(abilityName: String): Ability? {
-        val dto = safeApiCaller.invoke { dndApi.getSpellByIndex(abilityName) } ?: return null
+        if (abilityName.isBlank()) return null
+        println("DEBUG: Fetching ability with name: $abilityName")
+        val dto = safeApiCaller.invoke { dndApi.getSpellByIndex(abilityName) } ?: run {
+            println("DEBUG: API returned null for $abilityName")
+            return null
+        }
+        println("DEBUG: DTO received: $dto")
         val ability = spellToAbilityMapper.invoke(dto)
         return ability
     }
 
 
     override suspend fun getAbilityFromIndexList(abilityList: List<String>): List<Ability> {
-        TODO("Not yet implemented")
+        return abilityList.mapNotNull { abilityName ->
+            getAbilityByName(abilityName)
+        }
     }
     /*
         override suspend fun getAbilityForPlayer(

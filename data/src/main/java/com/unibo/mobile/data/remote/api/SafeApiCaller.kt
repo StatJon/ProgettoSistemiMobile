@@ -14,12 +14,14 @@ import retrofit2.HttpException
 class SafeApiCaller {
     suspend fun <T> invoke(apiCall: suspend () -> T): T? {
         return try {
-            apiCall()
+            val result = apiCall()
+            println("DEBUG: API SUCCESS: $result")
+            result
         } catch (e: HttpException) {
             print(e)
             null
         } catch (e: IOException) {
-            print(e)
+            print("DEBUG: API ERROR: ${e.message}")
             null
         }
     }

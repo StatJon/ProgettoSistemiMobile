@@ -2,7 +2,7 @@ package com.unibo.mobile.data.remote.api
 
 
 import com.unibo.mobile.data.remote.models.MonsterDto
-import com.unibo.mobile.data.remote.models.MonsterIndexDto
+import com.unibo.mobile.data.remote.models.MonsterListResponseDto
 import com.unibo.mobile.data.remote.models.SpellDto
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,7 +15,7 @@ interface DndApi {
     @GET("monsters")
     suspend fun getMonsterListByChallengeRating(
         @Query("challenge_rating") challengeRating: Float
-    ): List<MonsterIndexDto>
+    ): MonsterListResponseDto
 
     @GET(value = "monsters/{index}")
     suspend fun getMonsterByIndex(@Path("index") index: String): MonsterDto

@@ -23,7 +23,10 @@ fun PlayerControls(
             characterPlayer?.characterData?.abilityList?.forEach { ability ->
                 ActionButton(
                     ability = ability,
-                    onClick = { onAbilitySelected(ability) },
+                    onClick = {
+                        println("DEBUG: Button clicked: ${ability.name}")
+                        onAbilitySelected(ability)
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
