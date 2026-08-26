@@ -54,7 +54,7 @@ class SpellToAbilityMapper{
                 isAoe = determineAoe(spellDto),
                 actionCost = determineActionCost(spellDto),
                 manaCost = spellDto.level,
-                healDicesToRoll = parseDice(spellDto)
+                dicesToRoll = parseDice(spellDto)
             )
         } else {
             return AbilityDamage(
@@ -63,7 +63,7 @@ class SpellToAbilityMapper{
                 isAoe = determineAoe(spellDto),
                 actionCost = determineActionCost(spellDto),
                 manaCost = spellDto.level,
-                damageDices = parseDice(spellDto)
+                dicesToRoll = parseDice(spellDto)
             )
         }
     }

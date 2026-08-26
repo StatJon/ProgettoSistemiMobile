@@ -17,7 +17,7 @@ class AbilityRepositoryImpl(
         return ability
     }
 
-    override suspend fun getAbilityFromList(abilityList: List<String>): List<Ability> {
+    override suspend fun getAbilityFromIndexList(abilityList: List<String>): List<Ability> {
         TODO("Not yet implemented")
     }
 

@@ -24,7 +24,8 @@ object PlayerGamedata {
                     isAoe = false,
                     actionCost = ActionCost.ACTION,
                     manaCost = 0,
-                    damageDices = DicesToRoll(1, 6)
+                    dicesToRoll = DicesToRoll(1, 6),
+                    requiresHitRoll = true
                 )
             )
         ),
@@ -45,7 +46,8 @@ object PlayerGamedata {
                     isAoe = false,
                     actionCost = ActionCost.ACTION,
                     manaCost = 0,
-                    damageDices = DicesToRoll(1, 8)
+                    dicesToRoll = DicesToRoll(1, 8),
+                    requiresHitRoll = true
                 )
             )
         )

@@ -65,7 +65,7 @@ class SaveGameRepositoryImpl(
                             maxHealthPoints = rawSaveData.maxHealthPoints!!,
                             currentHealthPoints = rawSaveData.currentHealthPoints!!,
                             armorClass = rawSaveData.armorClass!!,
-                            abilityList = abilityRepository.getAbilityFromList(
+                            abilityList = abilityRepository.getAbilityFromIndexList(
                                 rawSaveData.abilityNames?.split(
                                     ","
                                 )!!

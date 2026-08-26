@@ -24,6 +24,7 @@ import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CombatLossUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CombatWinUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.TurnCheckUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
@@ -50,6 +51,7 @@ class GameScreenViewModel(
     private val combatLossUseCase: CombatLossUseCase,
     private val combatWinUseCase: CombatWinUseCase,
     private val decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase,
+    private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase,
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
     private val dungeonUseCase: SetupDungeonUseCase,
     private val turnCheckUseCase: TurnCheckUseCase
@@ -109,23 +111,26 @@ class GameScreenViewModel(
     // --- Orchestrator Private Functions
 
     private suspend fun gameLoop() {
-        while (_gamePhase.value !in listOf(GamePhase.DUNGEON_LOST, GamePhase.DUNGEON_WON)) {
-            val gamePhase = determineGamePhaseUseCase.invoke(
-                _dungeonIndex.value,
-                _dungeonLength.value
-            )
+        when (_gamePhase.value) {
+            GamePhase.DUNGEON_WON -> {
+                endGame(true)
+                return
+            }
 
-            when (gamePhase) {
-                GamePhase.COMBAT -> combatLoop()
-                GamePhase.CHECKPOINT -> checkpointLoop()
-                GamePhase.DUNGEON_WON -> {
-                    endGame(true)
-                    return
-                }
+            GamePhase.DUNGEON_LOST -> {
+                endGame(false)
+                return
+            }
 
-                GamePhase.DUNGEON_LOST -> {
-                    endGame(false)
-                    return
+            else -> {
+                val gamePhase = determineGamePhaseUseCase.invoke(
+                    _dungeonIndex.value,
+                    _dungeonLength.value
+                )
+                when (gamePhase) {
+                    GamePhase.COMBAT -> combatLoop()
+                    GamePhase.CHECKPOINT -> checkpointLoop()
+                    else -> throw IllegalStateException("Error: Unexpected game phase: $gamePhase")
                 }
             }
         }
@@ -210,7 +215,6 @@ class GameScreenViewModel(
                 _gamePhase.value = GamePhase.DUNGEON_LOST
                 return
             }
-
         }
     }
 
@@ -240,8 +244,11 @@ class GameScreenViewModel(
 
     private suspend fun initCombat() {
         _isLoading.value = true
+        val enemyChallengeRating = determineChallengeRatingUseCase.invoke(
+            dungeonIndex = _dungeonIndex.value
+        )
         val enemy: CharacterEnemy =
-            fetchEnemyByChallengeRatingUseCase.invoke(ChallengeRating.entries[_dungeonIndex.value])
+            fetchEnemyByChallengeRatingUseCase.invoke(enemyChallengeRating)
         _combatSnapshot.value = CombatSnapshot(
             player = _characterPlayer.value
                 ?: throw IllegalStateException("Player not initialized"),

@@ -2,12 +2,19 @@ package com.unibo.mobile.domain.di
 
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCase
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCaseImpl
+import com.unibo.mobile.domain.usecases.api.FetchEnemyByChallengeRatingUseCase
+import com.unibo.mobile.domain.usecases.api.FetchEnemyByChallengeRatingUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
@@ -25,6 +32,9 @@ object UseCaseProvider {
     lateinit var saveSaveGameUseCase: SaveSaveGameUseCase
     lateinit var fetchAbilityByNameUseCase: FetchAbilityByNameUseCase
     lateinit var calculateAbilityResultUseCase: CalculateAbilityResultUseCase
+    lateinit var determineGamePhaseUseCase: DetermineGamePhaseUseCase
+    lateinit var determineChallengeRatingUseCase: DetermineChallengeRatingUseCase
+    lateinit var fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase
 
     /**
      * Constructor
@@ -50,7 +60,16 @@ object UseCaseProvider {
         fetchAbilityByNameUseCase = FetchAbilityByNameUseCaseImpl(
             abilityRepository = repositoryProvider.abilityRepository
         )
+
+        fetchEnemyByChallengeRatingUseCase = FetchEnemyByChallengeRatingUseCaseImpl(
+            enemyRepository = repositoryProvider.enemyRepository
+        )
+
         calculateAbilityResultUseCase = CalculateAbilityResultUseCaseImpl()
+
+        determineGamePhaseUseCase = DetermineGamePhaseUseCaseImpl()
+
+        determineChallengeRatingUseCase = DetermineChallengeRatingUseCaseImpl()
 
     }
 }
