@@ -38,7 +38,6 @@ fun ScreenManager() {
             when (currentScreen) {
                 ScreenStatus.MENU -> MainMenu(
                     onNavigateToGame = { currentScreen = ScreenStatus.GAME },
-                    onNewGameSelected = { }
                 )
 
                 ScreenStatus.GAME -> GameScreen(

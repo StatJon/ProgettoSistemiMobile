@@ -12,6 +12,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,7 +30,6 @@ import com.unibo.mobile.uicompose.viewmodel.MainMenuViewModelFactory
 fun MainMenu(
     modifier: Modifier = Modifier,
     onNavigateToGame: () -> Unit,
-    onNewGameSelected: (PlayerClass) -> Unit,
     viewModel: MainMenuViewModel = viewModel(
         factory = MainMenuViewModelFactory(
             getAllPlayerClassesUseCase = UseCaseProvider.getAllPlayerClassesUseCase,
@@ -42,6 +43,14 @@ fun MainMenu(
     val playerClassesList = viewModel.playerClassesList.collectAsStateWithLifecycle()
     val saveGame = viewModel.saveGame.collectAsStateWithLifecycle()
     val winCounter = saveGame.value.winCounter
+    val navigateToGame = viewModel.navigateToGame.collectAsStateWithLifecycle()
+
+    if (navigateToGame.value) {
+        LaunchedEffect(Unit) {
+            onNavigateToGame()
+            viewModel.resetNavigation()
+        }
+    }
 
     // --- LoadingScreen Check
     if (isLoading.value) {
@@ -79,14 +88,14 @@ fun MainMenu(
             // --- NewGame Buttons with Classes
             NewGameButtonsWithClasses(
                 playerClassesList.value,
-                onNewGameSelected = onNewGameSelected,
+                onNewGameSelected = viewModel::onNewGameSelected,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.4f)
             )
             // --- Continue
             Button(
-                onClick = onNavigateToGame,
+                onClick = { viewModel.onContinueSelected() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(UiConstants.BUTTON_HEIGHT)
