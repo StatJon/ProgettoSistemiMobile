@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCase
 import com.unibo.mobile.domain.usecases.api.FetchEnemyByChallengeRatingUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
 
@@ -13,7 +16,10 @@ class GameScreenViewModelFactory(
     private val fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase,
     private val fetchAbilityByNameUseCase: FetchAbilityByNameUseCase,
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
-    private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase
+    private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase,
+    private val applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase,
+    private val checkCombatStatusUseCase: CheckCombatStatusUseCase,
+    private val applyAbilityResultUseCase: ApplyAbilityResultUseCase,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(GameScreenViewModel::class.java)) {
@@ -24,13 +30,11 @@ class GameScreenViewModelFactory(
                 fetchAbilityByEnemyUseCase = TODO(),
                 fetchAbilityByNameUseCase = fetchAbilityByNameUseCase,
                 fetchEnemyByChallengeRatingUseCase = fetchEnemyByChallengeRatingUseCase,
-                applyAbilityResultUseCase = TODO(),
-                applyPlayerAbilityCostUseCase = TODO(),
+                applyAbilityResultUseCase = applyAbilityResultUseCase,
+                applyPlayerAbilityCostUseCase = applyPlayerAbilityCostUseCase,
                 calculateAbilityResultUseCase = calculateAbilityResultUseCase,
-                checkCombatStatusUseCase = TODO(),
+                checkCombatStatusUseCase = checkCombatStatusUseCase,
                 checkpointUseCase = TODO(),
-                combatLossUseCase = TODO(),
-                combatWinUseCase = TODO(),
                 decideEnemyAbilityUseCase = TODO(),
                 determineGamePhaseUseCase = determineGamePhaseUseCase,
                 dungeonUseCase = TODO(),

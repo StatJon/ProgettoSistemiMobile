@@ -3,7 +3,6 @@ package com.unibo.mobile.uicompose.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unibo.mobile.domain.models.Ability
-import com.unibo.mobile.domain.models.ChallengeRating
 import com.unibo.mobile.domain.models.CharacterEnemy
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.CombatSnapshot
@@ -21,8 +20,6 @@ import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
-import com.unibo.mobile.domain.usecases.gamelogic.CombatLossUseCase
-import com.unibo.mobile.domain.usecases.gamelogic.CombatWinUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
@@ -48,8 +45,6 @@ class GameScreenViewModel(
     private val calculateAbilityResultUseCase: CalculateAbilityResultUseCase,
     private val checkCombatStatusUseCase: CheckCombatStatusUseCase,
     private val checkpointUseCase: CheckpointUseCase,
-    private val combatLossUseCase: CombatLossUseCase,
-    private val combatWinUseCase: CombatWinUseCase,
     private val decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase,
     private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase,
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,

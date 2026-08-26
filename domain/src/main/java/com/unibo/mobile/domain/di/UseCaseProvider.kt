@@ -8,8 +8,14 @@ import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCaseImpl
@@ -35,6 +41,9 @@ object UseCaseProvider {
     lateinit var determineGamePhaseUseCase: DetermineGamePhaseUseCase
     lateinit var determineChallengeRatingUseCase: DetermineChallengeRatingUseCase
     lateinit var fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase
+    lateinit var applyAbilityResultUseCase: ApplyAbilityResultUseCase
+    lateinit var checkCombatStatusUseCase: CheckCombatStatusUseCase
+    lateinit var applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase
 
     /**
      * Constructor
@@ -70,6 +79,12 @@ object UseCaseProvider {
         determineGamePhaseUseCase = DetermineGamePhaseUseCaseImpl()
 
         determineChallengeRatingUseCase = DetermineChallengeRatingUseCaseImpl()
+
+        applyAbilityResultUseCase = ApplyAbilityResultUseCaseImpl()
+
+        checkCombatStatusUseCase = CheckCombatStatusUseCaseImpl()
+
+        applyPlayerAbilityCostUseCase = ApplyPlayerAbilityCostUseCaseImpl()
 
     }
 }
