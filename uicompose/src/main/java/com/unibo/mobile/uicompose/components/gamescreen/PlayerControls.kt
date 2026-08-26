@@ -7,18 +7,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.unibo.mobile.domain.models.Ability
+import com.unibo.mobile.domain.models.CharacterPlayer
+import com.unibo.mobile.domain.models.GamePhase
 
 @Composable
 fun PlayerControls(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    characterPlayer: CharacterPlayer?,
+    gamePhase: GamePhase,
+    onAbilitySelected: (Ability) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(text = "HEADER PLAYER CONTROLS")
-        Button(
-            onClick = { },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "test")
+        if (gamePhase == GamePhase.COMBAT) {
+            characterPlayer?.characterData?.abilityList?.forEach { ability ->
+                ActionButton(
+                    ability = ability,
+                    onClick = { onAbilitySelected(ability) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        } else if (gamePhase == GamePhase.CHECKPOINT) {
+            Button(onClick = { /* TODO */ }, modifier = Modifier.fillMaxWidth()) {
+                Text("Continue")
+            }
         }
     }
 }
@@ -26,5 +38,9 @@ fun PlayerControls(
 @Preview
 @Composable
 fun PlayerControlsPreview() {
-    PlayerControls()
+    PlayerControls(
+        characterPlayer = null,
+        gamePhase = GamePhase.COMBAT,
+        onAbilitySelected = {}
+    )
 }

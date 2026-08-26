@@ -38,15 +38,17 @@ fun GameScreen(
     )
 ) {
     println("Accessing GameScreen")
-    /*
-    // --- Recupero variabili da ViewModel
+
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
+    val combatSnapshot = viewModel.combatSnapshot.collectAsStateWithLifecycle()
+    val gamePhase = viewModel.gamePhase.collectAsStateWithLifecycle()
+    val characterPlayer = viewModel.characterPlayer.collectAsStateWithLifecycle()
 
     // --- LoadingScreen Check
     if (isLoading.value) {
         LoadingScreen()
     }
-    */
+
     val navigateToEndScreen = viewModel.navigateToEndScreen.collectAsStateWithLifecycle()
     val isWon = navigateToEndScreen.value
 
@@ -61,16 +63,16 @@ fun GameScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        //TODO Aggiungere Logica per decidere il contenuto Combat/Safe
         GameView(
-            modifier = Modifier
-                .fillMaxHeight(0.5f)
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth(),
+            combatSnapshot = combatSnapshot.value,
+            gamePhase = gamePhase.value
         )
         PlayerControls(
-            modifier = Modifier
-                .fillMaxHeight(0.5f)
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth(),
+            characterPlayer = characterPlayer.value,
+            gamePhase = gamePhase.value,
+            onAbilitySelected = viewModel::onAbilitySelected
         )
     }
 }
@@ -82,8 +84,7 @@ fun GameScreen(
 @Composable
 fun GameScreenPreview() {
     GameScreen(
-        onNavigateToMenu = TODO(),
-        onNavigateToEndScreen = TODO()
+        onNavigateToMenu = {},
+        onNavigateToEndScreen = {}
     )
-
 }

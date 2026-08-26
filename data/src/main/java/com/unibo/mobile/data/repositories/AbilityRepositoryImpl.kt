@@ -17,18 +17,19 @@ class AbilityRepositoryImpl(
         return ability
     }
 
+
     override suspend fun getAbilityFromIndexList(abilityList: List<String>): List<Ability> {
         TODO("Not yet implemented")
     }
+    /*
+        override suspend fun getAbilityForPlayer(
+            className: String,
+            level: Int
+        ): Ability {
+            TODO("Not yet implemented")
+        }
 
-    override suspend fun getAbilityForPlayer(
-        className: String,
-        level: Int
-    ): Ability {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getAbitityForEnemy(enemyName: String): Ability {
-        TODO("Not yet implemented")
-    }
+        override suspend fun getAbitityForEnemy(enemyName: String): Ability {
+            TODO("Not yet implemented")
+         */
 }

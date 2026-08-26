@@ -20,11 +20,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.unibo.mobile.domain.models.CombatSnapshot
+import com.unibo.mobile.domain.models.GamePhase
 
 //TODO Aggiungere VIEWMODEL e cablare correttamente, sostituire i placeholder
 @Composable
 fun GameView(
     modifier: Modifier = Modifier,
+    combatSnapshot: CombatSnapshot?,
+    gamePhase: GamePhase
 ) {
     // --- General Container
     Box(
@@ -36,30 +40,39 @@ fun GameView(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            SpriteWithStats(
-                spritePainter = painterResource(R.drawable.cleric),
-                spriteName = "Cleric",
-                infoList = listOf("Name", "HP", "MP"),
-
+        if (gamePhase == GamePhase.COMBAT && combatSnapshot != null) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                SpriteWithStatsForCharacter(
+                    character = combatSnapshot.player,
+                    modifier = Modifier.weight(1f)
                 )
-            SpriteWithStats(
-                spritePainter = painterResource(R.drawable.humanoid),
-                spriteName = "Humanoid",
-                infoList = listOf("Name", "HP", "MP"),
-
+                SpriteWithStatsForCharacter(
+                    character = combatSnapshot.enemy,
+                    modifier = Modifier.weight(1f)
                 )
+            }
+        } else if (gamePhase == GamePhase.CHECKPOINT) {
+            // CHECKPOINT: mostra solo player
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                SpriteWithStatsForCharacter(
+                    character = combatSnapshot?.player ?: return@Box,
+                    modifier = Modifier
+                )
+            }
         }
-
     }
 }
 
 @Preview
 @Composable
 fun GameViewPreview() {
-    GameView(modifier = Modifier)
+    GameView(
+        combatSnapshot = null,
+        gamePhase = GamePhase.COMBAT,
+        modifier = Modifier
+    )
 }
