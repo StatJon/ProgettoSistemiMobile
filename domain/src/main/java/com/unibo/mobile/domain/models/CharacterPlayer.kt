@@ -12,6 +12,7 @@ data class CharacterPlayer(
     val playerClass: PlayerClass,
     val currentManaPoints: Int,
     val maxManaPoints: Int,
+    val level: Int,
     override val characterData: CharacterData
 ) : Character {
     fun applyManaCost(costValue: Int): CharacterPlayer =
@@ -25,6 +26,7 @@ data class CharacterPlayer(
             playerClass = playerClass,
             currentManaPoints = playerClass.baseManaPoints,
             maxManaPoints = playerClass.baseManaPoints,
+            level = 1,
             characterData = CharacterData(
                 name = playerClass.name,
                 maxHealthPoints = playerClass.baseHealthPoints,
@@ -38,11 +40,13 @@ data class CharacterPlayer(
             playerClass: PlayerClass,
             currentManaPoints: Int,
             currentHealthPoints: Int,
+            level: Int,
             abilityList: List<Ability>
         ): CharacterPlayer = CharacterPlayer(
             playerClass = playerClass,
             currentManaPoints = currentManaPoints,
             maxManaPoints = playerClass.baseManaPoints,
+            level = level,
             characterData = CharacterData(
                 name = playerClass.name,
                 maxHealthPoints = playerClass.baseHealthPoints,

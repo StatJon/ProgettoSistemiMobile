@@ -22,6 +22,8 @@ import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCas
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.NewSaveSessionUseCase
@@ -49,6 +51,7 @@ object UseCaseProvider {
     lateinit var checkCombatStatusUseCase: CheckCombatStatusUseCase
     lateinit var applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase
     lateinit var decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase
+    lateinit var levelUpUseCase: LevelUpUseCase
 
     /**
      * Constructor
@@ -80,6 +83,10 @@ object UseCaseProvider {
 
         fetchEnemyByChallengeRatingUseCase = FetchEnemyByChallengeRatingUseCaseImpl(
             enemyRepository = repositoryProvider.enemyRepository
+        )
+        
+        levelUpUseCase = LevelUpUseCaseImpl(
+            abilityRepository = repositoryProvider.abilityRepository
         )
 
         calculateAbilityResultUseCase = CalculateAbilityResultUseCaseImpl()

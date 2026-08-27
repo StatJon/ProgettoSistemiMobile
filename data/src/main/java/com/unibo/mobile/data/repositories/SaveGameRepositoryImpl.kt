@@ -69,6 +69,7 @@ class SaveGameRepositoryImpl(
                         playerClass = playerClass,
                         currentManaPoints = rawSaveData.currentManaPoints!!,
                         maxManaPoints = rawSaveData.maxManaPoints!!,
+                        level = rawSaveData.level!!,
                         characterData = CharacterData(
                             name = rawSaveData.name!!,
                             maxHealthPoints = rawSaveData.maxHealthPoints!!,
@@ -104,6 +105,7 @@ class SaveGameRepositoryImpl(
             currentManaPoints = playerCharacter?.currentManaPoints,
             maxManaPoints = playerCharacter?.maxManaPoints,
             name = playerCharacter?.characterData?.name,
+            level = playerCharacter?.level,
             maxHealthPoints = character?.maxHealthPoints,
             currentHealthPoints = character?.currentHealthPoints,
             armorClass = character?.armorClass,
@@ -121,6 +123,7 @@ class SaveGameRepositoryImpl(
                 playerClass = playerClass,
                 currentManaPoints = playerClass.baseManaPoints,
                 maxManaPoints = playerClass.baseManaPoints,
+                level = 1,
                 characterData = CharacterData(
                     name = playerClass.name,
                     maxHealthPoints = playerClass.baseHealthPoints,

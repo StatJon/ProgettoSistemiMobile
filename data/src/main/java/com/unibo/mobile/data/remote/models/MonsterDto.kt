@@ -38,7 +38,7 @@ data class ActionDto(
 
 @JsonClass(generateAdapter = true)
 data class ActionDamageDto(
-    @param:Json(name = "damage_dice") val damageDice: String
+    @param:Json(name = "damage_dice") val damageDice: String? = null
 )
 
 @JsonClass(generateAdapter = true)

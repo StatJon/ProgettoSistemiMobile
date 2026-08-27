@@ -10,6 +10,7 @@ import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
 
@@ -23,7 +24,9 @@ class GameScreenViewModelFactory(
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
     private val fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase,
     private val loadSaveGameUseCase: LoadSaveGameUseCase,
-    private val saveSaveGameUseCase: SaveSaveGameUseCase
+    private val levelUpUseCase: LevelUpUseCase,
+    private val saveSaveGameUseCase: SaveSaveGameUseCase,
+
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(GameScreenViewModel::class.java)) {
@@ -37,7 +40,8 @@ class GameScreenViewModelFactory(
                 checkCombatStatusUseCase = checkCombatStatusUseCase,
                 decideEnemyAbilityUseCase = decideEnemyAbilityUseCase,
                 determineChallengeRatingUseCase = determineChallengeRatingUseCase,
-                determineGamePhaseUseCase = determineGamePhaseUseCase
+                determineGamePhaseUseCase = determineGamePhaseUseCase,
+                levelUpUseCase = levelUpUseCase,
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

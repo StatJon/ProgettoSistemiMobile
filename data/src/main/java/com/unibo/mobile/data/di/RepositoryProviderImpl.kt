@@ -3,6 +3,7 @@ package com.unibo.mobile.data.di
 import com.unibo.mobile.data.local.dao.SaveGameDao
 import com.unibo.mobile.data.remote.api.DndApi
 import com.unibo.mobile.data.remote.api.SafeApiCaller
+import com.unibo.mobile.data.remote.mappers.ClassSpellDtoListToPairMapper
 import com.unibo.mobile.data.remote.mappers.MonsterDtoListToListMapper
 import com.unibo.mobile.data.remote.mappers.MonsterToEnemyMapper
 import com.unibo.mobile.data.remote.mappers.SpellToAbilityMapper
@@ -26,7 +27,8 @@ class RepositoryProviderImpl(
     override val abilityRepository: AbilityRepository = AbilityRepositoryImpl(
         dndApi = dndApi,
         safeApiCaller = SafeApiCaller(),
-        spellToAbilityMapper = SpellToAbilityMapper()
+        spellToAbilityMapper = SpellToAbilityMapper(),
+        classSpellDtoListToPairMapper = ClassSpellDtoListToPairMapper()
     )
 
     override val enemyRepository: EnemyRepository = EnemyRepositoryImpl(

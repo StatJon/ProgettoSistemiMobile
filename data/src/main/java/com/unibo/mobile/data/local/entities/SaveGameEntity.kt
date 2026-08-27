@@ -18,5 +18,6 @@ data class SaveGameEntity(
     val maxHealthPoints: Int?,
     val currentHealthPoints: Int?,
     val armorClass: Int?,
+    val level: Int?,
     val abilityNames: String?,
     )

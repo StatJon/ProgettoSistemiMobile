@@ -10,6 +10,7 @@ import com.unibo.mobile.domain.models.CombatSnapshot
 import com.unibo.mobile.domain.models.CombatStatus
 import com.unibo.mobile.domain.models.GamePhase
 import com.unibo.mobile.domain.models.SaveGame
+import com.unibo.mobile.domain.models.SaveSession
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByClassNameUseCase
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByEnemyUseCase
 import com.unibo.mobile.domain.usecases.api.FetchAbilityByNameUseCase
@@ -24,6 +25,7 @@ import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.TurnCheckUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
@@ -51,6 +53,7 @@ class GameScreenViewModel(
     private val decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase,
     private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase,
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
+    private val levelUpUseCase: LevelUpUseCase,
     //private val dungeonUseCase: SetupDungeonUseCase,
     //private val turnCheckUseCase: TurnCheckUseCase
 
@@ -119,20 +122,22 @@ class GameScreenViewModel(
         _navigateToEndScreen.value = null
     }
 
-    // --- Orchestrator Private Functions
+    // --- Orchestrator - GameLoop Private Functions
 
     private suspend fun gameLoop() {
         println("DEBUG: gameLoop started, phase: ${_gamePhase.value}")
         while (true) {
             when (_gamePhase.value) {
-                GamePhase.DUNGEON_WON -> {
-                    endGame(true)
-                    return
-                }
 
                 GamePhase.DUNGEON_LOST -> {
                     endGame(false)
                     return
+                }
+
+                GamePhase.CHECKPOINT -> {
+                    println("DEBUG: Entering CheckpointLoop")
+                    checkpointLoop()
+                    println("DEBUG: Exiting CheckpointLoop")
                 }
 
                 else -> {
@@ -142,10 +147,18 @@ class GameScreenViewModel(
                     )
                     when (gamePhase) {
                         GamePhase.COMBAT -> {
+                            println("DEBUG:")
+                            println("DEBUG: Entering GamePhase.COMBAT")
                             combatLoop()
+                            println("DEBUG: Exiting GamePhase.COMBAT")
                         }
 
-                        GamePhase.CHECKPOINT -> checkpointLoop()
+                        GamePhase.DUNGEON_WON -> {
+                            endGame(true)
+                            return
+                        }
+
+
                         else -> throw IllegalStateException("Error: Unexpected game phase: $gamePhase")
                     }
                 }
@@ -183,6 +196,7 @@ class GameScreenViewModel(
                 CombatStatus.VICTORY -> {
                     _dungeonIndex.value++
                     _combatSnapshot.value = null
+                    _gamePhase.value = GamePhase.CHECKPOINT
                     _lockUi.value = false
                     return
                 }
@@ -196,8 +210,16 @@ class GameScreenViewModel(
         }
     }
 
-    private fun checkpointLoop() {
-        //checkpointLogic TODO
+    private suspend fun checkpointLoop() {
+        _lockUi.value = false
+        val updatedCharacterPlayer = levelUpUseCase.invoke(_characterPlayer.value ?: return)
+        println("DEBUG: Updated Player AbilityList: ${updatedCharacterPlayer.characterData.abilityList}")
+        val updatedSaveSession =
+            _saveGame.value.saveSession?.copy(characterPlayer = updatedCharacterPlayer)
+        _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
+        saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
+        println("DEBUG: saved ${_saveGame.value}")
+        _gamePhase.value = GamePhase.COMBAT
     }
 
     private fun endGame(isWon: Boolean) {
@@ -280,5 +302,4 @@ class GameScreenViewModel(
             e.printStackTrace()
         }
     }
-
 }

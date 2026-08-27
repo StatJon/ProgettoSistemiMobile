@@ -33,7 +33,8 @@ fun GameScreen(
             determineGamePhaseUseCase = UseCaseProvider.determineGamePhaseUseCase,
             fetchEnemyByChallengeRatingUseCase = UseCaseProvider.fetchEnemyByChallengeRatingUseCase,
             loadSaveGameUseCase = UseCaseProvider.loadSaveGameUseCase,
-            saveSaveGameUseCase = UseCaseProvider.saveSaveGameUseCase
+            saveSaveGameUseCase = UseCaseProvider.saveSaveGameUseCase,
+            levelUpUseCase = UseCaseProvider.levelUpUseCase
         )
     )
 ) {
