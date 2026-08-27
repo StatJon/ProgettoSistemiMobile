@@ -89,7 +89,6 @@ class GameScreenViewModel(
     val navigateToEndScreen: StateFlow<Boolean?> = _navigateToEndScreen
 
 
-
     private val _abilitySelectedChannel = Channel<Ability>(Channel.RENDEZVOUS)
 
     override fun onCleared() {
@@ -141,12 +140,9 @@ class GameScreenViewModel(
                         _dungeonIndex.value,
                         _dungeonLength.value
                     )
-                    println("DEBUG: Determined phase: $gamePhase")
                     when (gamePhase) {
                         GamePhase.COMBAT -> {
-                            println("DEBUG: Starting combatLoop")
                             combatLoop()
-                            println("DEBUG: combatLoop finished")
                         }
 
                         GamePhase.CHECKPOINT -> checkpointLoop()
@@ -171,20 +167,16 @@ class GameScreenViewModel(
             when (combatSnapshot.combatStatus) {
                 CombatStatus.PLAYER_TURN -> {
                     _lockUi.value = false
-                    println("DEBUG: Waiting for ability...")
                     val playerAbility = _abilitySelectedChannel.receive()
                     _lockUi.value = true
-                    println("DEBUG: Received ability: ${playerAbility.name}")
                     executeTurn(combatSnapshot, playerAbility, isPlayerTurn = true)
                 }
 
                 CombatStatus.ENEMY_TURN -> {
                     _lockUi.value = true
-                    println("DEBUG: Enemy turn started")
                     val enemyAbility = decideEnemyAbilityUseCase.invoke(
                         enemy = combatSnapshot.enemy
                     )
-                    println("DEBUG: Enemy ability: ${enemyAbility.name}")
                     executeTurn(combatSnapshot, enemyAbility, isPlayerTurn = false)
                 }
 
@@ -242,10 +234,8 @@ class GameScreenViewModel(
         val enemyChallengeRating = determineChallengeRatingUseCase.invoke(
             dungeonIndex = _dungeonIndex.value
         )
-        println("DEBUG: ChallengeRating = $enemyChallengeRating")
         val enemy: CharacterEnemy =
             fetchEnemyByChallengeRatingUseCase.invoke(enemyChallengeRating)
-        println("DEBUG: Enemy = $enemy")
         _combatSnapshot.value = CombatSnapshot(
             player = _characterPlayer.value
                 ?: throw IllegalStateException("Player not initialized"),
@@ -263,22 +253,14 @@ class GameScreenViewModel(
     ) {
         try {
             val target = if (isPlayerTurn) combatSnapshot.enemy else combatSnapshot.player
-
-            println("DEBUG: Before calculateAbilityResultUseCase")
             val abilityResult = calculateAbilityResultUseCase.invoke(target, ability)
-            println("DEBUG: After calculateAbilityResultUseCase: $abilityResult")
-
-            println("DEBUG: Before applyAbilityResultUseCase")
             val updatedTargetData = applyAbilityResultUseCase.invoke(target, abilityResult)
-            println("DEBUG: After applyAbilityResultUseCase")
 
             val updatedSnapshot = if (isPlayerTurn) {
-                println("DEBUG: Before applyPlayerAbilityCostUseCase")
                 val updatedPlayer = applyPlayerAbilityCostUseCase.invoke(
                     combatSnapshot.player,
                     abilityResult.ability
                 )
-                println("DEBUG: After applyPlayerAbilityCostUseCase")
                 combatSnapshot.copy(
                     player = updatedPlayer,
                     enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
@@ -289,14 +271,10 @@ class GameScreenViewModel(
                     enemy = combatSnapshot.enemy
                 )
             }
-
-            println("DEBUG: Before checkCombatStatusUseCase")
             val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
-            println("DEBUG: New combat status: $newCombatStatus")
 
             _combatSnapshot.value = updatedSnapshot.copy(combatStatus = newCombatStatus)
             _characterPlayer.value = updatedSnapshot.player
-            println("DEBUG: Snapshot updated")
         } catch (e: Exception) {
             println("DEBUG: EXCEPTION in executeTurn: ${e.message}")
             e.printStackTrace()
