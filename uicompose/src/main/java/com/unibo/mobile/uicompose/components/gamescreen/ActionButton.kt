@@ -15,9 +15,14 @@ import com.unibo.mobile.domain.models.DicesToRoll
 fun ActionButton(
     ability: Ability,
     onClick: () -> Unit,
+    lockUi: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Button(onClick = onClick, modifier = modifier) {
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = !lockUi
+    ) {
         Text(ability.name)
     }
 }
@@ -32,9 +37,11 @@ fun ActionButtonPreview() {
             isAoe = false,
             actionCost = ActionCost.ACTION,
             manaCost = 1,
-            dicesToRoll = DicesToRoll(1,6),
+            dicesToRoll = DicesToRoll(1, 6),
             requiresHitRoll = true
         ),
-        onClick = {}
-    )
+        onClick = {},
+        lockUi = false,
+
+        )
 }

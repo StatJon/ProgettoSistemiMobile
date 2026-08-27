@@ -40,6 +40,7 @@ fun GameScreen(
     println("DEBUG: Accessing GameScreen")
 
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
+    val lockUI = viewModel.lockUi.collectAsStateWithLifecycle()
     val combatSnapshot = viewModel.combatSnapshot.collectAsStateWithLifecycle()
     val gamePhase = viewModel.gamePhase.collectAsStateWithLifecycle()
     val characterPlayer = viewModel.characterPlayer.collectAsStateWithLifecycle()
@@ -72,6 +73,7 @@ fun GameScreen(
             modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth(),
             characterPlayer = characterPlayer.value,
             gamePhase = gamePhase.value,
+            lockUi = lockUI.value,
             onAbilitySelected = viewModel::onAbilitySelected
         )
     }

@@ -16,6 +16,7 @@ fun PlayerControls(
     modifier: Modifier = Modifier,
     characterPlayer: CharacterPlayer?,
     gamePhase: GamePhase,
+    lockUi: Boolean,
     onAbilitySelected: (Ability) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -23,6 +24,7 @@ fun PlayerControls(
             characterPlayer?.characterData?.abilityList?.forEach { ability ->
                 ActionButton(
                     ability = ability,
+                    lockUi = lockUi,
                     onClick = {
                         println("DEBUG: Button clicked: ${ability.name}")
                         onAbilitySelected(ability)
@@ -44,6 +46,7 @@ fun PlayerControlsPreview() {
     PlayerControls(
         characterPlayer = null,
         gamePhase = GamePhase.COMBAT,
-        onAbilitySelected = {}
+        onAbilitySelected = {},
+        lockUi = false,
     )
 }

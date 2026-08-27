@@ -61,6 +61,9 @@ class GameScreenViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _lockUi = MutableStateFlow<Boolean>(false)
+    val lockUi: StateFlow<Boolean> = _lockUi
+
     private val _saveGame = MutableStateFlow(SaveGame(0, null))
     val saveGame: StateFlow<SaveGame> = _saveGame
 
@@ -84,6 +87,8 @@ class GameScreenViewModel(
 
     private val _navigateToEndScreen = MutableStateFlow<Boolean?>(null)
     val navigateToEndScreen: StateFlow<Boolean?> = _navigateToEndScreen
+
+
 
     private val _abilitySelectedChannel = Channel<Ability>(Channel.RENDEZVOUS)
 
@@ -165,13 +170,16 @@ class GameScreenViewModel(
 
             when (combatSnapshot.combatStatus) {
                 CombatStatus.PLAYER_TURN -> {
+                    _lockUi.value = false
                     println("DEBUG: Waiting for ability...")
                     val playerAbility = _abilitySelectedChannel.receive()
+                    _lockUi.value = true
                     println("DEBUG: Received ability: ${playerAbility.name}")
                     executeTurn(combatSnapshot, playerAbility, isPlayerTurn = true)
                 }
 
                 CombatStatus.ENEMY_TURN -> {
+                    _lockUi.value = true
                     println("DEBUG: Enemy turn started")
                     val enemyAbility = decideEnemyAbilityUseCase.invoke(
                         enemy = combatSnapshot.enemy
@@ -183,11 +191,13 @@ class GameScreenViewModel(
                 CombatStatus.VICTORY -> {
                     _dungeonIndex.value++
                     _combatSnapshot.value = null
+                    _lockUi.value = false
                     return
                 }
 
                 CombatStatus.DEFEAT -> {
                     _gamePhase.value = GamePhase.DUNGEON_LOST
+                    _lockUi.value = false
                     return
                 }
             }
@@ -227,6 +237,7 @@ class GameScreenViewModel(
     }
 
     private suspend fun initCombat() {
+        _lockUi.value = true
         _isLoading.value = true
         val enemyChallengeRating = determineChallengeRatingUseCase.invoke(
             dungeonIndex = _dungeonIndex.value
@@ -242,6 +253,7 @@ class GameScreenViewModel(
             combatStatus = CombatStatus.PLAYER_TURN,
         )
         _isLoading.value = false
+        _lockUi.value = false
     }
 
     private fun executeTurn(
