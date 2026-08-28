@@ -89,6 +89,7 @@ fun MainMenu(
             // --- NewGame Buttons with Classes
             NewGameButtonsWithClasses(
                 playerClassesList.value,
+                winCounter = winCounter,
                 onNewGameSelected = viewModel::onNewGameSelected,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -114,6 +115,7 @@ fun MainMenu(
 @Composable
 private fun NewGameButtonsWithClasses(
     playerClasses: List<PlayerClass>,
+    winCounter: Int,
     modifier: Modifier = Modifier,
     onNewGameSelected: (PlayerClass) -> Unit
 
@@ -125,6 +127,7 @@ private fun NewGameButtonsWithClasses(
         items(playerClasses) { playerClass ->
             Button(
                 onClick = { onNewGameSelected(playerClass) },
+                enabled = playerClass.unlockCounter <= winCounter,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(UiConstants.BUTTON_HEIGHT)
