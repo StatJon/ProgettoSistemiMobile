@@ -3,6 +3,7 @@ package com.unibo.mobile.uicompose.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unibo.mobile.domain.models.Ability
+import com.unibo.mobile.domain.models.AbilityHeal
 import com.unibo.mobile.domain.models.CharacterData
 import com.unibo.mobile.domain.models.CharacterEnemy
 import com.unibo.mobile.domain.models.CharacterPlayer
@@ -317,7 +318,11 @@ class GameScreenViewModel(
         isPlayerTurn: Boolean
     ) {
         try {
-            val target = if (isPlayerTurn) combatSnapshot.enemy else combatSnapshot.player
+            val caster = if (isPlayerTurn) combatSnapshot.player else combatSnapshot.enemy
+            val target = if (ability is AbilityHeal) caster
+            else if (isPlayerTurn) combatSnapshot.enemy
+            else combatSnapshot.player
+
             val abilityResult = calculateAbilityResultUseCase.invoke(target, ability)
             val updatedTargetData = applyAbilityResultUseCase.invoke(target, abilityResult)
 
@@ -326,18 +331,31 @@ class GameScreenViewModel(
                     combatSnapshot.player,
                     abilityResult.ability
                 )
-                combatSnapshot.copy(
-                    player = updatedPlayer,
-                    enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
-                )
+                if (target == combatSnapshot.player) {
+                    combatSnapshot.copy(
+                        player = updatedPlayer.copy(characterData = updatedTargetData as CharacterData),
+                        enemy = combatSnapshot.enemy
+                    )
+                } else {
+                    combatSnapshot.copy(
+                        player = updatedPlayer,
+                        enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
+                    )
+                }
             } else {
-                combatSnapshot.copy(
-                    player = combatSnapshot.player.copy(characterData = updatedTargetData),
-                    enemy = combatSnapshot.enemy
-                )
+                if (target == combatSnapshot.enemy) {
+                    combatSnapshot.copy(
+                        player = combatSnapshot.player,
+                        enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData as CharacterData)
+                    )
+                } else {
+                    combatSnapshot.copy(
+                        player = combatSnapshot.player.copy(characterData = updatedTargetData),
+                        enemy = combatSnapshot.enemy
+                    )
+                }
             }
             val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
-
             _combatSnapshot.value = updatedSnapshot.copy(combatStatus = newCombatStatus)
             _characterPlayer.value = updatedSnapshot.player
         } catch (e: Exception) {
