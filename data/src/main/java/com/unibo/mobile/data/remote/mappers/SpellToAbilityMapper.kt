@@ -50,6 +50,7 @@ class SpellToAbilityMapper{
         if (spellDto.healAtSlotLevel != null) {
             return AbilityHeal(
                 name = spellDto.name,
+                index = spellDto.index,
                 level = spellDto.level,
                 isAoe = determineAoe(spellDto),
                 actionCost = determineActionCost(spellDto),
@@ -59,6 +60,7 @@ class SpellToAbilityMapper{
         } else {
             return AbilityDamage(
                 name = spellDto.name,
+                index = spellDto.index,
                 level = spellDto.level,
                 isAoe = determineAoe(spellDto),
                 actionCost = determineActionCost(spellDto),

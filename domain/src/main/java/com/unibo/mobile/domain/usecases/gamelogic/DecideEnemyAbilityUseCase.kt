@@ -16,6 +16,7 @@ class DecideEnemyAbilityUseCaseImpl : DecideEnemyAbilityUseCase {
             listOf(
                 AbilityDamage(
                     name = "Basic Attack",
+                    index = "basic-attack",
                     level = 1,
                     isAoe = false,
                     actionCost = ActionCost.ACTION,

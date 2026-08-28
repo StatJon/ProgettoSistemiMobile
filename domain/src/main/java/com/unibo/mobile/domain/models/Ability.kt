@@ -2,6 +2,7 @@ package com.unibo.mobile.domain.models
 
 sealed interface Ability {
     val name: String
+    val index: String
     val level: Int
     val isAoe: Boolean
     val actionCost: ActionCost

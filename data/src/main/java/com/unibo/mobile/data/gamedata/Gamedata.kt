@@ -14,6 +14,7 @@ object Gamedata {
 
     val fallBackLevelUpAbility: Ability = AbilityDamage(
         name = "Fireball",
+        index = "fireball",
         level = 0,
         isAoe = true,
         actionCost = ActionCost.ACTION,
@@ -36,6 +37,7 @@ object Gamedata {
             baseAbilityList = listOf(
                 AbilityDamage(
                     name = "Mace",
+                    index = "mace",
                     level = 0,
                     isAoe = false,
                     actionCost = ActionCost.ACTION,
@@ -58,6 +60,7 @@ object Gamedata {
             baseAbilityList = listOf(
                 AbilityDamage(
                     name = "Rapier",
+                    index = "rapier",
                     level = 0,
                     isAoe = false,
                     actionCost = ActionCost.ACTION,

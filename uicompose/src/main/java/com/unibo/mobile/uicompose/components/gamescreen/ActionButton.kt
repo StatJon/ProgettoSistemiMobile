@@ -32,7 +32,8 @@ fun ActionButton(
 fun ActionButtonPreview() {
     ActionButton(
         ability = AbilityDamage(
-            name = "test",
+            name = "Test",
+            index = "test",
             level = 1,
             isAoe = false,
             actionCost = ActionCost.ACTION,
