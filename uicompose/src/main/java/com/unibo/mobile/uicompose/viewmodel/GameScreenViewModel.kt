@@ -247,7 +247,6 @@ class GameScreenViewModel(
             ?: throw IllegalStateException("ERROR: SaveSession missing in checkpointLoop")
         val updatedSaveSession = currentSaveSession.copy(characterPlayer = updatedCharacterPlayer)
         _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
-        _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
         saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
         println("DEBUG: saved ${_saveGame.value}")
 

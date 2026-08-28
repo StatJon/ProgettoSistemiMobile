@@ -81,7 +81,7 @@ class SaveGameRepositoryImpl(
                                             ","
                                         ) ?: emptyList()
                                     ))
-                                .distinctBy { it.name }
+                                .distinctBy { it.index }
                         ),
                     )
                 )
@@ -110,7 +110,7 @@ class SaveGameRepositoryImpl(
             maxHealthPoints = character?.maxHealthPoints,
             currentHealthPoints = character?.currentHealthPoints,
             armorClass = character?.armorClass,
-            abilityIndexList = character?.abilityList?.joinToString(",") { it.name })
+            abilityIndexList = character?.abilityList?.joinToString(",") { it.index })
     }
 
     private fun createNewSaveSession(saveGame: SaveGame, playerClassName: String): SaveSession {
