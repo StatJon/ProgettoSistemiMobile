@@ -10,6 +10,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.unibo.mobile.uicompose.components.common.UiConstants
 import com.unibo.mobile.uicompose.screens.EndScreen
 import com.unibo.mobile.uicompose.screens.GameScreen
@@ -18,13 +23,18 @@ import com.unibo.mobile.uicompose.screens.MainMenu
 /**
  * Contains the UI and manages navigation of the Screens to show
  */
+
+private object Routes {
+    const val MENU = "menu"
+    const val GAME = "game"
+    const val END_SCREEN = "end/{isWon}"
+    fun endScreen(isWon: Boolean) = "end/$isWon"
+}
+
 @Composable
 fun ScreenManager() {
-    //---Apre la prima Screen (.MENU = iniziale)
-    var currentScreen by rememberSaveable { mutableStateOf(ScreenStatus.MENU) }
-    var sessionResult: Boolean? by rememberSaveable { mutableStateOf(null) }
+    val navController = rememberNavController()
 
-    //--- Contenitore generale Ui
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -35,35 +45,48 @@ fun ScreenManager() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            //--- Selettore Screen
-            when (currentScreen) {
-                ScreenStatus.MENU -> MainMenu(
-                    onNavigateToGame = {
-                        currentScreen = ScreenStatus.GAME
-                        sessionResult = null
-                    },
-                )
+            NavHost(navController = navController, startDestination = Routes.MENU) {
 
-                ScreenStatus.GAME -> GameScreen(
-                    onNavigateToMenu = { currentScreen = ScreenStatus.MENU },
-                    onNavigateToEndScreen = { isWon ->
-                        currentScreen = ScreenStatus.END_SCREEN
-                        sessionResult = isWon
-                    }
-                )
+                composable(Routes.MENU) {
+                    MainMenu(
+                        onNavigateToGame = {
+                            navController.navigate(Routes.GAME) {
+                                popUpTo(Routes.MENU) { inclusive = true }
+                            }
+                        }
+                    )
+                }
 
-                ScreenStatus.END_SCREEN -> EndScreen(
-                    isWon = sessionResult ?: false,
-                    onNavigateToMenu = { currentScreen = ScreenStatus.MENU }
-                )
+                composable(Routes.GAME) {
+                    GameScreen(
+                        onNavigateToMenu = {
+                            navController.navigate(Routes.MENU) {
+                                popUpTo(Routes.GAME) { inclusive = true }
+                            }
+                        },
+                        onNavigateToEndScreen = { isWon ->
+                            navController.navigate(Routes.endScreen(isWon)) {
+                                popUpTo(Routes.GAME) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+
+                composable(
+                    route = Routes.END_SCREEN,
+                    arguments = listOf(navArgument("isWon") { type = NavType.BoolType })
+                ) { backStackEntry ->
+                    val isWon = backStackEntry.arguments?.getBoolean("isWon") ?: false
+                    EndScreen(
+                        isWon = isWon,
+                        onNavigateToMenu = {
+                            navController.navigate(Routes.MENU) {
+                                popUpTo(Routes.END_SCREEN) { inclusive = true }
+                            }
+                        }
+                    )
+                }
             }
         }
     }
-}
-
-
-enum class ScreenStatus {
-    MENU,
-    GAME,
-    END_SCREEN
 }
