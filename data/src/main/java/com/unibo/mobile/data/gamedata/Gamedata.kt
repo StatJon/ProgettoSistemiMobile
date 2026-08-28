@@ -1,5 +1,6 @@
 package com.unibo.mobile.data.gamedata
 
+import com.unibo.mobile.domain.models.Ability
 import com.unibo.mobile.domain.models.AbilityDamage
 import com.unibo.mobile.domain.models.ActionCost
 import com.unibo.mobile.domain.models.DicesToRoll
@@ -10,6 +11,16 @@ object Gamedata {
     val baseDungeonLength = 5
     // val checkpointStep = 3 TODO: Aggiungere dopo primo collaudo gioco, non MVP
     // val baseActionPointsPerTurn = 2 TODO: Se serve aggiungere
+
+    val fallBackLevelUpAbility: Ability = AbilityDamage(
+        name = "Fireball",
+        level = 0,
+        isAoe = true,
+        actionCost = ActionCost.ACTION,
+        manaCost = 3,
+        dicesToRoll = DicesToRoll(2, 6),
+        requiresHitRoll = true
+    )
 
     val PlayerClassList: List<PlayerClass> = listOf(
         PlayerClass(

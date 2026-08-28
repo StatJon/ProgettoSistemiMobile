@@ -33,6 +33,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class GameScreenViewModel(
 
@@ -127,41 +128,52 @@ class GameScreenViewModel(
     private suspend fun gameLoop() {
         println("DEBUG: gameLoop started, phase: ${_gamePhase.value}")
         while (true) {
-            when (_gamePhase.value) {
+            try {
+                when (_gamePhase.value) {
 
-                GamePhase.DUNGEON_LOST -> {
-                    endGame(false)
-                    return
-                }
+                    GamePhase.DUNGEON_LOST -> {
+                        endGame(false)
+                        return
+                    }
 
-                GamePhase.CHECKPOINT -> {
-                    println("DEBUG: Entering CheckpointLoop")
-                    checkpointLoop()
-                    println("DEBUG: Exiting CheckpointLoop")
-                }
+                    GamePhase.CHECKPOINT -> {
+                        println("DEBUG: Entering CheckpointLoop")
+                        checkpointLoop()
+                        println("DEBUG: Exiting CheckpointLoop")
+                    }
 
-                else -> {
-                    val gamePhase = determineGamePhaseUseCase.invoke(
-                        _dungeonIndex.value,
-                        _dungeonLength.value
-                    )
-                    when (gamePhase) {
-                        GamePhase.COMBAT -> {
-                            println("DEBUG:")
-                            println("DEBUG: Entering GamePhase.COMBAT")
-                            combatLoop()
-                            println("DEBUG: Exiting GamePhase.COMBAT")
+                    else -> {
+                        val gamePhase = determineGamePhaseUseCase.invoke(
+                            _dungeonIndex.value,
+                            _dungeonLength.value
+                        )
+                        when (gamePhase) {
+                            GamePhase.COMBAT -> {
+                                println("DEBUG:")
+                                println("DEBUG: Entering GamePhase.COMBAT")
+                                combatLoop()
+                                println("DEBUG: Exiting GamePhase.COMBAT")
+                            }
+
+                            GamePhase.DUNGEON_WON -> {
+                                endGame(true)
+                                return
+                            }
+
+
+                            else -> throw IllegalStateException("Error: Unexpected game phase: $gamePhase")
                         }
-
-                        GamePhase.DUNGEON_WON -> {
-                            endGame(true)
-                            return
-                        }
-
-
-                        else -> throw IllegalStateException("Error: Unexpected game phase: $gamePhase")
                     }
                 }
+            } catch (e: CancellationException) {
+                throw e //Ignores CancellationExceptions which are expected behaviour
+            } catch (e: Exception) {
+                println("DEBUG: EXCEPTION in gameLoop (phase=${_gamePhase.value}): ${e.message}")
+                e.printStackTrace()
+                _isLoading.value = false
+                _lockUi.value = false
+                endGame(false)
+                return
             }
         }
     }
@@ -211,15 +223,34 @@ class GameScreenViewModel(
     }
 
     private suspend fun checkpointLoop() {
-        _lockUi.value = false
-        val updatedCharacterPlayer = levelUpUseCase.invoke(_characterPlayer.value ?: return)
+        _lockUi.value = true
+        _isLoading.value = true
+
+        val currentPlayer = _characterPlayer.value
+
+        // safeguard extra
+        if (currentPlayer == null) {
+            println("DEBUG: checkpointLoop - characterPlayer null, interrompo la run")
+            _isLoading.value = false
+            _lockUi.value = false
+            _gamePhase.value = GamePhase.DUNGEON_LOST
+            return
+        }
+
+        val updatedCharacterPlayer = levelUpUseCase.invoke(currentPlayer)
         println("DEBUG: Updated Player AbilityList: ${updatedCharacterPlayer.characterData.abilityList}")
+
+        _characterPlayer.value = updatedCharacterPlayer
+
         val updatedSaveSession =
             _saveGame.value.saveSession?.copy(characterPlayer = updatedCharacterPlayer)
         _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
         saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
         println("DEBUG: saved ${_saveGame.value}")
+
         _gamePhase.value = GamePhase.COMBAT
+        _isLoading.value = false
+        _lockUi.value = false
     }
 
     private fun endGame(isWon: Boolean) {
