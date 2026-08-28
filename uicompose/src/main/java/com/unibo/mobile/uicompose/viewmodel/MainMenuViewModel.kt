@@ -65,6 +65,12 @@ class MainMenuViewModel(
         _navigateToGame.value = false
     }
 
+    fun refreshSaveData() {
+        viewModelScope.launch {
+            fetchSaveData()
+        }
+    }
+
     // --- Private Functions
     private suspend fun fetchPlayerClasses() {
         _playerClassesList.value = getAllPlayerClassesUseCase.invoke()

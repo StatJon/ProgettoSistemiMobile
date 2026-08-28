@@ -39,6 +39,11 @@ fun MainMenu(
         )
     )
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshSaveData()
+    }
+
     // --- Recupero variabili da ViewModel
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
     val playerClassesList = viewModel.playerClassesList.collectAsStateWithLifecycle()

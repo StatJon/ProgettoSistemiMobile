@@ -263,10 +263,18 @@ class GameScreenViewModel(
             viewModelScope.launch {
                 val currentSaveGame = _saveGame.value
                 val updatedSaveGame = currentSaveGame.copy(
-                    winCounter = currentSaveGame.winCounter + 1
+                    winCounter = currentSaveGame.winCounter + 1,
+                    saveSession = null
                 )
                 saveSaveGameUseCase.invoke(updatedSaveGame)
                 _saveGame.value = updatedSaveGame
+            }
+        } else {
+            viewModelScope.launch {
+                val updatedSaveGame = _saveGame.value.copy(saveSession = null)
+                saveSaveGameUseCase.invoke(updatedSaveGame)
+                _saveGame.value = updatedSaveGame
+                _characterPlayer.value = null
             }
         }
     }
