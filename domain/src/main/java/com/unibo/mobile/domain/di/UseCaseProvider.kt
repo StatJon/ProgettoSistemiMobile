@@ -86,7 +86,8 @@ object UseCaseProvider {
         )
         
         levelUpUseCase = LevelUpUseCaseImpl(
-            abilityRepository = repositoryProvider.abilityRepository
+            abilityRepository = repositoryProvider.abilityRepository,
+            gamedataRepository = repositoryProvider.gamedataRepository
         )
 
         calculateAbilityResultUseCase = CalculateAbilityResultUseCaseImpl()
