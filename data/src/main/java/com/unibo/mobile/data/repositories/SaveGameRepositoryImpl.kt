@@ -54,6 +54,7 @@ class SaveGameRepositoryImpl(
     }
 
     // TODO Nota: Valutare (anche di tempo) se sostituire !! con 2 DAO/Tabelle
+    // From DB
     private suspend fun mapRawToSaveGame(
         rawSaveData: SaveGameEntity, gamedataRepository: GamedataRepository
     ): SaveGame {
@@ -93,6 +94,7 @@ class SaveGameRepositoryImpl(
         }
     }
 
+    // Towards DB
     private fun mapSaveGameToRaw(saveGame: SaveGame): SaveGameEntity {
         val saveSession = saveGame.saveSession
         val playerCharacter = saveGame.saveSession?.characterPlayer
@@ -109,7 +111,7 @@ class SaveGameRepositoryImpl(
             maxHealthPoints = character?.maxHealthPoints,
             currentHealthPoints = character?.currentHealthPoints,
             armorClass = character?.armorClass,
-            abilityNames = character?.abilityList?.map { it.name }?.joinToString { (",") })
+            abilityNames = character?.abilityList?.joinToString(",") { it.name })
     }
 
     private fun createNewSaveSession(saveGame: SaveGame, playerClassName: String): SaveSession {

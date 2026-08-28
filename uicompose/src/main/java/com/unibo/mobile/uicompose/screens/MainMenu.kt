@@ -94,9 +94,10 @@ fun MainMenu(
                     .fillMaxWidth()
                     .weight(0.4f)
             )
-            // --- Continue
+            // --- ContinueButton
             Button(
                 onClick = { viewModel.onContinueSelected() },
+                enabled = saveGame.value.saveSession != null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(UiConstants.BUTTON_HEIGHT)

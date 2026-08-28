@@ -230,7 +230,7 @@ class GameScreenViewModel(
 
         // safeguard extra
         if (currentPlayer == null) {
-            println("DEBUG: checkpointLoop - characterPlayer null, interrompo la run")
+            println("ERROR: checkpointLoop - characterPlayer is null. Terminating Game")
             _isLoading.value = false
             _lockUi.value = false
             _gamePhase.value = GamePhase.DUNGEON_LOST
@@ -242,8 +242,10 @@ class GameScreenViewModel(
 
         _characterPlayer.value = updatedCharacterPlayer
 
-        val updatedSaveSession =
-            _saveGame.value.saveSession?.copy(characterPlayer = updatedCharacterPlayer)
+        val currentSaveSession = _saveGame.value.saveSession
+            ?: throw IllegalStateException("ERROR: SaveSession missing in checkpointLoop")
+        val updatedSaveSession = currentSaveSession.copy(characterPlayer = updatedCharacterPlayer)
+        _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
         _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
         saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
         println("DEBUG: saved ${_saveGame.value}")
@@ -258,11 +260,13 @@ class GameScreenViewModel(
         _combatSnapshot.value = null
         _navigateToEndScreen.value = isWon
         if (isWon) {
-            val updatedSaveGame = _saveGame.value.copy(
-                winCounter = _saveGame.value.winCounter + 1
-            )
             viewModelScope.launch {
+                val currentSaveGame = _saveGame.value
+                val updatedSaveGame = currentSaveGame.copy(
+                    winCounter = currentSaveGame.winCounter + 1
+                )
                 saveSaveGameUseCase.invoke(updatedSaveGame)
+                _saveGame.value = updatedSaveGame
             }
         }
     }

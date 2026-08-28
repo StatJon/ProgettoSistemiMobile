@@ -55,7 +55,9 @@ class MainMenuViewModel(
 
     fun onContinueSelected() {
         viewModelScope.launch {
-            _navigateToGame.value = true
+            if (_saveGame.value.saveSession != null) {
+                _navigateToGame.value = true
+            }
         }
     }
 
