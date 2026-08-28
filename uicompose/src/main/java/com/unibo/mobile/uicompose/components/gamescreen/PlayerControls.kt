@@ -1,7 +1,10 @@
 package com.unibo.mobile.uicompose.components.gamescreen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +22,9 @@ fun PlayerControls(
     lockUi: Boolean,
     onAbilitySelected: (Ability) -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        if (gamePhase == GamePhase.COMBAT) {
-            characterPlayer?.characterData?.abilityList?.forEach { ability ->
+    if (gamePhase == GamePhase.COMBAT) {
+        LazyColumn(modifier = modifier.fillMaxWidth().fillMaxHeight()) {
+            items(characterPlayer?.characterData?.abilityList ?: emptyList()) { ability ->
                 ActionButton(
                     ability = ability,
                     lockUi = lockUi,

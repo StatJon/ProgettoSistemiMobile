@@ -65,7 +65,7 @@ fun GameScreen(
             gamePhase = gamePhase.value
         )
         PlayerControls(
-            modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth(),
+            modifier = Modifier.fillMaxHeight(1f).fillMaxWidth(),
             characterPlayer = characterPlayer.value,
             gamePhase = gamePhase.value,
             lockUi = lockUI.value,
