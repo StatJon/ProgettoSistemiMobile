@@ -56,7 +56,6 @@ fun GameView(
                 )
             }
         } else if (gamePhase == GamePhase.CHECKPOINT) {
-            // CHECKPOINT: mostra solo player
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 SpriteWithStatsForCharacter(
                     character = combatSnapshot?.player ?: return@Box,

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
  * @param spriteName Content description for accessibility
  * @param infoList List of stat strings to display
  * @param modifier Modifier to apply to the Column container
- * @param spriteOffset Offset for sprite animation positioning, default (0,0)
+ * //@param spriteOffset Offset for sprite animation positioning, default (0,0)
  */
 @Composable
 fun SpriteWithStats(
@@ -27,14 +27,14 @@ fun SpriteWithStats(
     spriteName: String,
     infoList: List<String>,
     modifier: Modifier = Modifier,
-    spriteOffset: Offset = Offset(0.0F, 0.0F)
+    //spriteOffset: Offset = Offset(0.0F, 0.0F)
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        Sprite2D(spritePainter, spriteName, modifier, spriteOffset)
+        Sprite2D(spritePainter, spriteName, /*spriteOffset*/)
         StatsDisplay(infoList)
     }
 }

@@ -45,12 +45,6 @@ fun GameScreen(
     val combatSnapshot = viewModel.combatSnapshot.collectAsStateWithLifecycle()
     val gamePhase = viewModel.gamePhase.collectAsStateWithLifecycle()
     val characterPlayer = viewModel.characterPlayer.collectAsStateWithLifecycle()
-
-    // --- LoadingScreen Check
-    if (isLoading.value) {
-        LoadingScreen()
-    }
-
     val navigateToEndScreen = viewModel.navigateToEndScreen.collectAsStateWithLifecycle()
     val isWon = navigateToEndScreen.value
 
@@ -77,6 +71,9 @@ fun GameScreen(
             lockUi = lockUI.value,
             onAbilitySelected = viewModel::onAbilitySelected
         )
+    }
+    if (isLoading.value) {
+        LoadingScreen()
     }
 }
 

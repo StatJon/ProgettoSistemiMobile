@@ -16,10 +16,13 @@ fun SpriteWithStatsForCharacter(
     val spriteRes = when (character) {
         is CharacterPlayer -> R.drawable.cleric // TODO: PLACEHOLDER STATICO, SOSTITUIRE CON DINAMICO
         is CharacterEnemy -> R.drawable.humanoid // TODO: PLACEHOLDER STATICO, SOSTITUIRE CON DINAMICO
-        else -> R.drawable.cleric
     }
     val stats = buildList {
         add("Name: ${character.characterData.name}")
+        if (character is CharacterPlayer) {
+            add("Level: ${character.level}")
+        }
+        add("AC: ${character.characterData.armorClass}")
         add("HP: ${character.characterData.currentHealthPoints}/${character.characterData.maxHealthPoints}")
         if (character is CharacterPlayer) {
             add("MP: ${character.currentManaPoints}/${character.maxManaPoints}")

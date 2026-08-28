@@ -32,15 +32,9 @@ fun PlayerControls(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-        } else if (gamePhase == GamePhase.CHECKPOINT) {
-            /*
-            Button(onClick = { /* TODO */ }, modifier = Modifier.fillMaxWidth()) {
-                Text("Continue")
-
-             */
-            }
         }
     }
+}
 
 
 @Preview

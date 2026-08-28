@@ -23,7 +23,7 @@ fun Sprite2D(
     painter: Painter,
     contentName: String,
     modifier: Modifier = Modifier,
-    offsetForAnimation: Offset
+    //offsetForAnimation: Offset
 ) {
     Image(
         painter = painter,
@@ -31,6 +31,6 @@ fun Sprite2D(
         contentScale = ContentScale.Fit,
         modifier = modifier
             .size(GameScreenConstants.SPRITE_SIZE, GameScreenConstants.SPRITE_SIZE)
-            .offset(offsetForAnimation.x.dp, offsetForAnimation.y.dp)
+            //.offset(offsetForAnimation.x.dp, offsetForAnimation.y.dp)
     )
 }
