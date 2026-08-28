@@ -37,28 +37,17 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
 class GameScreenViewModel(
-
-    //private val getAllPlayerClassesUseCase: GetAllPlayerClassesUseCase,
     private val loadSaveGameUseCase: LoadSaveGameUseCase,
     private val saveSaveGameUseCase: SaveSaveGameUseCase,
-
-    //private val fetchAbilityByClassNameUseCase: FetchAbilityByClassNameUseCase,
-    //private val fetchAbilityByEnemyUseCase: FetchAbilityByEnemyUseCase,
-    //private val fetchAbilityByNameUseCase: FetchAbilityByNameUseCase,
     private val fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase,
-
     private val applyAbilityResultUseCase: ApplyAbilityResultUseCase,
     private val applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase,
     private val calculateAbilityResultUseCase: CalculateAbilityResultUseCase,
     private val checkCombatStatusUseCase: CheckCombatStatusUseCase,
-    //private val checkpointUseCase: CheckpointUseCase,
     private val decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase,
     private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase,
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
     private val levelUpUseCase: LevelUpUseCase,
-    //private val dungeonUseCase: SetupDungeonUseCase,
-    //private val turnCheckUseCase: TurnCheckUseCase
-
 ) : ViewModel() {
 
     // --- StateFlow

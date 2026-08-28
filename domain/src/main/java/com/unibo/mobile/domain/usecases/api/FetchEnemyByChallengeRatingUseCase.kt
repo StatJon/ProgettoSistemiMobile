@@ -22,7 +22,7 @@ class FetchEnemyByChallengeRatingUseCaseImpl(
                 ?: error("Error: Monsters not found by filter ")
         val enemyIndex: String = selectEnemyFromList(enemyIndexList)
             ?: error("Error: No monsters to choose from")
-        val enemy = enemyRepository.getEnemyByIndex(enemyIndex)
+        val enemy = enemyRepository.getEnemyByIndex(enemyIndex, challengeRating)
             ?: error("Error: Monster not found by index")
         println("DEBUG: Enemy from repo: $enemy")
         return enemy

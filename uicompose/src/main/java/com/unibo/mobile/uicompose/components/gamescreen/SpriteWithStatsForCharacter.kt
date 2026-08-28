@@ -21,6 +21,9 @@ fun SpriteWithStatsForCharacter(
         add("Name: ${character.characterData.name}")
         if (character is CharacterPlayer) {
             add("Level: ${character.level}")
+        }else if (character is CharacterEnemy){
+            add("Type: ${character.enemyType}")
+            add("CR: ${character.challengeRating}")
         }
         add("AC: ${character.characterData.armorClass}")
         add("HP: ${character.characterData.currentHealthPoints}/${character.characterData.maxHealthPoints}")

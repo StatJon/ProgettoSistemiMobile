@@ -18,6 +18,7 @@ data class MonsterIndexDto(
 data class MonsterDto(
     @param:Json(name = "index") val index: String,
     @param:Json(name = "name") val name: String,
+    @param:Json(name = "type") val type: String,
     @param:Json(name = "hit_points") val hitPoints: Int,
     @param:Json(name = "armor_class") val armorClass: List<ArmorClassDto>?,
     @param:Json(name = "actions") val actions: List<ActionDto>?,

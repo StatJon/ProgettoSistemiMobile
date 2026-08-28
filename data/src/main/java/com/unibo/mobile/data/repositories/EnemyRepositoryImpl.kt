@@ -26,11 +26,11 @@ class EnemyRepositoryImpl(
         return enemyList
     }
 
-    override suspend fun getEnemyByIndex(monsterIndex: String): CharacterEnemy? {
+    override suspend fun getEnemyByIndex(monsterIndex: String, challengeRating: ChallengeRating): CharacterEnemy? {
         val monsterDto =
             safeApiCaller.invoke { dndApi.getMonsterByIndex(monsterIndex) }
                 ?: return null
-        val enemy = monsterToEnemyMapper.invoke(monsterDto)
+        val enemy = monsterToEnemyMapper.invoke(monsterDto, challengeRating)
         return enemy
     }
 
