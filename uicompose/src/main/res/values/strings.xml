@@ -10,4 +10,8 @@
     <string name="end_defeat">Defeat!</string>
     <string name="return_to_menu">Return to main menu</string>
     <string name="dungeon_counter">Dungeon room: </string>
+    <string name="heal_label">Heal: </string>
+    <string name="damage_label">Damage: </string>
+    <string name="mana_label">MP: </string>
+    <string name="health_label">HP: </string>
 </resources>
