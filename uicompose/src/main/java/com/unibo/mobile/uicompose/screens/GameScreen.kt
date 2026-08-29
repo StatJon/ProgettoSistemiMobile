@@ -4,13 +4,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unibo.mobile.domain.di.UseCaseProvider
+import com.unibo.mobile.uicompose.R
 import com.unibo.mobile.uicompose.components.gamescreen.GameView
 import com.unibo.mobile.uicompose.components.gamescreen.PlayerControls
 import com.unibo.mobile.uicompose.viewmodel.GameScreenViewModel
@@ -46,6 +49,8 @@ fun GameScreen(
     val gamePhase = viewModel.gamePhase.collectAsStateWithLifecycle()
     val characterPlayer = viewModel.characterPlayer.collectAsStateWithLifecycle()
     val navigateToEndScreen = viewModel.navigateToEndScreen.collectAsStateWithLifecycle()
+    val dungeonIndex = viewModel.dungeonIndex.collectAsStateWithLifecycle()
+    val dungeonLength = viewModel.dungeonLength.collectAsStateWithLifecycle()
     val isWon = navigateToEndScreen.value
 
     if (isWon != null) {
@@ -60,12 +65,20 @@ fun GameScreen(
         modifier = modifier.fillMaxSize()
     ) {
         GameView(
-            modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxHeight(0.5f)
+                .fillMaxWidth(),
             combatSnapshot = combatSnapshot.value,
             gamePhase = gamePhase.value
         )
+        Text(
+            text = stringResource(R.string.dungeon_counter) + (dungeonIndex.value+1) + " / " + (dungeonLength.value+1),
+            modifier.fillMaxWidth()
+        )
         PlayerControls(
-            modifier = Modifier.fillMaxHeight(1f).fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxHeight(1f)
+                .fillMaxWidth(),
             characterPlayer = characterPlayer.value,
             gamePhase = gamePhase.value,
             lockUi = lockUI.value,

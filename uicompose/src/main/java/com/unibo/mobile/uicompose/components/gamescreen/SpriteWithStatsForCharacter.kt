@@ -19,14 +19,14 @@ fun SpriteWithStatsForCharacter(
     }
     val stats = buildList {
         add("Name: ${character.characterData.name}")
+        add("HP: ${character.characterData.currentHealthPoints}/${character.characterData.maxHealthPoints}")
+        add("AC: ${character.characterData.armorClass}")
         if (character is CharacterPlayer) {
             add("Level: ${character.level}")
         }else if (character is CharacterEnemy){
             add("Type: ${character.enemyType}")
             add("CR: ${character.challengeRating}")
         }
-        add("AC: ${character.characterData.armorClass}")
-        add("HP: ${character.characterData.currentHealthPoints}/${character.characterData.maxHealthPoints}")
         if (character is CharacterPlayer) {
             add("MP: ${character.currentManaPoints}/${character.maxManaPoints}")
         }

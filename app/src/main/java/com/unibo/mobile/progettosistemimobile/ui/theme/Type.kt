@@ -13,7 +13,7 @@ val MedievalSharp = FontFamily(Font(R.font.medievalsharp))
 val VT323 = FontFamily(Font(R.font.vt323))
 
 val Typography = Typography(
-    // --- Titoli / UI decorativa (stile medievale)
+    // Titles
     displayLarge = TextStyle(
         fontFamily = MedievalSharp,
         fontWeight = FontWeight.Normal,
@@ -21,6 +21,7 @@ val Typography = Typography(
         lineHeight = 48.sp,
         letterSpacing = 0.sp
     ),
+    // Secondary Titles
     displaySmall = TextStyle(
         fontFamily = MedievalSharp,
         fontWeight = FontWeight.Normal,
@@ -28,6 +29,7 @@ val Typography = Typography(
         lineHeight = 34.sp,
         letterSpacing = 0.sp
     ),
+    // Section headers
     titleLarge = TextStyle(
         fontFamily = MedievalSharp,
         fontWeight = FontWeight.Normal,
@@ -35,8 +37,7 @@ val Typography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
-
-    // --- Testo corrente / stat leggibili (stile pixel)
+    // Main text
     bodyLarge = TextStyle(
         fontFamily = VT323,
         fontWeight = FontWeight.Normal,
@@ -44,11 +45,21 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
+    // Caption, helper text
     labelSmall = TextStyle(
         fontFamily = VT323,
         fontWeight = FontWeight.Normal,
         fontSize = 13.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
+    ),
+    // Buttons
+    labelLarge = TextStyle(
+        fontFamily = VT323,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        lineHeight = 12.sp,
+        letterSpacing = 0.5.sp
     )
+
 )
