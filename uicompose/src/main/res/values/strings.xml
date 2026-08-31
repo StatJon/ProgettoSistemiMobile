@@ -15,7 +15,7 @@
     <string name="mana_label">MP: </string>
     <string name="health_label">HP: </string>
     <string name="value_separator"> | </string>
-    <string name="dungeon_counter_format">%d / %d</string>
+    <string name="dungeon_counter_format">Dungeon Progress: %d / %d</string>
     <string name="dungeons_won_format">Dungeons won: %d</string>
     <string name="name_label">Name: %s</string>
     <string name="hp_label">HP: %d/%d</string>

@@ -53,7 +53,7 @@ object Gamedata {
             name = "Wyll",
             classIndex = "warlock",
             className = "Warlock",
-            unlockCounter = 2   ,
+            unlockCounter = 1,
             baseHealthPoints = 10,
             baseManaPoints = 6,
             baseArmorClass = 14,
