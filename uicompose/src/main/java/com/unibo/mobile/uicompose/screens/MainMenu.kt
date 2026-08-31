@@ -65,6 +65,7 @@ fun MainMenu(
 
         println("DEBUG: Accessing Main Menu")
         println("DEBUG: SaveGame.winCounter: $winCounter")
+
         // --- MainMenu UI
         Column(
             modifier = modifier
@@ -75,11 +76,7 @@ fun MainMenu(
             // --- Title
             Text(
                 text = stringResource(R.string.main_menu_title),
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.4f),
-                textAlign = TextAlign.Center,
+
 
                 )
             // --- WinCounter
