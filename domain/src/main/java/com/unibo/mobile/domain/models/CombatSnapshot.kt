@@ -4,4 +4,5 @@ data class CombatSnapshot(
     val player: CharacterPlayer,
     val enemy: CharacterEnemy,
     val combatStatus: CombatStatus,
+    val lastAbilityResult: AbilityResult?
 )

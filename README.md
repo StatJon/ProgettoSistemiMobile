@@ -24,6 +24,7 @@ Sono state utilizzate chiamate API tramite Retrofit assieme a Moshi verso <https
 
 ## Possibili migliorie
 
-- Polish generale UI/UX.
 - Implementazione di più feature di gioco secondarie.
 - Maggiore contenuto di base e più mapper ad-hoc per permettere una maggiore integrazione con spell e monsters reperibili sulla API dnd5e.
+- Polish generale UI/UX.
+- Animazioni Sprite.

@@ -14,4 +14,7 @@
     <string name="damage_label">Damage: </string>
     <string name="mana_label">MP: </string>
     <string name="health_label">HP: </string>
+    <string name="message_heal">heals: </string>
+    <string name="message_damage">deals: </string>
+
 </resources>

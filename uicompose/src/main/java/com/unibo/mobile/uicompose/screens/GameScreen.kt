@@ -56,6 +56,7 @@ fun GameScreen(
     val navigateToEndScreen = viewModel.navigateToEndScreen.collectAsStateWithLifecycle()
     val dungeonIndex = viewModel.dungeonIndex.collectAsStateWithLifecycle()
     val dungeonLength = viewModel.dungeonLength.collectAsStateWithLifecycle()
+    val lastActionMessage = viewModel.lastActionMessage.collectAsStateWithLifecycle()
     val isWon = navigateToEndScreen.value
 
     if (isWon != null) {
@@ -74,11 +75,14 @@ fun GameScreen(
                 .fillMaxHeight(0.5f)
                 .fillMaxWidth(),
             combatSnapshot = combatSnapshot.value,
-            gamePhase = gamePhase.value
+            gamePhase = gamePhase.value,
+            lastActionMessage = lastActionMessage.value
         )
         Text(
-            text = stringResource(R.string.dungeon_counter) + (dungeonIndex.value+1) + " / " + (dungeonLength.value+1),
-            modifier.fillMaxWidth().wrapContentSize(Alignment.Center)
+            text = stringResource(R.string.dungeon_counter) + (dungeonIndex.value + 1) + " / " + (dungeonLength.value + 1),
+            modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
         )
         PlayerControls(
             modifier = Modifier

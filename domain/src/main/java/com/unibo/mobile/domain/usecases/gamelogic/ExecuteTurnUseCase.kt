@@ -40,24 +40,28 @@ class ExecuteTurnUseCaseImpl(
             if (target == combatSnapshot.player) {
                 combatSnapshot.copy(
                     player = updatedPlayer.copy(characterData = updatedTargetData),
-                    enemy = combatSnapshot.enemy
+                    enemy = combatSnapshot.enemy,
+                    lastAbilityResult = abilityResult
                 )
             } else {
                 combatSnapshot.copy(
                     player = updatedPlayer,
-                    enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
+                    enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData),
+                    lastAbilityResult = abilityResult
                 )
             }
         } else {
             if (target == combatSnapshot.enemy) {
                 combatSnapshot.copy(
                     player = combatSnapshot.player,
-                    enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
+                    enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData),
+                    lastAbilityResult = abilityResult
                 )
             } else {
                 combatSnapshot.copy(
                     player = combatSnapshot.player.copy(characterData = updatedTargetData),
-                    enemy = combatSnapshot.enemy
+                    enemy = combatSnapshot.enemy,
+                    lastAbilityResult = abilityResult
                 )
             }
         }

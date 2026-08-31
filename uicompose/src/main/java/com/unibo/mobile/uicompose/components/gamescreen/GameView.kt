@@ -23,12 +23,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.unibo.mobile.domain.models.CombatSnapshot
 import com.unibo.mobile.domain.models.GamePhase
 
-//TODO Aggiungere VIEWMODEL e cablare correttamente, sostituire i placeholder
 @Composable
 fun GameView(
     modifier: Modifier = Modifier,
     combatSnapshot: CombatSnapshot?,
-    gamePhase: GamePhase
+    gamePhase: GamePhase,
+    lastActionMessage: String? = null
 ) {
     // --- General Container
     Box(
@@ -62,6 +62,9 @@ fun GameView(
                     modifier = Modifier
                 )
             }
+        }
+        if (lastActionMessage != null) {
+            ActionMessagePopup(message = lastActionMessage)
         }
     }
 }

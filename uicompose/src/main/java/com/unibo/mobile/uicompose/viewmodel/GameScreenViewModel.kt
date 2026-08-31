@@ -1,5 +1,6 @@
 package com.unibo.mobile.uicompose.viewmodel
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unibo.mobile.domain.models.Ability
@@ -27,11 +28,15 @@ import com.unibo.mobile.domain.usecases.gamelogic.ExecuteTurnUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
+import com.unibo.mobile.uicompose.R
+import com.unibo.mobile.uicompose.components.common.UiConstants
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * ViewModel responsible for managing the game state and logic for the GameScreen screen.
@@ -312,12 +317,13 @@ class GameScreenViewModel(
                 ?: throw IllegalStateException("Player not initialized"),
             enemy = enemy,
             combatStatus = CombatStatus.PLAYER_TURN,
+            lastAbilityResult = null,
         )
         _isLoading.value = false
         _lockUi.value = false
     }
 
-    private fun executeTurn(
+    private suspend fun executeTurn(
         combatSnapshot: CombatSnapshot,
         ability: Ability,
         isPlayerTurn: Boolean
@@ -332,6 +338,16 @@ class GameScreenViewModel(
             val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
             _combatSnapshot.value = updatedSnapshot.copy(combatStatus = newCombatStatus)
             _characterPlayer.value = updatedSnapshot.player
+
+            val attackerName =
+                if (isPlayerTurn) combatSnapshot.player.characterData.name else combatSnapshot.enemy.characterData.name
+            //val lastAbilityResult = _combatSnapshot.value?.lastAbilityResult ?: throw IllegalStateException("ERROR: lastAbilityResult missing")
+            _lastActionMessage.value = "$attackerName uses ${ability.name}"
+
+            delay(UiConstants.ACTION_WAIT.milliseconds)
+            _lastActionMessage.value = null
+            _lockUi.value = false
+
         } catch (e: Exception) {
             println("DEBUG: EXCEPTION in executeTurn: ${e.message}")
             e.printStackTrace()

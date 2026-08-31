@@ -9,4 +9,5 @@ object UiConstants {
     val BUTTON_SPACING = 8.dp
     val ROUNDED_CORNER_RADIUS = 16.dp
     val BUTTON_HEIGHT = 56.dp
+    val ACTION_WAIT = 1000L // ms
 }
