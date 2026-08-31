@@ -26,13 +26,14 @@ import com.unibo.mobile.uicompose.components.common.UiConstants
 fun ActionButton(
     ability: Ability,
     onClick: () -> Unit,
+    enabled: Boolean,
     lockUi: Boolean,
     modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
         modifier = modifier.height(UiConstants.ACTION_BUTTON_HEIGHT),
-        enabled = !lockUi
+        enabled = enabled
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -73,6 +74,7 @@ fun ActionButtonPreview() {
         ),
         onClick = {},
         lockUi = false,
+        enabled = true,
 
         )
 }

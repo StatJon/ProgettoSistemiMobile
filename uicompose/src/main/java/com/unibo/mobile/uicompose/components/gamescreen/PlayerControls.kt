@@ -34,9 +34,13 @@ fun PlayerControls(
                 .fillMaxHeight()
         ) {
             items(characterPlayer?.characterData?.abilityList ?: emptyList()) { ability ->
+                val isEnabled = characterPlayer != null &&
+                        characterPlayer.currentManaPoints >= ability.manaCost
+
                 ActionButton(
                     ability = ability,
                     lockUi = lockUi,
+                    enabled = isEnabled && !lockUi,
                     onClick = { onAbilitySelected(ability) },
                     modifier = Modifier
                         .fillMaxWidth()

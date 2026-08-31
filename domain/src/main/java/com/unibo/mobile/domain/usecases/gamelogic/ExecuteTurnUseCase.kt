@@ -24,6 +24,10 @@ class ExecuteTurnUseCaseImpl(
         isPlayerTurn: Boolean
     ): CombatSnapshot {
 
+        if (isPlayerTurn && ability.manaCost > combatSnapshot.player.currentManaPoints) {
+            return combatSnapshot
+        }
+
         val caster = if (isPlayerTurn) combatSnapshot.player else combatSnapshot.enemy
         val target = if (ability is AbilityHeal) caster
         else if (isPlayerTurn) combatSnapshot.enemy

@@ -341,7 +341,6 @@ class GameScreenViewModel(
 
             val attackerName =
                 if (isPlayerTurn) combatSnapshot.player.characterData.name else combatSnapshot.enemy.characterData.name
-            //val lastAbilityResult = _combatSnapshot.value?.lastAbilityResult ?: throw IllegalStateException("ERROR: lastAbilityResult missing")
             _lastActionMessage.value = "$attackerName uses ${ability.name}"
 
             delay(UiConstants.ACTION_WAIT.milliseconds)
