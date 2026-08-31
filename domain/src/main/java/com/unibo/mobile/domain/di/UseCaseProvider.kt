@@ -18,6 +18,8 @@ import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
@@ -54,6 +56,7 @@ object UseCaseProvider {
     lateinit var applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase
     lateinit var decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase
     lateinit var levelUpUseCase: LevelUpUseCase
+    lateinit var checkpointUseCase: CheckpointUseCase
     lateinit var validateDungeonLengthUseCase : ValidateDungeonLengthUseCase
     /**
      * Constructor
@@ -91,6 +94,10 @@ object UseCaseProvider {
             abilityRepository = repositoryProvider.abilityRepository,
             gamedataRepository = repositoryProvider.gamedataRepository
         )
+        
+        checkpointUseCase = CheckpointUseCaseImpl(
+            levelUpUseCase = levelUpUseCase
+        )
 
         validateDungeonLengthUseCase = ValidateDungeonLengthUseCaseImpl(
             gamedataRepository = repositoryProvider.gamedataRepository
@@ -109,6 +116,6 @@ object UseCaseProvider {
         applyPlayerAbilityCostUseCase = ApplyPlayerAbilityCostUseCaseImpl()
 
         decideEnemyAbilityUseCase = DecideEnemyAbilityUseCaseImpl()
-
+        
     }
 }

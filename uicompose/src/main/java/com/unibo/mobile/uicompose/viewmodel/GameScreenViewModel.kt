@@ -11,12 +11,14 @@ import com.unibo.mobile.domain.models.CombatSnapshot
 import com.unibo.mobile.domain.models.CombatStatus
 import com.unibo.mobile.domain.models.GamePhase
 import com.unibo.mobile.domain.models.SaveGame
+import com.unibo.mobile.domain.models.SaveSession
 import com.unibo.mobile.domain.usecases.api.FetchEnemyByChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamedata.ValidateDungeonLengthUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
@@ -44,6 +46,7 @@ class GameScreenViewModel(
     private val decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase,
     private val determineChallengeRatingUseCase: DetermineChallengeRatingUseCase,
     private val determineGamePhaseUseCase: DetermineGamePhaseUseCase,
+    private val checkpointUseCase: CheckpointUseCase,
     private val levelUpUseCase: LevelUpUseCase,
     private val validateDungeonLengthUseCase: ValidateDungeonLengthUseCase,
 ) : ViewModel() {
@@ -218,7 +221,7 @@ class GameScreenViewModel(
                 }
 
                 CombatStatus.VICTORY -> {
-                    _dungeonIndex.value++
+                    //_dungeonIndex.value++
                     _combatSnapshot.value = null
                     _gamePhase.value = GamePhase.CHECKPOINT
                     _lockUi.value = false
@@ -241,35 +244,36 @@ class GameScreenViewModel(
         _lockUi.value = true
         _isLoading.value = true
 
-        val currentPlayer = _characterPlayer.value
+        val updatedSaveSession = checkpointUseCase.invoke(_saveGame.value.saveSession)
+        saveSaveSession(updatedSaveSession)
+        updateViewModelState(updatedSaveSession)
 
-        // safeguard extra
-        if (currentPlayer == null) {
-            println("ERROR: checkpointLoop - characterPlayer is null. Terminating Game")
-            _isLoading.value = false
-            _lockUi.value = false
-            _gamePhase.value = GamePhase.DUNGEON_LOST
-            return
-        }
-
-        val updatedCharacterPlayer = levelUpUseCase.invoke(currentPlayer)
-        println("DEBUG: Updated Player AbilityList: ${updatedCharacterPlayer.characterData.abilityList}")
-
-        _characterPlayer.value = updatedCharacterPlayer
-
-        val currentSaveSession = _saveGame.value.saveSession
-            ?: throw IllegalStateException("ERROR: SaveSession missing in checkpointLoop")
-        val updatedSaveSession = currentSaveSession.copy(
-            dungeon = currentSaveSession.dungeon.copy(dungeonIndex = _dungeonIndex.value),
-            characterPlayer = updatedCharacterPlayer
-        )
-        _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
-        saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
-        println("DEBUG: saved ${_saveGame.value}")
 
         _gamePhase.value = GamePhase.COMBAT
         _isLoading.value = false
         _lockUi.value = false
+    }
+
+    /**
+     * Updates the _saveGame with updatedSaveSession
+     *
+     * @param updatedSaveSession the SaveSession used to update the _saveGame
+     */
+    private suspend fun saveSaveSession(updatedSaveSession: SaveSession) {
+        _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
+        saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
+        println("DEBUG: saved ${_saveGame.value}")
+    }
+
+    /**
+     * Updates the ViewModel StateFlow with the saveSession
+     *
+     * @param saveSession the SaveSession used to update the StateFlow
+     */
+    private fun updateViewModelState(saveSession: SaveSession) {
+        _dungeonIndex.value = saveSession.dungeon.dungeonIndex
+        _dungeonLength.value = saveSession.dungeon.dungeonLength
+        _characterPlayer.value = saveSession.characterPlayer
     }
 
     /**
@@ -308,7 +312,8 @@ class GameScreenViewModel(
             loadedSaveGame.saveSession ?: throw IllegalStateException("Error: saveSession missing")
         _saveGame.value = loadedSaveGame
         _dungeonIndex.value = loadedSaveSession.dungeon.dungeonIndex
-        _dungeonLength.value = validateDungeonLengthUseCase.invoke(loadedSaveSession.dungeon.dungeonLength)
+        _dungeonLength.value =
+            validateDungeonLengthUseCase.invoke(loadedSaveSession.dungeon.dungeonLength)
         _characterPlayer.value = loadedSaveSession.characterPlayer
         _isLoading.value = false
     }

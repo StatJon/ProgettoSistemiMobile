@@ -40,6 +40,7 @@ fun GameScreen(
             loadSaveGameUseCase = UseCaseProvider.loadSaveGameUseCase,
             saveSaveGameUseCase = UseCaseProvider.saveSaveGameUseCase,
             levelUpUseCase = UseCaseProvider.levelUpUseCase,
+            checkpointUseCase = UseCaseProvider.checkpointUseCase,
             validateDungeonLengthUseCase = UseCaseProvider.validateDungeonLengthUseCase,
         )
     )

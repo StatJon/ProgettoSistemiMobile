@@ -20,7 +20,7 @@ class LevelUpUseCaseImpl(
     override suspend fun invoke(characterPlayer: CharacterPlayer): CharacterPlayer {
         val newLevel = characterPlayer.level + 1
         val newAbility = fetchNewAbility(
-            className = characterPlayer.playerClass.className,
+            className = characterPlayer.playerClass.classIndex,
             level = newLevel
         )
 

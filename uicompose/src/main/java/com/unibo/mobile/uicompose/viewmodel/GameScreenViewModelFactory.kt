@@ -8,6 +8,7 @@ import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CheckCombatStatusUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
@@ -26,6 +27,7 @@ class GameScreenViewModelFactory(
     private val fetchEnemyByChallengeRatingUseCase: FetchEnemyByChallengeRatingUseCase,
     private val loadSaveGameUseCase: LoadSaveGameUseCase,
     private val levelUpUseCase: LevelUpUseCase,
+    private val checkpointUseCase: CheckpointUseCase,
     private val saveSaveGameUseCase: SaveSaveGameUseCase,
     private val validateDungeonLengthUseCase: ValidateDungeonLengthUseCase,
 
@@ -44,6 +46,7 @@ class GameScreenViewModelFactory(
                 determineChallengeRatingUseCase = determineChallengeRatingUseCase,
                 determineGamePhaseUseCase = determineGamePhaseUseCase,
                 levelUpUseCase = levelUpUseCase,
+                checkpointUseCase = checkpointUseCase,
                 validateDungeonLengthUseCase = validateDungeonLengthUseCase,
             ) as T
         }
