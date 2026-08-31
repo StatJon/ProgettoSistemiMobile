@@ -6,7 +6,6 @@ interface DetermineGamePhaseUseCase {
     fun invoke(dungeonIndex: Int, dungeonLength: Int): GamePhase
 }
 
-// TODO aggiungere qui caso CHECKPOINT
 class DetermineGamePhaseUseCaseImpl : DetermineGamePhaseUseCase {
     override fun invoke(
         dungeonIndex: Int,

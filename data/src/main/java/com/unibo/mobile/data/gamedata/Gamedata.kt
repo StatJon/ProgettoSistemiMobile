@@ -10,8 +10,6 @@ object Gamedata {
 
     const val baseDungeonLength = 4
     const val maxDungeonLength = 19
-    // val checkpointStep = 3 TODO: Aggiungere dopo primo collaudo gioco, non MVP
-    // val baseActionPointsPerTurn = 2 TODO: Se serve aggiungere
 
     val fallBackLevelUpAbility: Ability = AbilityDamage(
         name = "Fireball",

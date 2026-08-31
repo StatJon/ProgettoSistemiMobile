@@ -1,7 +1,5 @@
 package com.unibo.mobile.domain.models
 
-import kotlin.random.Random
-
 class DiceRoller(){
 
     fun invoke(dicesToRoll: DicesToRoll): Int {

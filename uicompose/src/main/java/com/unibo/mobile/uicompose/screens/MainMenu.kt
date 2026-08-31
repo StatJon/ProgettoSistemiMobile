@@ -201,18 +201,6 @@ private class GetAllPlayerClassesUseCaseMock : GetAllPlayerClassesUseCase {
     }
 }
 
-private class mockSaveGame : SaveGame(1,mockSaveSession) {
-
-}
-
-private class mockSaveSession : SaveSession() {
-
-}
-
-private class LoadSaveGameUseCaseMock : LoadSaveGameUseCase {
-    override suspend fun invoke(): SaveGame {
-        TODO("Not yet implemented")
-    }
 
 }
 */
