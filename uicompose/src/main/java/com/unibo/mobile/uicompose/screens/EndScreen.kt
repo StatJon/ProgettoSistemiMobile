@@ -24,7 +24,6 @@ fun EndScreen(
     isWon: Boolean,
     onNavigateToMenu: () -> Unit,
 ) {
-    println("DEBUG: Accessing EndScreen")
     Column(
         modifier = modifier
             .fillMaxSize()

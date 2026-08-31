@@ -14,7 +14,17 @@
     <string name="damage_label">Damage: </string>
     <string name="mana_label">MP: </string>
     <string name="health_label">HP: </string>
+    <string name="value_separator"> | </string>
+    <string name="dungeon_counter_format">%d / %d</string>
+    <string name="dungeons_won_format">Dungeons won: %d</string>
+    <string name="name_label">Name: %s</string>
+    <string name="hp_label">HP: %d/%d</string>
+    <string name="ac_label">AC: %d</string>
+    <string name="level_label">Level: %d</string>
+    <string name="type_label">Type: %s</string>
+    <string name="cr_label">CR: %s</string>
+    <string name="mp_label">MP: %d/%d</string>
+    <string name="mana_label_format">Mana: %d</string>
     <string name="message_heal">heals: </string>
     <string name="message_damage">deals: </string>
-
 </resources>

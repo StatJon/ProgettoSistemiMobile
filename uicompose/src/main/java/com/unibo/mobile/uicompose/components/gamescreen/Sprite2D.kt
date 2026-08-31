@@ -9,6 +9,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.unibo.mobile.uicompose.components.common.UiConstants
 
 /**
  * Renders a 2D sprite image with fixed size and animation support via offset.
@@ -16,21 +17,17 @@ import androidx.compose.ui.unit.dp
  * @param painter Painter for the sprite image
  * @param contentName Content description for accessibility
  * @param modifier Modifier to apply to the Image
- * @param offsetForAnimation Offset for sprite animation positioning
  */
 @Composable
 fun Sprite2D(
     painter: Painter,
     contentName: String,
-    modifier: Modifier = Modifier,
-    //offsetForAnimation: Offset
+    modifier: Modifier = Modifier
 ) {
     Image(
         painter = painter,
         contentDescription = contentName,
         contentScale = ContentScale.Fit,
-        modifier = modifier
-            .size(GameScreenConstants.SPRITE_SIZE, GameScreenConstants.SPRITE_SIZE)
-            //.offset(offsetForAnimation.x.dp, offsetForAnimation.y.dp)
+        modifier = modifier.size(UiConstants.SPRITE_SIZE, UiConstants.SPRITE_SIZE)
     )
 }

@@ -20,6 +20,7 @@ import com.unibo.mobile.domain.models.AbilityDamage
 import com.unibo.mobile.domain.models.AbilityHeal
 import com.unibo.mobile.domain.models.ActionCost
 import com.unibo.mobile.domain.models.DicesToRoll
+import com.unibo.mobile.uicompose.components.common.UiConstants
 
 @Composable
 fun ActionButton(
@@ -30,7 +31,7 @@ fun ActionButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.height(48.dp),
+        modifier = modifier.height(UiConstants.ACTION_BUTTON_HEIGHT),
         enabled = !lockUi
     ) {
         Row(
@@ -47,9 +48,9 @@ fun ActionButton(
                         stringResource(R.string.damage_label)
                     }
                 )
-                Text(text = ability.dicesToRoll.diceNumber.toString() + "d" + ability.dicesToRoll.diceFaces.toString())
-                Text(text = " | ")
-                Text(text = stringResource(R.string.mana_label) + ability.manaCost.toString())
+                Text(text = "${ability.dicesToRoll.diceNumber}d${ability.dicesToRoll.diceFaces}")
+                Text(text = stringResource(R.string.value_separator))
+                Text(text = stringResource(R.string.mana_label_format, ability.manaCost))
             }
 
         }

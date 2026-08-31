@@ -21,7 +21,7 @@ fun ActionMessagePopup(message: String) {
         contentAlignment = Alignment.TopCenter,
     ) {
         Surface(
-            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = UiConstants.BASE_OVERLAY_ALPHA),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(

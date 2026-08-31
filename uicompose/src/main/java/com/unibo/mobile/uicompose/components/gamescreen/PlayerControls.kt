@@ -17,6 +17,7 @@ import com.google.android.material.carousel.Arrangement
 import com.unibo.mobile.domain.models.Ability
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.GamePhase
+import com.unibo.mobile.uicompose.components.common.UiConstants
 
 @Composable
 fun PlayerControls(
@@ -30,16 +31,16 @@ fun PlayerControls(
         LazyColumn(
             modifier = modifier
                 .fillMaxWidth()
-                .fillMaxHeight()) {
+                .fillMaxHeight()
+        ) {
             items(characterPlayer?.characterData?.abilityList ?: emptyList()) { ability ->
                 ActionButton(
                     ability = ability,
                     lockUi = lockUi,
-                    onClick = {
-                        println("DEBUG: Button clicked: ${ability.name}")
-                        onAbilitySelected(ability)
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                    onClick = { onAbilitySelected(ability) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = UiConstants.PLAYER_CONTROLS_ITEM_PADDING)
                 )
             }
         }

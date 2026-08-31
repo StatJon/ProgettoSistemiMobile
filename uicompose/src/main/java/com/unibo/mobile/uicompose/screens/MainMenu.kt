@@ -79,17 +79,16 @@ fun MainMenu(
                 style = MaterialTheme.typography.displayLarge,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.4f),
+                    .weight(UiConstants.MAIN_MENU_TITLE_WEIGHT_MAIN),
                 textAlign = TextAlign.Center,
-
-                )
+            )
             // --- WinCounter
             Text(
-                text = stringResource(R.string.dungeons_won) + winCounter,
+                text = stringResource(R.string.dungeons_won_format, winCounter),
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.1f),
+                    .weight(UiConstants.MAIN_MENU_WIN_COUNTER_WEIGHT),
                 textAlign = TextAlign.Center
             )
             // --- NewGame Buttons with Classes
@@ -99,7 +98,7 @@ fun MainMenu(
                 onNewGameSelected = viewModel::onNewGameSelected,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.4f)
+                    .weight(UiConstants.MAIN_MENU_TITLE_WEIGHT_MAIN)
             )
             // --- ContinueButton
             Button(

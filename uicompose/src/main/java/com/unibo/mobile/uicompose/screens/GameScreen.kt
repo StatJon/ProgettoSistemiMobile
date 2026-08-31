@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unibo.mobile.domain.di.UseCaseProvider
 import com.unibo.mobile.uicompose.R
+import com.unibo.mobile.uicompose.components.common.UiConstants
 import com.unibo.mobile.uicompose.components.gamescreen.GameView
 import com.unibo.mobile.uicompose.components.gamescreen.PlayerControls
 import com.unibo.mobile.uicompose.viewmodel.GameScreenViewModel
@@ -72,21 +73,25 @@ fun GameScreen(
     ) {
         GameView(
             modifier = Modifier
-                .fillMaxHeight(0.5f)
+                .fillMaxHeight(UiConstants.GAME_VIEW_HEIGHT_RATIO)
                 .fillMaxWidth(),
             combatSnapshot = combatSnapshot.value,
             gamePhase = gamePhase.value,
             lastActionMessage = lastActionMessage.value
         )
         Text(
-            text = stringResource(R.string.dungeon_counter) + (dungeonIndex.value + 1) + " / " + (dungeonLength.value + 1),
-            modifier
+            text = stringResource(
+                R.string.dungeon_counter_format,
+                dungeonIndex.value + 1,
+                dungeonLength.value + 1
+            ),
+            modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentSize(Alignment.Center)
         )
         PlayerControls(
             modifier = Modifier
-                .fillMaxHeight(1f)
+                .fillMaxHeight(UiConstants.PLAYER_CONTROLS_HEIGHT_RATIO)
                 .fillMaxWidth(),
             characterPlayer = characterPlayer.value,
             gamePhase = gamePhase.value,

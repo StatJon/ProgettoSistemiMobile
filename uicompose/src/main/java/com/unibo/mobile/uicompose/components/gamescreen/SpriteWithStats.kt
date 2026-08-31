@@ -26,15 +26,14 @@ fun SpriteWithStats(
     spritePainter: Painter,
     spriteName: String,
     infoList: List<String>,
-    modifier: Modifier = Modifier,
-    //spriteOffset: Offset = Offset(0.0F, 0.0F)
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Sprite2D(spritePainter, spriteName, /*spriteOffset*/)
+        Sprite2D(spritePainter, spriteName)
         StatsDisplay(infoList)
     }
 }

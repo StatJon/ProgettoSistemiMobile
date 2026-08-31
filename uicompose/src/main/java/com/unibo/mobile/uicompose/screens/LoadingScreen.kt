@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.unibo.mobile.uicompose.components.common.UiConstants
 
 @Preview
 @Composable
@@ -17,7 +18,7 @@ fun LoadingScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f)),
+            .background(Color.Black.copy(alpha = UiConstants.BASE_OVERLAY_ALPHA)),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()
