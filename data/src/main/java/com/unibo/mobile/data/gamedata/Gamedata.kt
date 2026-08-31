@@ -8,7 +8,7 @@ import com.unibo.mobile.domain.models.PlayerClass
 
 object Gamedata {
 
-    val baseDungeonLength = 5
+    const val baseDungeonLength = 5
     // val checkpointStep = 3 TODO: Aggiungere dopo primo collaudo gioco, non MVP
     // val baseActionPointsPerTurn = 2 TODO: Se serve aggiungere
 
@@ -26,7 +26,8 @@ object Gamedata {
     val PlayerClassList: List<PlayerClass> = listOf(
         PlayerClass(
             name = "Suor Mazzate",
-            className = "cleric",
+            classIndex = "cleric",
+            className = "Cleric",
             unlockCounter = 0,
             baseHealthPoints = 12,
             baseManaPoints = 4,
@@ -49,7 +50,8 @@ object Gamedata {
         ),
         PlayerClass(
             name = "Wyll",
-            className = "warlock",
+            classIndex = "warlock",
+            className = "Warlock",
             unlockCounter = 2   ,
             baseHealthPoints = 10,
             baseManaPoints = 6,

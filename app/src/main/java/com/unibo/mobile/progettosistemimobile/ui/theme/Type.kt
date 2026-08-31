@@ -37,19 +37,19 @@ val Typography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
-    // Main text
+    // Main text (StatsDisplay)
     bodyLarge = TextStyle(
         fontFamily = VT323,
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
+        fontSize = 20.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
-    // Caption, helper text
+    // Caption, helper text (NOT IN USE)
     labelSmall = TextStyle(
         fontFamily = VT323,
         fontWeight = FontWeight.Normal,
-        fontSize = 13.sp,
+        fontSize = 60.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     ),
@@ -57,7 +57,7 @@ val Typography = Typography(
     labelLarge = TextStyle(
         fontFamily = VT323,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
+        fontSize = 22.sp,
         lineHeight = 12.sp,
         letterSpacing = 0.5.sp
     )

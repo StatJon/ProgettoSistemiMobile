@@ -143,7 +143,7 @@ private fun NewGameButtonsWithClasses(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = playerClass.name,
+                        text = playerClass.className,
                         textAlign = TextAlign.Center
                     )
                 }

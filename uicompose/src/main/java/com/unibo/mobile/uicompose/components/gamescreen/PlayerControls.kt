@@ -1,8 +1,10 @@
 package com.unibo.mobile.uicompose.components.gamescreen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -10,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.google.android.material.carousel.Arrangement
 import com.unibo.mobile.domain.models.Ability
 import com.unibo.mobile.domain.models.CharacterPlayer
 import com.unibo.mobile.domain.models.GamePhase
@@ -23,7 +27,10 @@ fun PlayerControls(
     onAbilitySelected: (Ability) -> Unit
 ) {
     if (gamePhase == GamePhase.COMBAT) {
-        LazyColumn(modifier = modifier.fillMaxWidth().fillMaxHeight()) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+                .fillMaxHeight()) {
             items(characterPlayer?.characterData?.abilityList ?: emptyList()) { ability ->
                 ActionButton(
                     ability = ability,
@@ -32,7 +39,7 @@ fun PlayerControls(
                         println("DEBUG: Button clicked: ${ability.name}")
                         onAbilitySelected(ability)
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                 )
             }
         }
