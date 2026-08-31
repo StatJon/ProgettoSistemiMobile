@@ -29,6 +29,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * ViewModel responsible for managing the game state and logic for the GameScreen screen.
+ * Handles combat, checkpoint progression, game phase transitions, and persistence of game state.
+ */
 class GameScreenViewModel(
     private val loadSaveGameUseCase: LoadSaveGameUseCase,
     private val saveSaveGameUseCase: SaveSaveGameUseCase,
@@ -76,9 +80,14 @@ class GameScreenViewModel(
     private val _navigateToEndScreen = MutableStateFlow<Boolean?>(null)
     val navigateToEndScreen: StateFlow<Boolean?> = _navigateToEndScreen
 
-
+    /**
+     * Channel called when the user selects an ability, used to inject the user's input inside the gameloop.
+     */
     private val _abilitySelectedChannel = Channel<Ability>(Channel.RENDEZVOUS)
 
+    /**
+     * Resets the _abilitySelectedChannel Channel to avoid leaks and issues.
+     */
     override fun onCleared() {
         _abilitySelectedChannel.close()
         super.onCleared()
@@ -95,20 +104,32 @@ class GameScreenViewModel(
 
     // --- Public Functions
 
+    /**
+     * Called when the user selects an ability to use in combat.
+     *
+     * @param ability The selected ability to be used.
+     */
     fun onAbilitySelected(ability: Ability) {
         println("DEBUG: onAbilitySelected called: ${ability.name}")
         viewModelScope.launch {
             println("DEBUG: Sending to channel: ${ability.name}")
-            _abilitySelectedChannel.send(ability)
+            _abilitySelectedChannel.trySend(ability)
         }
     }
 
+    /**
+     * Resets the navigation flag to the end screen.
+     */
     fun resetNavigateToEndScreen() {
         _navigateToEndScreen.value = null
     }
 
     // --- Orchestrator - GameLoop Private Functions
 
+    /**
+     * Main game loop that orchestrates game flow using a state machine based on [GamePhase].
+     * Handles transitions between phases and delegates to combatLoop, checkpointLoop, or endGame.
+     */
     private suspend fun gameLoop() {
         println("DEBUG: gameLoop started, phase: ${_gamePhase.value}")
         while (true) {
@@ -116,6 +137,7 @@ class GameScreenViewModel(
                 when (_gamePhase.value) {
 
                     GamePhase.DUNGEON_LOST -> {
+                        println("DEBUG: Entering GamePhase.DUNGEON_LOST")
                         endGame(false)
                         return
                     }
@@ -133,26 +155,26 @@ class GameScreenViewModel(
                         )
                         when (gamePhase) {
                             GamePhase.COMBAT -> {
-                                println("DEBUG:")
                                 println("DEBUG: Entering GamePhase.COMBAT")
                                 combatLoop()
                                 println("DEBUG: Exiting GamePhase.COMBAT")
                             }
 
                             GamePhase.DUNGEON_WON -> {
+                                println("DEBUG: Entering GamePhase.DUNGEON_WON")
                                 endGame(true)
                                 return
                             }
 
 
-                            else -> throw IllegalStateException("Error: Unexpected game phase: $gamePhase")
+                            else -> throw IllegalStateException("ERROR: Unexpected game phase: $gamePhase")
                         }
                     }
                 }
             } catch (e: CancellationException) {
-                throw e //Ignores CancellationExceptions which are expected behaviour
+                throw e //Ignores CancellationExceptions which are expected behaviour when closing gameLoop and related viewModelScopes
             } catch (e: Exception) {
-                println("DEBUG: EXCEPTION in gameLoop (phase=${_gamePhase.value}): ${e.message}")
+                println("ERROR: EXCEPTION in gameLoop (phase=${_gamePhase.value}): ${e.message}")
                 e.printStackTrace()
                 _isLoading.value = false
                 _lockUi.value = false
@@ -162,6 +184,12 @@ class GameScreenViewModel(
         }
     }
 
+    /**
+     * Manages the combat phase using a state machine based on [CombatStatus].
+     * Handles turn-based logic between player and enemy, and transitions to CHECKPOINT on victory
+     * or DUNGEON_LOST on defeat.
+     * Uses an INIT + LOOP pattern
+     */
     private suspend fun combatLoop() {
         // --- INIT
         if (_combatSnapshot.value == null) {
@@ -171,7 +199,7 @@ class GameScreenViewModel(
         // --- LOOP
         while (true) {
             val combatSnapshot = _combatSnapshot.value
-                ?: throw IllegalStateException("Error: combatSnapshot not initialized")
+                ?: throw IllegalStateException("ERROR: combatSnapshot not initialized")
 
             when (combatSnapshot.combatStatus) {
                 CombatStatus.PLAYER_TURN -> {
@@ -206,6 +234,9 @@ class GameScreenViewModel(
         }
     }
 
+    /**
+     * Manages all operations between two combat loops.
+     */
     private suspend fun checkpointLoop() {
         _lockUi.value = true
         _isLoading.value = true
@@ -241,6 +272,9 @@ class GameScreenViewModel(
         _lockUi.value = false
     }
 
+    /**
+     * Determines the win or loss conditions of the active session and applies appropriate actions.
+     */
     private fun endGame(isWon: Boolean) {
         _gamePhase.value = if (isWon) GamePhase.DUNGEON_WON else GamePhase.DUNGEON_LOST
         _combatSnapshot.value = null
@@ -318,7 +352,7 @@ class GameScreenViewModel(
                 )
                 if (target == combatSnapshot.player) {
                     combatSnapshot.copy(
-                        player = updatedPlayer.copy(characterData = updatedTargetData as CharacterData),
+                        player = updatedPlayer.copy(characterData = updatedTargetData),
                         enemy = combatSnapshot.enemy
                     )
                 } else {
@@ -331,7 +365,7 @@ class GameScreenViewModel(
                 if (target == combatSnapshot.enemy) {
                     combatSnapshot.copy(
                         player = combatSnapshot.player,
-                        enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData as CharacterData)
+                        enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
                     )
                 } else {
                     combatSnapshot.copy(
