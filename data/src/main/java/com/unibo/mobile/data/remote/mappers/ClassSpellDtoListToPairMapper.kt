@@ -1,6 +1,5 @@
 package com.unibo.mobile.data.remote.mappers
 
-import com.unibo.mobile.data.remote.models.ClassSpellDto
 import com.unibo.mobile.data.remote.models.ClassSpellDtoList
 
 class ClassSpellDtoListToPairMapper {

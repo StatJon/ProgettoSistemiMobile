@@ -1,11 +1,9 @@
 package com.unibo.mobile.data.remote.api
 
-
+import com.unibo.mobile.data.remote.models.ClassSpellDtoList
 import com.unibo.mobile.data.remote.models.MonsterDto
 import com.unibo.mobile.data.remote.models.MonsterListResponseDto
 import com.unibo.mobile.data.remote.models.SpellDto
-import com.unibo.mobile.data.remote.models.ClassSpellDto
-import com.unibo.mobile.data.remote.models.ClassSpellDtoList
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

@@ -4,7 +4,6 @@ import com.unibo.mobile.domain.models.Ability
 import com.unibo.mobile.domain.models.AbilityResult
 import com.unibo.mobile.domain.models.Character
 import com.unibo.mobile.domain.models.DiceRoller
-import com.unibo.mobile.domain.models.DiceTypes
 import com.unibo.mobile.domain.models.DicesToRoll
 
 interface CalculateAbilityResultUseCase {

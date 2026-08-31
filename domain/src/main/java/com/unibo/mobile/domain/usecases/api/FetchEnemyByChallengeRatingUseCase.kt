@@ -1,10 +1,7 @@
 package com.unibo.mobile.domain.usecases.api
 
-import com.unibo.mobile.domain.models.Ability
 import com.unibo.mobile.domain.models.ChallengeRating
-import com.unibo.mobile.domain.models.CharacterData
 import com.unibo.mobile.domain.models.CharacterEnemy
-import com.unibo.mobile.domain.repositories.AbilityRepository
 import com.unibo.mobile.domain.repositories.EnemyRepository
 
 interface FetchEnemyByChallengeRatingUseCase {
