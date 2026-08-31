@@ -12,6 +12,7 @@ import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ExecuteTurnUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
@@ -30,6 +31,7 @@ class GameScreenViewModelFactory(
     private val checkpointUseCase: CheckpointUseCase,
     private val saveSaveGameUseCase: SaveSaveGameUseCase,
     private val validateDungeonLengthUseCase: ValidateDungeonLengthUseCase,
+    private val executeTurnUseCase: ExecuteTurnUseCase
 
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -48,6 +50,7 @@ class GameScreenViewModelFactory(
                 levelUpUseCase = levelUpUseCase,
                 checkpointUseCase = checkpointUseCase,
                 validateDungeonLengthUseCase = validateDungeonLengthUseCase,
+                executeTurnUseCase = executeTurnUseCase
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

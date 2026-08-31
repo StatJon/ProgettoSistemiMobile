@@ -22,6 +22,8 @@ import com.unibo.mobile.domain.usecases.gamelogic.CheckpointUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DecideEnemyAbilityUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ExecuteTurnUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ExecuteTurnUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCase
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
 import com.unibo.mobile.domain.usecases.savegame.SaveSaveGameUseCase
@@ -49,6 +51,7 @@ class GameScreenViewModel(
     private val checkpointUseCase: CheckpointUseCase,
     private val levelUpUseCase: LevelUpUseCase,
     private val validateDungeonLengthUseCase: ValidateDungeonLengthUseCase,
+    private val executeTurnUseCase: ExecuteTurnUseCase
 ) : ViewModel() {
 
     // --- StateFlow
@@ -255,28 +258,6 @@ class GameScreenViewModel(
     }
 
     /**
-     * Updates the _saveGame with updatedSaveSession
-     *
-     * @param updatedSaveSession the SaveSession used to update the _saveGame
-     */
-    private suspend fun saveSaveSession(updatedSaveSession: SaveSession) {
-        _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
-        saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
-        println("DEBUG: saved ${_saveGame.value}")
-    }
-
-    /**
-     * Updates the ViewModel StateFlow with the saveSession
-     *
-     * @param saveSession the SaveSession used to update the StateFlow
-     */
-    private fun updateViewModelState(saveSession: SaveSession) {
-        _dungeonIndex.value = saveSession.dungeon.dungeonIndex
-        _dungeonLength.value = saveSession.dungeon.dungeonLength
-        _characterPlayer.value = saveSession.characterPlayer
-    }
-
-    /**
      * Determines the win or loss conditions of the active session and applies appropriate actions.
      */
     private fun endGame(isWon: Boolean) {
@@ -342,43 +323,12 @@ class GameScreenViewModel(
         isPlayerTurn: Boolean
     ) {
         try {
-            val caster = if (isPlayerTurn) combatSnapshot.player else combatSnapshot.enemy
-            val target = if (ability is AbilityHeal) caster
-            else if (isPlayerTurn) combatSnapshot.enemy
-            else combatSnapshot.player
+            val updatedSnapshot = executeTurnUseCase.invoke(
+                combatSnapshot = combatSnapshot,
+                ability = ability,
+                isPlayerTurn = isPlayerTurn
+            )
 
-            val abilityResult = calculateAbilityResultUseCase.invoke(target, ability)
-            val updatedTargetData = applyAbilityResultUseCase.invoke(target, abilityResult)
-
-            val updatedSnapshot = if (isPlayerTurn) {
-                val updatedPlayer = applyPlayerAbilityCostUseCase.invoke(
-                    combatSnapshot.player,
-                    abilityResult.ability
-                )
-                if (target == combatSnapshot.player) {
-                    combatSnapshot.copy(
-                        player = updatedPlayer.copy(characterData = updatedTargetData),
-                        enemy = combatSnapshot.enemy
-                    )
-                } else {
-                    combatSnapshot.copy(
-                        player = updatedPlayer,
-                        enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
-                    )
-                }
-            } else {
-                if (target == combatSnapshot.enemy) {
-                    combatSnapshot.copy(
-                        player = combatSnapshot.player,
-                        enemy = combatSnapshot.enemy.copy(characterData = updatedTargetData)
-                    )
-                } else {
-                    combatSnapshot.copy(
-                        player = combatSnapshot.player.copy(characterData = updatedTargetData),
-                        enemy = combatSnapshot.enemy
-                    )
-                }
-            }
             val newCombatStatus = checkCombatStatusUseCase.invoke(updatedSnapshot)
             _combatSnapshot.value = updatedSnapshot.copy(combatStatus = newCombatStatus)
             _characterPlayer.value = updatedSnapshot.player
@@ -387,4 +337,27 @@ class GameScreenViewModel(
             e.printStackTrace()
         }
     }
+
+    /**
+     * Updates the _saveGame with updatedSaveSession
+     *
+     * @param updatedSaveSession the SaveSession used to update the _saveGame
+     */
+    private suspend fun saveSaveSession(updatedSaveSession: SaveSession) {
+        _saveGame.value = _saveGame.value.copy(saveSession = updatedSaveSession)
+        saveSaveGameUseCase.invoke(saveGame = _saveGame.value)
+        println("DEBUG: saved ${_saveGame.value}")
+    }
+
+    /**
+     * Updates the ViewModel StateFlow with the saveSession
+     *
+     * @param saveSession the SaveSession used to update the StateFlow
+     */
+    private fun updateViewModelState(saveSession: SaveSession) {
+        _dungeonIndex.value = saveSession.dungeon.dungeonIndex
+        _dungeonLength.value = saveSession.dungeon.dungeonLength
+        _characterPlayer.value = saveSession.characterPlayer
+    }
+
 }

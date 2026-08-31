@@ -26,6 +26,8 @@ import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCas
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineChallengeRatingUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.DetermineGamePhaseUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamelogic.ExecuteTurnUseCase
+import com.unibo.mobile.domain.usecases.gamelogic.ExecuteTurnUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.LevelUpUseCaseImpl
 import com.unibo.mobile.domain.usecases.savegame.LoadSaveGameUseCase
@@ -57,7 +59,9 @@ object UseCaseProvider {
     lateinit var decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase
     lateinit var levelUpUseCase: LevelUpUseCase
     lateinit var checkpointUseCase: CheckpointUseCase
-    lateinit var validateDungeonLengthUseCase : ValidateDungeonLengthUseCase
+    lateinit var validateDungeonLengthUseCase: ValidateDungeonLengthUseCase
+    lateinit var executeTurnUseCase: ExecuteTurnUseCase
+
     /**
      * Constructor
      * Creates associations between the UseCasesImpl and the proper repository
@@ -67,6 +71,17 @@ object UseCaseProvider {
     fun setup(
         repositoryProvider: RepositoryProvider
     ) {
+
+        // --- No dependencies
+        calculateAbilityResultUseCase = CalculateAbilityResultUseCaseImpl()
+        determineGamePhaseUseCase = DetermineGamePhaseUseCaseImpl()
+        determineChallengeRatingUseCase = DetermineChallengeRatingUseCaseImpl()
+        applyAbilityResultUseCase = ApplyAbilityResultUseCaseImpl()
+        checkCombatStatusUseCase = CheckCombatStatusUseCaseImpl()
+        applyPlayerAbilityCostUseCase = ApplyPlayerAbilityCostUseCaseImpl()
+        decideEnemyAbilityUseCase = DecideEnemyAbilityUseCaseImpl()
+
+        // --- No useCases dependencies
         getAllPlayerClassesUseCase = GetAllPlayerClassesUseCaseImpl(
             gamedataRepository = repositoryProvider.gamedataRepository
         )
@@ -85,16 +100,16 @@ object UseCaseProvider {
         fetchAbilityByNameUseCase = FetchAbilityByNameUseCaseImpl(
             abilityRepository = repositoryProvider.abilityRepository
         )
-
         fetchEnemyByChallengeRatingUseCase = FetchEnemyByChallengeRatingUseCaseImpl(
             enemyRepository = repositoryProvider.enemyRepository
         )
-        
+
+        // --- With useCases dependencies
         levelUpUseCase = LevelUpUseCaseImpl(
             abilityRepository = repositoryProvider.abilityRepository,
             gamedataRepository = repositoryProvider.gamedataRepository
         )
-        
+
         checkpointUseCase = CheckpointUseCaseImpl(
             levelUpUseCase = levelUpUseCase
         )
@@ -103,19 +118,12 @@ object UseCaseProvider {
             gamedataRepository = repositoryProvider.gamedataRepository
         )
 
-        calculateAbilityResultUseCase = CalculateAbilityResultUseCaseImpl()
+        // --- With initialized useCases dependencies
+        executeTurnUseCase = ExecuteTurnUseCaseImpl(
+            calculateAbilityResultUseCase = calculateAbilityResultUseCase,
+            applyAbilityResultUseCase = applyAbilityResultUseCase,
+            applyPlayerAbilityCostUseCase = applyPlayerAbilityCostUseCase
+        )
 
-        determineGamePhaseUseCase = DetermineGamePhaseUseCaseImpl()
-
-        determineChallengeRatingUseCase = DetermineChallengeRatingUseCaseImpl()
-
-        applyAbilityResultUseCase = ApplyAbilityResultUseCaseImpl()
-
-        checkCombatStatusUseCase = CheckCombatStatusUseCaseImpl()
-
-        applyPlayerAbilityCostUseCase = ApplyPlayerAbilityCostUseCaseImpl()
-
-        decideEnemyAbilityUseCase = DecideEnemyAbilityUseCaseImpl()
-        
     }
 }

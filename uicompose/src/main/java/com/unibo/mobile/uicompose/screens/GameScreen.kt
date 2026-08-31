@@ -42,6 +42,7 @@ fun GameScreen(
             levelUpUseCase = UseCaseProvider.levelUpUseCase,
             checkpointUseCase = UseCaseProvider.checkpointUseCase,
             validateDungeonLengthUseCase = UseCaseProvider.validateDungeonLengthUseCase,
+            executeTurnUseCase = UseCaseProvider.executeTurnUseCase
         )
     )
 ) {
