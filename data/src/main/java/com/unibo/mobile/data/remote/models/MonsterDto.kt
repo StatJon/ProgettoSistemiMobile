@@ -56,5 +56,5 @@ data class SpellcastingDto(
 
 @JsonClass(generateAdapter = true)
 data class MonsterSpellIndexDto(
-    @param:Json(name = "index") val index: String
+    @param:Json(name = "index") val index: String?
 )

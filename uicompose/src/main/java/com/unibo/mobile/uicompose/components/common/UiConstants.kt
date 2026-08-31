@@ -19,14 +19,12 @@ object UiConstants {
 
     val EDGE_BASE_PADDING = 16.dp
     val SECTION_SPACING = 12.dp
-    val BUTTON_SPACING = 8.dp
-    val ROUNDED_CORNER_RADIUS = 16.dp
     val BUTTON_HEIGHT = 56.dp
     val PLAYER_CONTROLS_ITEM_PADDING = 4.dp
     val ACTION_BUTTON_HEIGHT = 48.dp
 
     // Sprites
-    val SPRITE_SIZE = 100.dp
+    val SPRITE_SIZE = 120.dp
 
 
     // Time - milliseconds

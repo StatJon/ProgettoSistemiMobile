@@ -314,7 +314,7 @@ class GameScreenViewModel(
             fetchEnemyByChallengeRatingUseCase.invoke(enemyChallengeRating)
         _combatSnapshot.value = CombatSnapshot(
             player = _characterPlayer.value
-                ?: throw IllegalStateException("Player not initialized"),
+                ?: throw IllegalStateException("ERROR: Player not initialized"),
             enemy = enemy,
             combatStatus = CombatStatus.PLAYER_TURN,
             lastAbilityResult = null,
