@@ -18,6 +18,10 @@ class GamedataRepositoryImpl : GamedataRepository {
         return Gamedata.baseDungeonLength
     }
 
+    override fun getDungeonMaxLength(): Int {
+        return Gamedata.maxDungeonLength
+    }
+
     override fun getFallBackLevelUpAbility(): Ability {
         return Gamedata.fallBackLevelUpAbility
     }

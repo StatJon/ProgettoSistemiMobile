@@ -3,6 +3,7 @@ package com.unibo.mobile.uicompose.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.unibo.mobile.domain.usecases.api.FetchEnemyByChallengeRatingUseCase
+import com.unibo.mobile.domain.usecases.gamedata.ValidateDungeonLengthUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.CalculateAbilityResultUseCase
@@ -26,6 +27,7 @@ class GameScreenViewModelFactory(
     private val loadSaveGameUseCase: LoadSaveGameUseCase,
     private val levelUpUseCase: LevelUpUseCase,
     private val saveSaveGameUseCase: SaveSaveGameUseCase,
+    private val validateDungeonLengthUseCase: ValidateDungeonLengthUseCase,
 
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -42,6 +44,7 @@ class GameScreenViewModelFactory(
                 determineChallengeRatingUseCase = determineChallengeRatingUseCase,
                 determineGamePhaseUseCase = determineGamePhaseUseCase,
                 levelUpUseCase = levelUpUseCase,
+                validateDungeonLengthUseCase = validateDungeonLengthUseCase,
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

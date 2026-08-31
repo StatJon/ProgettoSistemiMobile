@@ -8,6 +8,8 @@ import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetAllPlayerClassesUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCase
 import com.unibo.mobile.domain.usecases.gamedata.GetPlayerClassByClassNameUseCaseImpl
+import com.unibo.mobile.domain.usecases.gamedata.ValidateDungeonLengthUseCase
+import com.unibo.mobile.domain.usecases.gamedata.ValidateDungeonLengthUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCase
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyAbilityResultUseCaseImpl
 import com.unibo.mobile.domain.usecases.gamelogic.ApplyPlayerAbilityCostUseCase
@@ -52,7 +54,7 @@ object UseCaseProvider {
     lateinit var applyPlayerAbilityCostUseCase: ApplyPlayerAbilityCostUseCase
     lateinit var decideEnemyAbilityUseCase: DecideEnemyAbilityUseCase
     lateinit var levelUpUseCase: LevelUpUseCase
-
+    lateinit var validateDungeonLengthUseCase : ValidateDungeonLengthUseCase
     /**
      * Constructor
      * Creates associations between the UseCasesImpl and the proper repository
@@ -87,6 +89,10 @@ object UseCaseProvider {
         
         levelUpUseCase = LevelUpUseCaseImpl(
             abilityRepository = repositoryProvider.abilityRepository,
+            gamedataRepository = repositoryProvider.gamedataRepository
+        )
+
+        validateDungeonLengthUseCase = ValidateDungeonLengthUseCaseImpl(
             gamedataRepository = repositoryProvider.gamedataRepository
         )
 

@@ -7,6 +7,6 @@ interface GamedataRepository {
     fun getPlayerClassByName(className: String): PlayerClass?
     fun getAllPlayerClasses(): List<PlayerClass>
     fun getDungeonBaseLength(): Int
-
+    fun getDungeonMaxLength() : Int
     fun getFallBackLevelUpAbility() : Ability
 }

@@ -8,7 +8,8 @@ import com.unibo.mobile.domain.models.PlayerClass
 
 object Gamedata {
 
-    const val baseDungeonLength = 5
+    const val baseDungeonLength = 4
+    const val maxDungeonLength = 19
     // val checkpointStep = 3 TODO: Aggiungere dopo primo collaudo gioco, non MVP
     // val baseActionPointsPerTurn = 2 TODO: Se serve aggiungere
 
